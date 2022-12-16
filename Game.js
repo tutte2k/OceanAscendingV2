@@ -49,7 +49,7 @@ window.addEventListener("load", function () {
       this.win = false;
       this.gameOver = false;
       this.score = 0;
-      this.winningScore = 10;
+      this.winningScore = 9999999;
       this.gameTime = 0;
       this.timeLimit = 15000;
       this.speed = 1;
@@ -270,11 +270,13 @@ window.addEventListener("load", function () {
     }
     addEnemy() {
       const randomize = Math.random();
-
+      const indexOfLastWord = this.words.length - 1;
+      const word = this.getNextWord(indexOfLastWord);
+      const creature = this.chooseEnemy(word);
       if (randomize < 0.5) {
-        this.enemies.push(this.chooseEnemy(this.words.pop()));
+        this.enemies.push(creature);
       } else if (this.enemies.length === 0) {
-        this.enemies.push(this.chooseEnemy(this.words.pop()));
+        this.enemies.push(creature);
       }
     }
     chooseEnemy(value) {
@@ -306,7 +308,6 @@ window.addEventListener("load", function () {
         rect1.height + rect1.y > rect2.y
       );
     }
-
     findFocus(key) {
       let enemy = this.enemies.find((enemy) => {
         return enemy.text.startsWith(key);
@@ -325,6 +326,28 @@ window.addEventListener("load", function () {
       } else {
         return null;
       }
+    }
+    getNextWord(startIndex) {
+      let notAvailableChars = [];
+      for (let i = 0; i < this.enemies.length; i++) {
+        if (this.enemies[i]) {
+          if (!notAvailableChars.includes(this.enemies[i].text.charAt(0))) {
+            notAvailableChars.push(this.enemies[i].text.charAt(0));
+          }
+        }
+      }
+      for (let i = startIndex; i >= 0; i--) {
+        const wordSuggestion = this.words[i];
+        if (wordSuggestion) {
+          const firstLetterInWord = wordSuggestion.charAt(0);
+          if (!notAvailableChars.includes(firstLetterInWord)) {
+            return this.words.splice(i, 1)[0];
+          } else {
+            continue;
+          }
+        }
+      }
+      return target.words.pop();
     }
   }
   const sortedWords = Wordstring.split(" ").sort((a, b) => b.length - a.length);
