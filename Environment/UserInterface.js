@@ -22,6 +22,13 @@ export default class UserInterface {
     );
     context.fillText("Ammo: " + this.game.ammo, this.game.width * 0.05, 30);
     context.fillText("Air: " + this.game.health, this.game.width * 0.15, 30);
+
+    context.fillText(
+      "Level " + this.game.specifiedLevel,
+      this.game.width * 0.5,
+      60
+    );
+
     context.fillText(
       "Words left: " + this.game.words.length,
       this.game.width * 0.5,
@@ -32,12 +39,12 @@ export default class UserInterface {
       context.textAlign = "center";
       let message1;
       let message2;
-      if (this.game.score > this.game.winningScore) {
+      if (this.game.win) {
         message1 = "You win!";
-        message2 = "Fishing with dynamite is only illegal if someone heard it.";
-      } else {
+        message2 = "Fishing with dynamite is only illegal if someone hears it!";
+      } else if (this.game.lose) {
         message1 = "You ran out of air!";
-        message2 = "How much fish is in the water?";
+        message2 = "If you can't catch em, flee!";
       }
       context.font = " 70px " + this.fontFamily;
       context.fillText(

@@ -25,9 +25,16 @@ window.addEventListener("load", function () {
   const ctx = canvas.getContext("2d");
   canvas.width = 1768;
   canvas.height = window.outerHeight;
+  var levelsCompleted = JSON.parse(
+    this.localStorage.getItem("levelsCompleted")
+  );
+  if (levelsCompleted === null) {
+    levelsCompleted = {};
+  }
 
   class Game {
-    constructor(width, height, words) {
+    static levels = [];
+    constructor(width, height, words, specifiedLevel) {
       this.width = width;
       this.height = height;
       this.background = new Background(this);
@@ -44,7 +51,7 @@ window.addEventListener("load", function () {
       this.ammo = 1;
       this.maxAmmo = 1;
       this.ammoTimer = 0;
-      this.ammoInterval = 2000;
+      this.ammoInterval = 5000;
       this.lose = false;
       this.win = false;
       this.gameOver = false;
@@ -57,16 +64,26 @@ window.addEventListener("load", function () {
       this.focus = null;
       this.words = words;
       this.health = 3;
+      this.specifiedLevel = specifiedLevel;
     }
     update(deltaTime) {
       if (this.health < 1) {
         this.lose = true;
-      } else if (this.score > this.winningScore) {
+      } else if (
+        this.score > this.winningScore ||
+        (this.words.length === 0 && !this.gameOver)
+      ) {
         this.win = true;
+        levelsCompleted[this.specifiedLevel] = this.score;
+        localStorage.setItem(
+          "levelsCompleted",
+          JSON.stringify(levelsCompleted)
+        );
+        updateLevelButtons();
+        startGame(this.specifiedLevel + 1);
       }
       this.gameOver = this.lose == true || this.win === true;
-
-      if (!this.lose && !this.win) {
+      if (!this.gameOver) {
         this.gameTime += deltaTime;
         this.background.update();
         this.background.layer4.update();
@@ -80,12 +97,10 @@ window.addEventListener("load", function () {
         }
       }
       this.player.update(deltaTime);
-
       this.particles.forEach((particle) => particle.update());
       this.particles = this.particles.filter(
         (particle) => !particle.markedForDeletion
       );
-
       this.explosions.forEach((explosion) => explosion.update(deltaTime));
       this.explosions = this.explosions.filter(
         (explosion) => !explosion.markedForDeletion
@@ -96,47 +111,11 @@ window.addEventListener("load", function () {
       this.floatingMessages = this.floatingMessages.filter(
         (floatingMessage) => !floatingMessage.markedForDeletion
       );
-
       this.enemies.forEach((enemy) => {
         if (enemy.focused === true) {
           this.focus = enemy;
         }
         enemy.update();
-
-        if (enemy.markedForDeletion === true) {
-          this.score += enemy.score;
-          this.floatingMessages.push(
-            new FloatingMessage(
-              "+" + enemy.score,
-              enemy.x + enemy.width * 0.5,
-              enemy.y + enemy.height * 0.5,
-              "yellow"
-            )
-          );
-
-          for (let i = 0; i < enemy.score; i++) {
-            this.particles.push(
-              new Particle(
-                this,
-                enemy.x + enemy.width * 0.5,
-                enemy.y + enemy.height * 0.5
-              )
-            );
-          }
-          if (enemy.type === "hive") {
-            for (let i = 0; i < 5; i++) {
-              this.enemies.push(
-                new Drone(
-                  this,
-                  enemy.x + Math.random() * enemy.width,
-                  enemy.y + Math.random() * enemy.height * 0.5,
-                  this.words.pop()
-                )
-              );
-            }
-          }
-          this.focus = null;
-        }
         if (this.checkCollision(this.player, enemy)) {
           if (enemy.focused && this.focus === enemy) {
             this.focus = null;
@@ -164,13 +143,12 @@ window.addEventListener("load", function () {
             );
           }
         }
-
         this.player.projectiles.forEach((projectile) => {
           if (this.checkCollision(projectile, enemy)) {
+            this.score += enemy.score;
             if (enemy.focused && this.focus === enemy) {
               this.focus = null;
             }
-            this.score += enemy.score;
             this.floatingMessages.push(
               new FloatingMessage(
                 "+" + enemy.score,
@@ -181,7 +159,7 @@ window.addEventListener("load", function () {
             );
             projectile.markedForDeletion = true;
             enemy.markedForDeletion = true;
-            this.score += enemy.score;
+
             this.explosions.push(
               new FireExplosion(
                 this,
@@ -200,22 +178,58 @@ window.addEventListener("load", function () {
             }
             if (enemy.type === "hive") {
               for (let i = 0; i < 5; i++) {
+                const indexOfLastWord = this.words.length - 1;
+                const word = this.getNextWord(indexOfLastWord);
                 this.enemies.push(
                   new Drone(
                     this,
                     enemy.x + Math.random() * enemy.width,
                     enemy.y + Math.random() * enemy.height * 0.5,
-                    this.words.pop()
+                    word
                   )
                 );
               }
             }
           }
         });
+        if (enemy.markedForDeletion === true) {
+          this.score += enemy.score;
+          this.floatingMessages.push(
+            new FloatingMessage(
+              "+" + enemy.score,
+              enemy.x + enemy.width * 0.5,
+              enemy.y + enemy.height * 0.5,
+              "yellow"
+            )
+          );
+          for (let i = 0; i < enemy.score; i++) {
+            this.particles.push(
+              new Particle(
+                this,
+                enemy.x + enemy.width * 0.5,
+                enemy.y + enemy.height * 0.5
+              )
+            );
+          }
+          if (enemy.type === "hive") {
+            for (let i = 0; i < 5; i++) {
+              const indexOfLastWord = this.words.length - 1;
+              const word = this.getNextWord(indexOfLastWord);
+              this.enemies.push(
+                new Drone(
+                  this,
+                  enemy.x + Math.random() * enemy.width,
+                  enemy.y + Math.random() * enemy.height * 0.5,
+                  word
+                )
+              );
+            }
+          }
+          this.focus = null;
+        }
       });
-
       this.enemies = this.enemies.filter((enemy) => !enemy.markedForDeletion);
-      if (this.enemyTimer > this.enemyInterval && !this.lose && !this.win) {
+      if (this.enemyTimer > this.enemyInterval && !this.gameOver) {
         this.addEnemy();
         this.enemyTimer = 0;
       } else {
@@ -233,15 +247,13 @@ window.addEventListener("load", function () {
         0,
         this.player.y + this.player.height * 0.5
       );
-      let black = true;
+      let red = true;
       for (let i = 0; i < 10; i++) {
-        let color = black ? "red" : "orange";
+        let color = red ? "red" : "orange";
         gradient.addColorStop(`0.${i}`, color);
-        black = !black;
+        red = !red;
       }
-
       context.strokeStyle = gradient;
-
       context.moveTo(
         this.player.x + this.player.width * 0.65,
         this.player.y + this.player.height * 0.5
@@ -263,7 +275,6 @@ window.addEventListener("load", function () {
         context.stroke();
       }
       this.enemies.forEach((enemy) => enemy.draw(context));
-
       this.explosions.forEach((explosion) => explosion.draw(context));
       this.particles.forEach((particle) => particle.draw(context));
       this.background.layer4.draw(context);
@@ -276,7 +287,7 @@ window.addEventListener("load", function () {
       const indexOfLastWord = this.words.length - 1;
       const word = this.getNextWord(indexOfLastWord);
       const creature = this.chooseEnemy(word);
-      if (randomize < 0.5) {
+      if (randomize < 1) {
         this.enemies.push(creature);
       } else if (this.enemies.length === 0) {
         this.enemies.push(creature);
@@ -360,14 +371,97 @@ window.addEventListener("load", function () {
           }
         }
       }
-      return target.words.pop();
+      let fallback = this.words.pop();
+      if (fallback) return fallback;
+      else return "x";
     }
   }
+
   const sortedWords = Wordstring.split(" ").sort((a, b) => b.length - a.length);
+  var levels = [];
+  var points = [];
+  for (let i = 0; i < 100; i++) {
+    const level = sortedWords.slice(-100);
+    sortedWords.splice(-100);
+    levels.push(level);
+    points.push(level);
+  }
 
-  const game = new Game(canvas.width, canvas.height, sortedWords);
+  let currentLevel =
+    +Object.keys(levelsCompleted)[Object.keys(levelsCompleted).length - 1] + 1;
+
+  let game = new Game(
+    canvas.width,
+    canvas.height,
+    levels[currentLevel || 0],
+    currentLevel || 0
+  );
+  updateLevelButtons();
+  function updateLevelButtons() {
+    const bad = "👎";
+    const ok = "🆗";
+    const good = "👍";
+    const perfect = "💯";
+    const hook = "🪝";
+
+    const levelContainer = window.document.getElementById("levelContainer");
+    while (levelContainer.lastChild) {
+      levelContainer.removeChild(levelContainer.lastChild);
+    }
+    for (const level in levelsCompleted) {
+      if (Object.hasOwnProperty.call(levelsCompleted, level)) {
+        let availableScore = 0;
+        levels[level].forEach((x) => (availableScore += x.length));
+        if (availableScore === 0) {
+          points[+level + 1].forEach((x) => (availableScore += x.length));
+        }
+        let score = levelsCompleted[level] || game.score;
+        let button = window.document.createElement("button");
+        button.classList.add("btn", "btn-success");
+        console.log(score, availableScore);
+        let percent = score / availableScore;
+        let emoji;
+
+        if (percent >= 0.75) emoji = perfect;
+        else if (percent >= 0.5) emoji = good;
+        else if (percent >= 0.25) emoji = ok;
+        else if (percent < 0.25) emoji = bad;
+        else emoji = hook;
+        button.innerHTML = `Level ${level} ${emoji} ${(percent * 100).toFixed(
+          0
+        )}%`;
+        button.value = level;
+        button.addEventListener("click", function (e) {
+          startGame(e.target.value);
+        });
+        levelContainer.appendChild(button);
+      }
+    }
+    if (levelContainer.children.length === 0) {
+      let button = window.document.createElement("button");
+      button.classList.add("btn", "btn-secondary");
+      button.innerHTML = `Level 0 ${hook}`;
+      button.value = 0;
+      button.addEventListener("click", function (e) {
+        startGame(e.target.value);
+      });
+      levelContainer.appendChild(button);
+    } else {
+      let button = window.document.createElement("button");
+      button.classList.add("btn", "btn-secondary");
+      button.innerHTML = `Level ${+game.specifiedLevel + 1} ${hook}`;
+      button.value = +game.specifiedLevel + 1;
+      button.addEventListener("click", function (e) {
+        startGame(e.target.value);
+      });
+      levelContainer.appendChild(button);
+    }
+  }
+  function startGame(level) {
+    game = new Game(canvas.width, canvas.height, levels[level], level);
+  }
+
   let lastTime = 0;
-
   function animate(timeStamp) {
     const deltaTime = timeStamp - lastTime;
     lastTime = timeStamp;

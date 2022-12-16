@@ -4,7 +4,7 @@ class Enemy {
     this.text = word;
     this.completedText = "";
     this.x = this.game.width;
-    this.speedX = Math.random() * -1.5 - 0.5;
+    this.speedX = -this.game.speed;
     this.markedForDeletion = false;
     this.frameX = 0;
     this.frameY = 0;
