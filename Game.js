@@ -324,6 +324,16 @@ window.addEventListener("load", function () {
         enemy.focused = true;
         return enemy;
       } else {
+        const controls = ["ArrowDown", "ArrowUp", "ArrowRight"];
+        if (!controls.includes(key))
+          this.floatingMessages.push(
+            new FloatingMessage(
+              key,
+              this.player.x + this.player.width * 0.8,
+              this.player.y + this.player.height * 0.2,
+              "white"
+            )
+          );
         return null;
       }
     }

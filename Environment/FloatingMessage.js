@@ -8,7 +8,7 @@ export default class FloatingMessage {
     this.opacity = 1;
     this.markedForDeletion = false;
     this.size = 45;
-    this.font = "Bangers";
+    this.font = "Carter One";
     this.color = color;
   }
   update() {
