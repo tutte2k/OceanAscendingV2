@@ -98,6 +98,9 @@ window.addEventListener("load", function () {
       );
 
       this.enemies.forEach((enemy) => {
+        if (enemy.focused === true) {
+          this.focus = enemy;
+        }
         enemy.update();
 
         if (enemy.markedForDeletion === true) {
@@ -331,7 +334,7 @@ window.addEventListener("load", function () {
               key,
               this.player.x + this.player.width * 0.8,
               this.player.y + this.player.height * 0.2,
-              "white"
+              "white "
             )
           );
         return null;
