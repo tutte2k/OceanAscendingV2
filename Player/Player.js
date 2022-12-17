@@ -58,7 +58,7 @@ export class Player {
       } else if (this.game.keys.includes("ArrowDown")) {
         this.speedY = this.maxSpeed;
       } else {
-        this.speedY = 0;
+        this.speedY >= 0 ? (this.speedY -= 0.05) : (this.speedY += 0.05);
       }
       this.y += this.speedY;
 

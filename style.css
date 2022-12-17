@@ -23,22 +23,24 @@ html {
 #fireExplosion,
 #rainbowExplosion,
 #lionfish1,
-#lionfish2,
-#lionfish3,
-#lionfish4,
-#lionfish5,
+#seahorse,
 #turtle1,
 #turtle2,
 #turtle3,
 #turtle4,
-#turtle5 {
+#turtle5,
+#jellyfish1,
+#jellyfish2,
+#jellyfish3,
+#jellyfish4,
+#jellyfish5 {
   display: none;
 }
 
 #canvas1 {
   border: 2px solid black;
   position: absolute;
-  max-width: 80%;
+  max-width: 100%;
   max-height: 100%;
   top: 50%;
   left: 50%;

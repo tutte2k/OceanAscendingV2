@@ -18,6 +18,8 @@ import {
   Drone,
   Turtle,
   Lionfish,
+  Seahorse,
+  Jellyfish,
 } from "./Enemy/Enemy.js";
 
 window.addEventListener("load", function () {
@@ -116,7 +118,7 @@ window.addEventListener("load", function () {
         if (enemy.focused === true) {
           this.focus = enemy;
         }
-        enemy.update();
+        enemy.update(deltaTime);
         if (this.checkCollision(this.player, enemy)) {
           if (enemy.focused && this.focus === enemy) {
             this.focus = null;
@@ -194,7 +196,6 @@ window.addEventListener("load", function () {
           }
         });
         if (enemy.markedForDeletion === true) {
-          this.score += enemy.score;
           this.floatingMessages.push(
             new FloatingMessage(
               "+" + enemy.score,
@@ -298,10 +299,15 @@ window.addEventListener("load", function () {
       const enemies = [
         new Turtle(this, value),
         new Lionfish(this, value),
+
+        new Jellyfish(this, value),
+      ];
+      const hard = [
+        new HiveWhale(this, value),
         new LuckyFish(this, value),
+        new Seahorse(this, value),
         new Angler1(this, value),
         new Angler2(this, value),
-        new HiveWhale(this, value),
       ];
 
       return enemies[Math.floor(Math.random() * enemies.length)];
@@ -420,7 +426,7 @@ window.addEventListener("load", function () {
         }
         let score = levelsCompleted[level] || game.score;
         let button = window.document.createElement("button");
-        button.classList.add("btn", "btn-success");
+        button.classList.add("btn", "btn-dark", "btn-sm");
         console.log(score, availableScore);
         let percent = score / availableScore;
         let emoji;
@@ -430,9 +436,7 @@ window.addEventListener("load", function () {
         else if (percent >= 0.25) emoji = ok;
         else if (percent < 0.25) emoji = bad;
         else emoji = hook;
-        button.innerHTML = `Level ${level} ${emoji} ${(percent * 100).toFixed(
-          0
-        )}%`;
+        button.innerHTML = `${level} ${emoji} ${(percent * 100).toFixed(0)}%`;
         button.value = level;
         button.addEventListener("click", function (e) {
           startGame(e.target.value);
@@ -442,8 +446,8 @@ window.addEventListener("load", function () {
     }
     if (levelContainer.children.length === 0) {
       let button = window.document.createElement("button");
-      button.classList.add("btn", "btn-secondary");
-      button.innerHTML = `Level 0 ${hook}`;
+      button.classList.add("btn", "btn-success", "btn-sm");
+      button.innerHTML = `0 ${hook}`;
       button.value = 0;
       button.addEventListener("click", function (e) {
         startGame(e.target.value);
@@ -451,8 +455,8 @@ window.addEventListener("load", function () {
       levelContainer.appendChild(button);
     } else {
       let button = window.document.createElement("button");
-      button.classList.add("btn", "btn-secondary");
-      button.innerHTML = `Level ${+game.specifiedLevel} ${hook}`;
+      button.classList.add("btn", "btn-success", "btn-sm");
+      button.innerHTML = `${+game.specifiedLevel} ${hook}`;
       button.value = +game.specifiedLevel;
       button.addEventListener("click", function (e) {
         startGame(e.target.value);

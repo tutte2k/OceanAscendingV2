@@ -14,18 +14,32 @@ class Enemy {
     this.score = this.text.length;
     this.font = "Carter One";
     this.focused = false;
+
+    this.fps = 30;
+    this.timer = 0;
+    this.interval = 1000 / this.fps;
   }
-  update() {
-    this.x += this.speedX - this.game.speed;
-    this.y > this.game.player.y ? (this.y -= 0.4) : (this.y += 0.4);
-    if (this.x + this.width * 0.7 < 0) {
-      this.x -= this.width;
+  update(deltaTime) {
+    if (this.speedY) {
+      this.y += this.speedY - this.game.speed;
+    } else {
+      this.x += this.speedX - this.game.speed;
+      this.y > this.game.player.y ? (this.y -= 0.4) : (this.y += 0.4);
+      if (this.x + this.width * 0.7 < 0) {
+        this.x -= this.width;
+      }
     }
-    if (this.x + this.width < 0) {
+    if (this.x + this.width < 0 || this.y + this.height < 0) {
       this.markedForDeletion = true;
     }
+
     if (this.frameX < this.maxFrame) {
-      this.frameX++;
+      if (this.timer > this.interval) {
+        this.frameX++;
+        this.timer = 0;
+      } else {
+        this.timer += deltaTime;
+      }
     } else {
       this.frameX = 0;
     }
@@ -40,6 +54,9 @@ class Enemy {
       console.log(this.text, this.completedText);
     }
     this.markedForDeletion = !(this.completedText !== this.text);
+    if (this.markedForDeletion) {
+      this.game.score += this.score;
+    }
     return isNextChar;
   }
 
@@ -68,6 +85,34 @@ class Enemy {
       this.y + this.height * 0.5
     );
     context.restore();
+  }
+}
+export class Jellyfish extends Enemy {
+  constructor(game, word) {
+    super(game, word);
+    this.width = 120;
+    this.height = 258;
+    this.x = randomInteger(
+      this.game.width * 0.1,
+      this.game.width - this.game.width * 0.1
+    );
+
+    this.image = document.getElementById(`jellyfish${randomInteger(1, 5)}`);
+    this.frameY = 0;
+    this.maxFrame = 59;
+    this.y = this.game.height + 100;
+    this.speedX = 0;
+    this.speedY = -1;
+  }
+}
+export class Seahorse extends Enemy {
+  constructor(game, word) {
+    super(game, word);
+    this.width = 120;
+    this.height = 190;
+    this.y = Math.random() * (this.game.height * 0.95 - this.height);
+    this.image = document.getElementById("seahorse");
+    this.frameY = Math.floor(Math.random() * 2);
   }
 }
 export class Angler1 extends Enemy {
@@ -118,9 +163,7 @@ export class Turtle extends Enemy {
     this.width = 225;
     this.height = 221;
     this.y = Math.random() * (this.game.height * 0.95 - this.height);
-    this.image = document.getElementById(
-      `turtle${1 + Math.floor(Math.random() * 4)}`
-    );
+    this.image = document.getElementById(`turtle${randomInteger(1, 5)}`);
     this.frameY = 0;
     this.maxFrame = 59;
   }
@@ -149,4 +192,8 @@ export class Drone extends Enemy {
     this.frameY = Math.floor(Math.random() * 2);
     this.type = "drone";
   }
+}
+
+function randomInteger(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
