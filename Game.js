@@ -79,8 +79,8 @@ window.addEventListener("load", function () {
           "levelsCompleted",
           JSON.stringify(levelsCompleted)
         );
+        game.specifiedLevel++;
         updateLevelButtons();
-        startGame(this.specifiedLevel + 1);
       }
       this.gameOver = this.lose == true || this.win === true;
       if (!this.gameOver) {
