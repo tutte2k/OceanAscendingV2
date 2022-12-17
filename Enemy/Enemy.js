@@ -18,6 +18,9 @@ class Enemy {
   update() {
     this.x += this.speedX - this.game.speed;
     this.y > this.game.player.y ? (this.y -= 0.4) : (this.y += 0.4);
+    if (this.x + this.width * 0.7 < 0) {
+      this.x -= this.width;
+    }
     if (this.x + this.width < 0) {
       this.markedForDeletion = true;
     }
