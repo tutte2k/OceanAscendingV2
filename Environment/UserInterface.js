@@ -13,12 +13,11 @@ export default class UserInterface {
     context.shadowOffsetT = 2;
     context.shadowColor = "black";
     context.font = this.fontSize + "px " + this.fontFamily;
-    context.fillText("Score:" + this.game.score, this.game.width * 0.75, 30);
     const formattedTime = (this.game.gameTime * 0.001).toFixed(1);
     context.fillText(
       "Depth: " + formattedTime + "M",
-      this.game.width * 0.9,
-      30
+      this.game.width * 0.5,
+      this.game.height - 30
     );
     context.fillText("Ammo: " + this.game.ammo, this.game.width * 0.05, 30);
     context.fillText("Air: " + this.game.health, this.game.width * 0.15, 30);
@@ -58,6 +57,17 @@ export default class UserInterface {
         this.game.width * 0.5,
         this.game.height * 0.5 + 20
       );
+    }
+    if (this.game.focus) {
+      if (this.game.focus.text.length != 1) {
+        context.font = "100" + "px " + this.fontFamily;
+        context.fillText(
+          this.game.focus.displayText,
+          this.game.width / 2,
+          this.game.height - 100
+        );
+        context.font = this.fontSize + "px " + this.fontFamily;
+      }
     }
     context.restore();
   }

@@ -378,13 +378,12 @@ window.addEventListener("load", function () {
   }
 
   const sortedWords = Wordstring.split(" ").sort((a, b) => b.length - a.length);
+
   var levels = [];
-  var points = [];
   for (let i = 0; i < 100; i++) {
     const level = sortedWords.slice(-100);
     sortedWords.splice(-100);
     levels.push(level);
-    points.push(level);
   }
 
   let currentLevel =
@@ -393,7 +392,7 @@ window.addEventListener("load", function () {
   let game = new Game(
     canvas.width,
     canvas.height,
-    levels[currentLevel || 0],
+    levels[currentLevel || 0].slice(),
     currentLevel || 0
   );
   updateLevelButtons();
@@ -413,7 +412,7 @@ window.addEventListener("load", function () {
         let availableScore = 0;
         levels[level].forEach((x) => (availableScore += x.length));
         if (availableScore === 0) {
-          points[+level + 1].forEach((x) => (availableScore += x.length));
+          levels[level + 1].forEach((x) => (availableScore += x.length));
         }
         let score = levelsCompleted[level] || game.score;
         let button = window.document.createElement("button");
@@ -449,8 +448,8 @@ window.addEventListener("load", function () {
     } else {
       let button = window.document.createElement("button");
       button.classList.add("btn", "btn-secondary");
-      button.innerHTML = `Level ${+game.specifiedLevel + 1} ${hook}`;
-      button.value = +game.specifiedLevel + 1;
+      button.innerHTML = `Level ${+game.specifiedLevel} ${hook}`;
+      button.value = +game.specifiedLevel;
       button.addEventListener("click", function (e) {
         startGame(e.target.value);
       });
@@ -458,7 +457,7 @@ window.addEventListener("load", function () {
     }
   }
   function startGame(level) {
-    game = new Game(canvas.width, canvas.height, levels[level], level);
+    game = new Game(canvas.width, canvas.height, levels[level].slice(), level);
   }
 
   let lastTime = 0;
