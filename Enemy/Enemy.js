@@ -106,6 +106,7 @@ export class HiveWhale extends Enemy {
     this.image = document.getElementById("hivewhale");
     this.frameY = 0;
     this.type = "hive";
+    this.speedX = -0.2;
   }
 }
 export class Turtle extends Enemy {
