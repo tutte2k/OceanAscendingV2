@@ -61,11 +61,13 @@ export default class UserInterface {
     if (this.game.focus) {
       if (this.game.focus.text.length != 1) {
         context.font = "100" + "px " + this.fontFamily;
+        context.fillStyle = "silver";
         context.fillText(
           this.game.focus.displayText,
           this.game.width / 2,
           this.game.height - 100
         );
+        context.fillStyle = this.color;
         context.font = this.fontSize + "px " + this.fontFamily;
       }
     }

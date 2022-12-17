@@ -25,6 +25,7 @@ window.addEventListener("load", function () {
   const ctx = canvas.getContext("2d");
   canvas.width = 1768;
   canvas.height = window.outerHeight;
+
   var levelsCompleted = JSON.parse(
     this.localStorage.getItem("levelsCompleted")
   );
@@ -395,6 +396,10 @@ window.addEventListener("load", function () {
     levels[currentLevel || 0].slice(),
     currentLevel || 0
   );
+  canvas.addEventListener("click", function (e) {
+    game.player.shootTop();
+  });
+
   updateLevelButtons();
   function updateLevelButtons() {
     const bad = "👎";
@@ -402,7 +407,6 @@ window.addEventListener("load", function () {
     const good = "👍";
     const perfect = "💯";
     const hook = "🪝";
-
     const levelContainer = window.document.getElementById("levelContainer");
     while (levelContainer.lastChild) {
       levelContainer.removeChild(levelContainer.lastChild);

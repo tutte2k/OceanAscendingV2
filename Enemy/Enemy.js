@@ -57,7 +57,7 @@ class Enemy {
     context.shadowOffsetY = 2;
     context.shadowColor = "black";
     this.displayText = this.text.replace(this.completedText, "");
-    context.fillStyle = "white";
+    context.fillStyle = this.focused ? "silver" : "white";
     context.font = "40px " + this.font;
     context.fillText(
       this.displayText,
