@@ -1,23 +1,27 @@
+import Sprite from "../Game/Sprite.js";
+import Helper from "../Game/Helper.js";
+
 class Enemy {
-  constructor(game, word) {
+  constructor(game, word, sprite) {
     this.game = game;
     this.text = word;
     this.completedText = "";
-    this.x = this.game.width;
-    this.speedX = -this.game.speed;
-    this.markedForDeletion = false;
-    this.frameX = 0;
-    this.frameY = 0;
-    this.lives = this.text.length;
-    this.maxFrame = 37;
     this.displayText = this.text;
     this.score = this.text.length;
-    this.font = "Carter One";
+    this.lives = this.text.length;
     this.focused = false;
 
-    this.fps = 30;
-    this.timer = 0;
-    this.interval = 1000 / this.fps;
+    this.x = this.game.width;
+
+    this.speedX = -this.game.speed;
+    this.markedForDeletion = false;
+
+    this.font = "Carter One";
+
+    this.sprite = sprite;
+    this.width = sprite.width;
+    this.height = sprite.height;
+    this.y = Math.random() * (this.game.height * 0.95 - this.height);
   }
   update(deltaTime) {
     if (this.speedY) {
@@ -32,17 +36,7 @@ class Enemy {
     if (this.x + this.width < 0 || this.y + this.height < 0) {
       this.markedForDeletion = true;
     }
-
-    if (this.frameX < this.maxFrame) {
-      if (this.timer > this.interval) {
-        this.frameX++;
-        this.timer = 0;
-      } else {
-        this.timer += deltaTime;
-      }
-    } else {
-      this.frameX = 0;
-    }
+    this.sprite.update(deltaTime);
   }
   consume(key) {
     var length = this.completedText.length + 1;
@@ -51,7 +45,6 @@ class Enemy {
     if (isNextChar) {
       this.completedText += key;
       this.x += 5;
-      console.log(this.text, this.completedText);
     }
     this.markedForDeletion = !(this.completedText !== this.text);
     if (this.markedForDeletion) {
@@ -62,17 +55,7 @@ class Enemy {
 
   draw(context) {
     context.save();
-    context.drawImage(
-      this.image,
-      this.frameX * this.width,
-      this.frameY * this.height,
-      this.width,
-      this.height,
-      this.x,
-      this.y,
-      this.width,
-      this.height
-    );
+    this.sprite.draw(context, this.x, this.y);
     context.shadowOffsetX = 2;
     context.shadowOffsetY = 2;
     context.shadowColor = "black";
@@ -89,17 +72,22 @@ class Enemy {
 }
 export class Jellyfish extends Enemy {
   constructor(game, word) {
-    super(game, word);
-    this.width = 120;
-    this.height = 258;
-    this.x = randomInteger(
+    super(
+      game,
+      word,
+      new Sprite(
+        document.getElementById(`jellyfish${Helper.randInt(1, 5)}`),
+        120,
+        258,
+        59,
+        0,
+        30
+      )
+    );
+    this.x = Helper.randInt(
       this.game.width * 0.1,
       this.game.width - this.game.width * 0.1
     );
-
-    this.image = document.getElementById(`jellyfish${randomInteger(1, 5)}`);
-    this.frameY = 0;
-    this.maxFrame = 59;
     this.y = this.game.height + 100;
     this.speedX = 0;
     this.speedY = -1;
@@ -107,93 +95,103 @@ export class Jellyfish extends Enemy {
 }
 export class Seahorse extends Enemy {
   constructor(game, word) {
-    super(game, word);
-    this.width = 120;
-    this.height = 190;
-    this.y = Math.random() * (this.game.height * 0.95 - this.height);
-    this.image = document.getElementById("seahorse");
-    this.frameY = Math.floor(Math.random() * 2);
+    super(
+      game,
+      word,
+      new Sprite(
+        document.getElementById("seahorse"),
+        120,
+        190,
+        37,
+        Math.floor(Math.random() * 2),
+        30
+      )
+    );
   }
 }
 export class Angler1 extends Enemy {
   constructor(game, word) {
-    super(game, word);
-    this.width = 228;
-    this.height = 169;
-    this.y = Math.random() * (this.game.height * 0.95 - this.height);
-    this.image = document.getElementById("angler1");
-    this.frameY = Math.floor(Math.random() * 3);
+    super(
+      game,
+      word,
+      new Sprite(
+        document.getElementById("angler1"),
+        228,
+        169,
+        37,
+        Math.floor(Math.random() * 3),
+        30
+      )
+    );
   }
 }
 export class Angler2 extends Enemy {
   constructor(game, word) {
-    super(game, word);
-    this.width = 213;
-    this.height = 165;
-    this.y = Math.random() * (this.game.height * 0.95 - this.height);
-    this.image = document.getElementById("angler2");
-    this.frameY = Math.floor(Math.random() * 2);
+    const width = 213;
+    const height = 165;
+    const image = document.getElementById("angler2");
+    const spriteSheetRows = Math.floor(Math.random() * 2);
+    super(
+      game,
+      word,
+      new Sprite(image, width, height, 37, spriteSheetRows, 30)
+    );
   }
 }
 export class LuckyFish extends Enemy {
   constructor(game, word) {
-    super(game, word);
-    this.width = 99;
-    this.height = 95;
-    this.y = Math.random() * (this.game.height * 0.95 - this.height);
-    this.image = document.getElementById("lucky");
-    this.frameY = Math.floor(Math.random() * 2);
+    const width = 99;
+    const height = 95;
+    const image = document.getElementById("lucky");
+    const spriteSheetRows = Math.floor(Math.random() * 2);
+    super(
+      game,
+      word,
+      new Sprite(image, width, height, 37, spriteSheetRows, 30)
+    );
   }
 }
 export class HiveWhale extends Enemy {
   constructor(game, word) {
-    super(game, word);
-    this.width = 400;
-    this.height = 227;
-    this.y = Math.random() * (this.game.height * 0.95 - this.height);
-    this.image = document.getElementById("hivewhale");
-    this.frameY = 0;
-    this.type = "hive";
+    const width = 400;
+    const height = 227;
+    const image = document.getElementById("hivewhale");
+    const spriteSheetRows = 0;
+    super(
+      game,
+      word,
+      new Sprite(image, width, height, 37, spriteSheetRows, 30)
+    );
     this.speedX = -0.2;
+    this.type = "hive";
   }
 }
 export class Turtle extends Enemy {
   constructor(game, word) {
-    super(game, word);
-    this.width = 225;
-    this.height = 221;
-    this.y = Math.random() * (this.game.height * 0.95 - this.height);
-    this.image = document.getElementById(`turtle${randomInteger(1, 5)}`);
-    this.frameY = 0;
-    this.maxFrame = 59;
+    const width = 225;
+    const height = 221;
+    const image = document.getElementById(`turtle${Helper.randInt(1, 5)}`);
+    super(game, word, new Sprite(image, width, height, 59, 0, 30));
   }
 }
 
 export class Lionfish extends Enemy {
   constructor(game, word) {
-    super(game, word);
-    this.width = 251;
-    this.height = 187;
-    this.y = Math.random() * (this.game.height * 0.95 - this.height);
-    this.image = document.getElementById("lionfish1");
-    this.frameY = 0;
-    this.maxFrame = 60;
+    const width = 251;
+    const height = 187;
+    const image = document.getElementById("lionfish1");
+    super(game, word, new Sprite(image, width, height, 60, 0, 30));
   }
 }
 
 export class Drone extends Enemy {
   constructor(game, x, y, word) {
-    super(game, word);
-    this.width = 115;
-    this.height = 95;
+    const width = 115;
+    const height = 95;
+    const image = document.getElementById("drone");
+    const spriteSheetRows = Math.floor(Math.random() * 2);
+    super(game, word, new Sprite(image, width, height, 37, spriteSheetRows));
     this.x = x;
     this.y = y;
-    this.image = document.getElementById("drone");
-    this.frameY = Math.floor(Math.random() * 2);
-    this.type = "drone";
   }
-}
-
-function randomInteger(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
 }

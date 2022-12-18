@@ -1,7 +1,7 @@
 import FloatingMessage from "./Environment/FloatingMessage.js";
 import InputHandler from "./Game/InputHandler.js";
 import { Player } from "./Player/Player.js";
-import Particle from "./Enemy/Particle.js";
+import Particle from "./Environment/Particle.js";
 import { Background } from "./Environment/Background.js";
 import UserInterface from "./Environment/UserInterface.js";
 import {
@@ -27,16 +27,31 @@ window.addEventListener("load", function () {
   const ctx = canvas.getContext("2d");
   canvas.width = 2500;
   canvas.height = 1768;
-
   var levelsCompleted = JSON.parse(
     this.localStorage.getItem("levelsCompleted")
   );
   if (levelsCompleted === null) {
     levelsCompleted = {};
   }
+  var shop = JSON.parse(this.localStorage.getItem("shop"));
+  var cashElement = this.document.getElementById("cash");
+  if (shop === null) {
+    shop = {
+      cash: 0,
+      stats: { air: 0, mine: 0, speed: 0 },
+      drops: {
+        zapper: 0,
+        shield: 0,
+        timewarp: 0,
+      },
+      regen: { air: 0, mine: 0 },
+    };
+    cashElement.innerHTML = 0;
+  } else {
+    cashElement.innerHTML = shop["cash"];
+  }
 
   class Game {
-    static levels = [];
     constructor(width, height, words, specifiedLevel) {
       this.width = width;
       this.height = height;
@@ -54,7 +69,7 @@ window.addEventListener("load", function () {
       this.ammo = 1;
       this.maxAmmo = 1;
       this.ammoTimer = 0;
-      this.ammoInterval = 5000;
+      this.ammoInterval = 30000;
       this.lose = false;
       this.win = false;
       this.gameOver = false;
@@ -77,8 +92,14 @@ window.addEventListener("load", function () {
         (this.words.length === 0 && !this.gameOver)
       ) {
         this.win = true;
-        this.enemies.forEach((enemy) => (enemy.markedForDeletion = true));
+        this.enemies.forEach((enemy) => {
+          this.score += enemy.score;
+          enemy.markedForDeletion = true;
+        });
         levelsCompleted[this.specifiedLevel] = this.score;
+        shop["cash"] += this.specifiedLevel;
+        cashElement.innerHTML = shop["cash"];
+        localStorage.setItem("shop", JSON.stringify(shop));
         localStorage.setItem(
           "levelsCompleted",
           JSON.stringify(levelsCompleted)
@@ -184,6 +205,13 @@ window.addEventListener("load", function () {
             }
             if (enemy.type === "hive") {
               for (let i = 0; i < 5; i++) {
+                this.explosions.push(
+                  new SmokeExplosion(
+                    this,
+                    enemy.x + Math.random() * enemy.width,
+                    enemy.y + Math.random() * enemy.height
+                  )
+                );
                 const indexOfLastWord = this.words.length - 1;
                 const word = this.getNextWord(indexOfLastWord);
                 this.enemies.push(
@@ -199,7 +227,7 @@ window.addEventListener("load", function () {
           }
         });
         if (enemy.markedForDeletion === true) {
-          if (!this.gameOver) {
+          if (!this.lose) {
             this.floatingMessages.push(
               new FloatingMessage(
                 "+" + enemy.score,
@@ -219,6 +247,13 @@ window.addEventListener("load", function () {
             }
             if (enemy.type === "hive") {
               for (let i = 0; i < 5; i++) {
+                this.explosions.push(
+                  new SmokeExplosion(
+                    this,
+                    enemy.x + Math.random() * enemy.width,
+                    enemy.y + Math.random() * enemy.height
+                  )
+                );
                 const indexOfLastWord = this.words.length - 1;
                 const word = this.getNextWord(indexOfLastWord);
                 this.enemies.push(
@@ -250,16 +285,6 @@ window.addEventListener("load", function () {
 
       this.player.draw(context);
 
-      if (this.focus) {
-        context.beginPath();
-        context.strokeStyle = "white";
-        context.moveTo(this.player.x, this.player.y);
-        context.lineTo(
-          this.focus.x + this.focus.width * 0.5,
-          this.focus.y + this.focus.height * 0.5
-        );
-        context.stroke();
-      }
       this.enemies.forEach((enemy) => enemy.draw(context));
       this.explosions.forEach((explosion) => explosion.draw(context));
       this.particles.forEach((particle) => particle.draw(context));
@@ -281,17 +306,15 @@ window.addEventListener("load", function () {
     }
     chooseEnemy(value) {
       const enemies = [
+        new Jellyfish(this, value),
+        new Seahorse(this, value),
         new Turtle(this, value),
         new Lionfish(this, value),
-
-        new Jellyfish(this, value),
         new HiveWhale(this, value),
         new LuckyFish(this, value),
-        new Seahorse(this, value),
-        new Angler1(this, value),
         new Angler2(this, value),
+        new Angler1(this, value),
       ];
-
       return enemies[Math.floor(Math.random() * enemies.length)];
     }
     addExplosion(enemy) {
@@ -409,7 +432,7 @@ window.addEventListener("load", function () {
         }
         let score = levelsCompleted[level] || game.score;
         let button = window.document.createElement("button");
-        button.classList.add("btn", "btn-dark", "btn-sm");
+        button.classList.add("btn", "btn-outline-secondary", "btn-sm");
         console.log(score, availableScore);
         let percent = score / availableScore;
         let emoji;

@@ -116,6 +116,16 @@ export class Player {
       this.width,
       this.height
     );
+    if (this.game.focus) {
+      context.beginPath();
+      context.strokeStyle = "white";
+      context.moveTo(this.x, this.y);
+      context.lineTo(
+        this.game.focus.x + this.game.focus.width * 0.5,
+        this.game.focus.y + this.game.focus.height * 0.5
+      );
+      context.stroke();
+    }
   }
 
   shootTop() {
