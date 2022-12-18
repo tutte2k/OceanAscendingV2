@@ -329,7 +329,7 @@ window.addEventListener("load", function () {
     }
     findFocus(key) {
       let enemy = this.enemies.find((enemy) => {
-        if (enemy.x < this.width) return enemy.text.startsWith(key);
+        return enemy.text.startsWith(key);
       });
 
       if (enemy && !game.lose) {
@@ -340,6 +340,7 @@ window.addEventListener("load", function () {
             enemy.y + enemy.height * 0.5
           )
         );
+
         enemy.focused = true;
         return enemy;
       } else {
