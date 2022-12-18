@@ -26,7 +26,7 @@ window.addEventListener("load", function () {
   const canvas = document.getElementById("canvas1");
   const ctx = canvas.getContext("2d");
   canvas.width = 2500;
-  canvas.height = window.innerHeight;
+  canvas.height = 1768;
 
   var levelsCompleted = JSON.parse(
     this.localStorage.getItem("levelsCompleted")
@@ -77,6 +77,7 @@ window.addEventListener("load", function () {
         (this.words.length === 0 && !this.gameOver)
       ) {
         this.win = true;
+        this.enemies.forEach((enemy) => (enemy.markedForDeletion = true));
         levelsCompleted[this.specifiedLevel] = this.score;
         localStorage.setItem(
           "levelsCompleted",
@@ -136,14 +137,16 @@ window.addEventListener("load", function () {
                 )
               );
             }
-            this.floatingMessages.push(
-              new FloatingMessage(
-                "-" + 1,
-                this.player.x + this.player.width * 0.8,
-                this.player.y + this.player.height * 0.2,
-                "red"
-              )
-            );
+            if (!this.gameOver) {
+              this.floatingMessages.push(
+                new FloatingMessage(
+                  "-" + 1,
+                  this.player.x + this.player.width * 0.8,
+                  this.player.y + this.player.height * 0.2,
+                  "red"
+                )
+              );
+            }
           }
         }
         this.player.projectiles.forEach((projectile) => {
@@ -187,7 +190,7 @@ window.addEventListener("load", function () {
                   new Drone(
                     this,
                     enemy.x + Math.random() * enemy.width,
-                    enemy.y + Math.random() * enemy.height * 0.5,
+                    enemy.y + Math.random() * enemy.height,
                     word
                   )
                 );
@@ -196,37 +199,40 @@ window.addEventListener("load", function () {
           }
         });
         if (enemy.markedForDeletion === true) {
-          this.floatingMessages.push(
-            new FloatingMessage(
-              "+" + enemy.score,
-              enemy.x + enemy.width * 0.5,
-              enemy.y + enemy.height * 0.5,
-              "yellow"
-            )
-          );
-          for (let i = 0; i < enemy.score; i++) {
-            this.particles.push(
-              new Particle(
-                this,
+          if (!this.gameOver) {
+            this.floatingMessages.push(
+              new FloatingMessage(
+                "+" + enemy.score,
                 enemy.x + enemy.width * 0.5,
-                enemy.y + enemy.height * 0.5
+                enemy.y + enemy.height * 0.5,
+                "yellow"
               )
             );
-          }
-          if (enemy.type === "hive") {
-            for (let i = 0; i < 5; i++) {
-              const indexOfLastWord = this.words.length - 1;
-              const word = this.getNextWord(indexOfLastWord);
-              this.enemies.push(
-                new Drone(
+            for (let i = 0; i < enemy.score; i++) {
+              this.particles.push(
+                new Particle(
                   this,
-                  enemy.x + Math.random() * enemy.width,
-                  enemy.y + Math.random() * enemy.height * 0.5,
-                  word
+                  enemy.x + enemy.width * 0.5,
+                  enemy.y + enemy.height * 0.5
                 )
               );
             }
+            if (enemy.type === "hive") {
+              for (let i = 0; i < 5; i++) {
+                const indexOfLastWord = this.words.length - 1;
+                const word = this.getNextWord(indexOfLastWord);
+                this.enemies.push(
+                  new Drone(
+                    this,
+                    enemy.x + Math.random() * enemy.width,
+                    enemy.y + Math.random() * enemy.height * 0.5,
+                    word
+                  )
+                );
+              }
+            }
           }
+
           this.focus = null;
         }
       });
@@ -242,28 +248,6 @@ window.addEventListener("load", function () {
       this.background.draw(context);
       this.userInterface.draw(context);
 
-      context.beginPath();
-      var gradient = ctx.createLinearGradient(
-        0,
-        0,
-        0,
-        this.player.y + this.player.height * 0.5
-      );
-      let red = true;
-      for (let i = 0; i < 10; i++) {
-        let color = red ? "red" : "orange";
-        gradient.addColorStop(`0.${i}`, color);
-        red = !red;
-      }
-      context.strokeStyle = gradient;
-      context.moveTo(
-        this.player.x + this.player.width * 0.65,
-        this.player.y + this.player.height * 0.5
-      );
-      context.lineTo(50, 0);
-      context.lineWidth = 3;
-
-      context.stroke();
       this.player.draw(context);
 
       if (this.focus) {

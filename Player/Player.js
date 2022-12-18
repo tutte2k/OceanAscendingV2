@@ -86,6 +86,24 @@ export class Player {
     }
   }
   draw(context) {
+    context.beginPath();
+    var gradient = context.createLinearGradient(
+      0,
+      0,
+      0,
+      this.y + this.height * 0.5
+    );
+    let red = true;
+    for (let i = 0; i < 10; i++) {
+      let color = red ? "red" : "orange";
+      gradient.addColorStop(`0.${i}`, color);
+      red = !red;
+    }
+    context.strokeStyle = gradient;
+    context.moveTo(this.x + this.width * 0.65, this.y + this.height * 0.5);
+    context.lineTo(50, 0);
+    context.lineWidth = 3;
+    context.stroke();
     this.projectiles.forEach((projectile) => projectile.draw(context));
     context.drawImage(
       this.image,
