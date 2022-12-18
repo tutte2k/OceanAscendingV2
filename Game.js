@@ -301,8 +301,6 @@ window.addEventListener("load", function () {
         new Lionfish(this, value),
 
         new Jellyfish(this, value),
-      ];
-      const hard = [
         new HiveWhale(this, value),
         new LuckyFish(this, value),
         new Seahorse(this, value),
@@ -331,7 +329,7 @@ window.addEventListener("load", function () {
     }
     findFocus(key) {
       let enemy = this.enemies.find((enemy) => {
-        return enemy.text.startsWith(key);
+        if (enemy.x < this.this.width - 1) return enemy.text.startsWith(key);
       });
 
       if (enemy && !game.lose) {
