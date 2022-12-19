@@ -19,7 +19,7 @@ export default class UserInterface {
       this.game.width * 0.5,
       this.game.height - 30
     );
-    context.fillText("Ammo: " + this.game.ammo, this.game.width * 0.05, 30);
+    context.fillText("Mine: " + this.game.ammo, this.game.width * 0.05, 30);
     context.fillText("Air: " + this.game.health, this.game.width * 0.15, 30);
 
     context.fillText(

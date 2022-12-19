@@ -426,9 +426,6 @@ window.addEventListener("load", function () {
     levels[currentLevel || 0].slice(),
     currentLevel || 0
   );
-  canvas.addEventListener("click", function (e) {
-    game.player.shootTop();
-  });
 
   function storeCash(earnedCash) {
     console.log(earnedCash);
@@ -453,6 +450,7 @@ window.addEventListener("load", function () {
     levels[level].forEach((x) => (availableScore += x.length));
     return availableScore;
   }
+
   function createBtnGrp(id) {
     const btnGrp = window.document.createElement("div");
     btnGrp.id = `btnGrp${id}`;
@@ -467,7 +465,7 @@ window.addEventListener("load", function () {
     btnGrp.appendChild(displayButton);
     const dropdown = window.document.createElement("div");
     dropdown.id = `dropdown${id}`;
-    dropdown.classList.add("dropdown-menu", "row-cols-1");
+    dropdown.classList.add("dropdown-menu", "row-cols-1", "p-0");
     btnGrp.appendChild(dropdown);
     return btnGrp;
   }
@@ -493,6 +491,7 @@ window.addEventListener("load", function () {
     for (const level in levelsCompleted) {
       if (Object.hasOwnProperty.call(levelsCompleted, level)) {
         if (maxLevel % 10 == 0 && maxLevel != 0) {
+          btnGrp.children[number].innerHTML += "asd";
           number++;
         }
         let btnGrp = window.document.getElementById(`btnGrp${number}`);
@@ -505,7 +504,7 @@ window.addEventListener("load", function () {
         let score = levelsCompleted[level] || game.score;
         let button = window.document.createElement("button");
 
-        button.classList.add("btn", "btn-outline-secondary", "my-1");
+        button.classList.add("btn", "btn-outline-secondary", "p-0", "m-0");
 
         let percent = score / availableScore;
         let emoji;
@@ -535,6 +534,7 @@ window.addEventListener("load", function () {
     });
     levelContainer.appendChild(button);
   }
+
   function startGame(level) {
     game = new Game(canvas.width, canvas.height, levels[level].slice(), level);
   }
