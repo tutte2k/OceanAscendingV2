@@ -96,14 +96,63 @@ window.addEventListener("load", function () {
           this.score += enemy.score;
           enemy.markedForDeletion = true;
         });
-        levelsCompleted[this.specifiedLevel] = this.score;
-        shop["cash"] += this.specifiedLevel;
-        cashElement.innerHTML = shop["cash"];
-        localStorage.setItem("shop", JSON.stringify(shop));
-        localStorage.setItem(
-          "levelsCompleted",
-          JSON.stringify(levelsCompleted)
-        );
+
+        let earnedCash;
+
+        if (!levelsCompleted[this.specifiedLevel]) {
+          levelsCompleted[this.specifiedLevel] = this.score;
+          earnedCash =
+            +this.specifiedLevel +
+            Math.round(
+              (this.score / getAvailableScore(this.specifiedLevel)) * 10
+            );
+
+          this.floatingMessages.push(
+            new FloatingMessage(
+              `$${earnedCash.toFixed(0)}`,
+              this.width * 0.9,
+              this.height * 0.5,
+              "green",
+              100
+            )
+          );
+          shop["cash"] = (+shop["cash"] + earnedCash).toFixed(0);
+          cashElement.innerHTML = shop["cash"];
+
+          localStorage.setItem("shop", JSON.stringify(shop));
+          localStorage.setItem(
+            "levelsCompleted",
+            JSON.stringify(levelsCompleted)
+          );
+        } else if (levelsCompleted[this.specifiedLevel] < this.score) {
+          let previousScore = levelsCompleted[this.specifiedLevel];
+          levelsCompleted[this.specifiedLevel] = this.score;
+
+          let currentScore = this.score;
+
+          let earnableScore = currentScore - previousScore;
+
+          earnedCash = Math.round(
+            (earnableScore / getAvailableScore(this.specifiedLevel)) * 10
+          );
+
+          this.floatingMessages.push(
+            new FloatingMessage(
+              `$${earnedCash.toFixed(0)}`,
+              this.width * 0.9,
+              this.height * 0.5,
+              "green",
+              100
+            )
+          );
+          shop["cash"] = (+shop["cash"] + earnedCash).toFixed(0);
+          cashElement.innerHTML = shop["cash"];
+          localStorage.setItem("shop", JSON.stringify(shop));
+          localStorage.setItem(
+            "levelsCompleted",
+            JSON.stringify(levelsCompleted)
+          );
+        }
         game.specifiedLevel++;
         updateLevelButtons();
       }
@@ -164,7 +213,8 @@ window.addEventListener("load", function () {
                   "-" + 1,
                   this.player.x + this.player.width * 0.8,
                   this.player.y + this.player.height * 0.2,
-                  "red"
+                  "red",
+                  45
                 )
               );
             }
@@ -181,7 +231,8 @@ window.addEventListener("load", function () {
                 "+" + enemy.score,
                 enemy.x + enemy.width * 0.5,
                 enemy.y + enemy.height * 0.5,
-                "yellow"
+                "yellow",
+                45
               )
             );
             projectile.markedForDeletion = true;
@@ -233,7 +284,8 @@ window.addEventListener("load", function () {
                 "+" + enemy.score,
                 enemy.x + enemy.width * 0.5,
                 enemy.y + enemy.height * 0.5,
-                "yellow"
+                "yellow",
+                45
               )
             );
             for (let i = 0; i < enemy.score; i++) {
@@ -358,7 +410,8 @@ window.addEventListener("load", function () {
               key,
               this.player.x + this.player.width * 0.8,
               this.player.y + this.player.height * 0.2,
-              "white "
+              "white ",
+              45
             )
           );
         return null;
@@ -411,6 +464,29 @@ window.addEventListener("load", function () {
   canvas.addEventListener("click", function (e) {
     game.player.shootTop();
   });
+  function getAvailableScore(level) {
+    let availableScore = 0;
+    levels[level].forEach((x) => (availableScore += x.length));
+    return availableScore;
+  }
+  function createBtnGrp(id) {
+    const btnGrp = window.document.createElement("div");
+    btnGrp.id = `btnGrp${id}`;
+    btnGrp.classList.add("btn-group");
+    btnGrp.role = "group";
+    const displayButton = window.document.createElement("button");
+    displayButton.classList.add("btn", "btn-outline-secondary");
+    displayButton.setAttribute("aria-expanded", "false");
+    displayButton.setAttribute("data-bs-toggle", "dropdown");
+    displayButton.innerHTML =
+      id == 0 ? 0 + "-" + "9" : id + "0" + "-" + (id + "9");
+    btnGrp.appendChild(displayButton);
+    const dropdown = window.document.createElement("div");
+    dropdown.id = `dropdown${id}`;
+    dropdown.classList.add("dropdown-menu", "row-cols-1");
+    btnGrp.appendChild(dropdown);
+    return btnGrp;
+  }
 
   updateLevelButtons();
   function updateLevelButtons() {
@@ -419,21 +495,34 @@ window.addEventListener("load", function () {
     const good = "👍";
     const perfect = "💯";
     const hook = "🪝";
-    const levelContainer = window.document.getElementById("levelContainer");
+    let levelContainer = window.document.getElementById("levelContainer");
+    let maxLevel = 0;
+
+    let number = 0;
+
     while (levelContainer.lastChild) {
       levelContainer.removeChild(levelContainer.lastChild);
     }
+    for (let i = 0; i < 10; i++) {
+      levelContainer.appendChild(createBtnGrp(i));
+    }
     for (const level in levelsCompleted) {
       if (Object.hasOwnProperty.call(levelsCompleted, level)) {
+        if (maxLevel % 10 == 0 && maxLevel != 0) {
+          number++;
+        }
+        let btnGrp = window.document.getElementById(`btnGrp${number}`);
         let availableScore = 0;
         levels[level].forEach((x) => (availableScore += x.length));
         if (availableScore === 0) {
           levels[level + 1].forEach((x) => (availableScore += x.length));
         }
+
         let score = levelsCompleted[level] || game.score;
         let button = window.document.createElement("button");
-        button.classList.add("btn", "btn-outline-secondary", "btn-sm");
-        console.log(score, availableScore);
+
+        button.classList.add("btn", "btn-outline-secondary", "my-1");
+
         let percent = score / availableScore;
         let emoji;
 
@@ -447,28 +536,18 @@ window.addEventListener("load", function () {
         button.addEventListener("click", function (e) {
           startGame(e.target.value);
         });
-        levelContainer.appendChild(button);
+        btnGrp.children[1].appendChild(button);
+        maxLevel++;
       }
     }
-    if (levelContainer.children.length === 0) {
-      let button = window.document.createElement("button");
-      button.classList.add("btn", "btn-success", "btn-sm");
-      button.innerHTML = `0 ${hook}`;
-      button.value = 0;
-      button.addEventListener("click", function (e) {
-        startGame(e.target.value);
-      });
-      levelContainer.appendChild(button);
-    } else {
-      let button = window.document.createElement("button");
-      button.classList.add("btn", "btn-success", "btn-sm");
-      button.innerHTML = `${+game.specifiedLevel} ${hook}`;
-      button.value = +game.specifiedLevel;
-      button.addEventListener("click", function (e) {
-        startGame(e.target.value);
-      });
-      levelContainer.appendChild(button);
-    }
+    let button = window.document.createElement("button");
+    button.classList.add("btn", "btn-success", "mt-2");
+    button.innerHTML = `${maxLevel || +game.specifiedLevel} ${hook}`;
+    button.value = maxLevel || +game.specifiedLevel;
+    button.addEventListener("click", function (e) {
+      startGame(e.target.value);
+    });
+    levelContainer.appendChild(button);
   }
   function startGame(level) {
     game = new Game(canvas.width, canvas.height, levels[level].slice(), level);

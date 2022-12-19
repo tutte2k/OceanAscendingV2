@@ -1,5 +1,5 @@
 export default class FloatingMessage {
-  constructor(value, x, y, color) {
+  constructor(value, x, y, color, size) {
     this.value = value;
     this.x = x;
     this.y = y;
@@ -7,7 +7,7 @@ export default class FloatingMessage {
     this.lived = 0;
     this.opacity = 1;
     this.markedForDeletion = false;
-    this.size = 45;
+    this.size = size;
     this.font = "Carter One";
     this.color = color;
   }
