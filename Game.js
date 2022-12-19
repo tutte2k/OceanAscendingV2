@@ -107,51 +107,16 @@ window.addEventListener("load", function () {
               (this.score / getAvailableScore(this.specifiedLevel)) * 10
             );
 
-          this.floatingMessages.push(
-            new FloatingMessage(
-              `$${earnedCash.toFixed(0)}`,
-              this.width * 0.9,
-              this.height * 0.5,
-              "green",
-              100
-            )
-          );
-          shop["cash"] = (+shop["cash"] + earnedCash).toFixed(0);
-          cashElement.innerHTML = shop["cash"];
-
-          localStorage.setItem("shop", JSON.stringify(shop));
-          localStorage.setItem(
-            "levelsCompleted",
-            JSON.stringify(levelsCompleted)
-          );
+          storeCash(earnedCash);
         } else if (levelsCompleted[this.specifiedLevel] < this.score) {
           let previousScore = levelsCompleted[this.specifiedLevel];
           levelsCompleted[this.specifiedLevel] = this.score;
-
           let currentScore = this.score;
-
           let earnableScore = currentScore - previousScore;
-
           earnedCash = Math.round(
             (earnableScore / getAvailableScore(this.specifiedLevel)) * 10
           );
-
-          this.floatingMessages.push(
-            new FloatingMessage(
-              `$${earnedCash.toFixed(0)}`,
-              this.width * 0.9,
-              this.height * 0.5,
-              "green",
-              100
-            )
-          );
-          shop["cash"] = (+shop["cash"] + earnedCash).toFixed(0);
-          cashElement.innerHTML = shop["cash"];
-          localStorage.setItem("shop", JSON.stringify(shop));
-          localStorage.setItem(
-            "levelsCompleted",
-            JSON.stringify(levelsCompleted)
-          );
+          storeCash(earnedCash);
         }
         game.specifiedLevel++;
         updateLevelButtons();
@@ -464,6 +429,25 @@ window.addEventListener("load", function () {
   canvas.addEventListener("click", function (e) {
     game.player.shootTop();
   });
+
+  function storeCash(earnedCash) {
+    console.log(earnedCash);
+    game.floatingMessages.push(
+      new FloatingMessage(
+        `$${earnedCash.toFixed(0)}`,
+        game.width * 0.9,
+        game.height * 0.5,
+        "green",
+        100
+      )
+    );
+    shop["cash"] = (+shop["cash"] + earnedCash).toFixed(0);
+    cashElement.innerHTML = shop["cash"];
+
+    localStorage.setItem("shop", JSON.stringify(shop));
+    localStorage.setItem("levelsCompleted", JSON.stringify(levelsCompleted));
+  }
+
   function getAvailableScore(level) {
     let availableScore = 0;
     levels[level].forEach((x) => (availableScore += x.length));
