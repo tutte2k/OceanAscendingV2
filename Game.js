@@ -526,7 +526,9 @@ window.addEventListener("load", function () {
     }
     let button = window.document.createElement("button");
     button.classList.add("btn", "btn-success", "mt-2");
-    button.innerHTML = `${maxLevel || +game.specifiedLevel} ${hook}`;
+    button.innerHTML = `Go Fish ${hook} Level ${
+      maxLevel || +game.specifiedLevel
+    } `;
     button.value = maxLevel || +game.specifiedLevel;
     button.addEventListener("click", function (e) {
       startGame(e.target.value);
