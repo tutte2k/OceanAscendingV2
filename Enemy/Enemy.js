@@ -1,4 +1,4 @@
-import Sprite from "../Game/Sprite.js";
+import SpriteSheet from "../Game/Sprite.js";
 import Helper from "../Game/Helper.js";
 
 class Enemy {
@@ -75,7 +75,7 @@ export class Jellyfish extends Enemy {
     super(
       game,
       word,
-      new Sprite(
+      new SpriteSheet(
         document.getElementById(`jellyfish${Helper.randInt(1, 5)}`),
         120,
         258,
@@ -98,7 +98,7 @@ export class Seahorse extends Enemy {
     super(
       game,
       word,
-      new Sprite(
+      new SpriteSheet(
         document.getElementById("seahorse"),
         120,
         190,
@@ -114,7 +114,7 @@ export class Angler1 extends Enemy {
     super(
       game,
       word,
-      new Sprite(
+      new SpriteSheet(
         document.getElementById("angler1"),
         228,
         169,
@@ -134,7 +134,7 @@ export class Angler2 extends Enemy {
     super(
       game,
       word,
-      new Sprite(image, width, height, 37, spriteSheetRows, 30)
+      new SpriteSheet(image, width, height, 37, spriteSheetRows, 30)
     );
   }
 }
@@ -147,7 +147,7 @@ export class LuckyFish extends Enemy {
     super(
       game,
       word,
-      new Sprite(image, width, height, 37, spriteSheetRows, 30)
+      new SpriteSheet(image, width, height, 37, spriteSheetRows, 30)
     );
   }
 }
@@ -160,7 +160,7 @@ export class HiveWhale extends Enemy {
     super(
       game,
       word,
-      new Sprite(image, width, height, 37, spriteSheetRows, 30)
+      new SpriteSheet(image, width, height, 37, spriteSheetRows, 30)
     );
     this.speedX = -0.2;
     this.type = "hive";
@@ -171,7 +171,17 @@ export class Turtle extends Enemy {
     const width = 225;
     const height = 221;
     const image = document.getElementById(`turtle${Helper.randInt(1, 5)}`);
-    super(game, word, new Sprite(image, width, height, 59, 0, 30));
+    super(game, word, new SpriteSheet(image, width, height, 59, 0, 30));
+    this.speedX = -0.1;
+  }
+}
+export class Chtullie extends Enemy {
+  constructor(game, word) {
+    const width = 500;
+    const height = 500;
+    const image = document.getElementById(`chtullie`);
+    super(game, word, new SpriteSheet(image, width, height, 4, 9, 25, true));
+    this.speedX = -1.2;
   }
 }
 
@@ -180,7 +190,8 @@ export class Lionfish extends Enemy {
     const width = 251;
     const height = 187;
     const image = document.getElementById("lionfish1");
-    super(game, word, new Sprite(image, width, height, 60, 0, 30));
+    super(game, word, new SpriteSheet(image, width, height, 60, 0, 30));
+    this.speedX = -0.5;
   }
 }
 
@@ -190,7 +201,11 @@ export class Drone extends Enemy {
     const height = 95;
     const image = document.getElementById("drone");
     const spriteSheetRows = Math.floor(Math.random() * 2);
-    super(game, word, new Sprite(image, width, height, 37, spriteSheetRows));
+    super(
+      game,
+      word,
+      new SpriteSheet(image, width, height, 37, spriteSheetRows)
+    );
     this.x = x;
     this.y = y;
   }

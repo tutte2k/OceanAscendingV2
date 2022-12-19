@@ -1,6 +1,15 @@
-export default class Sprite {
-  constructor(image, width, height, spriteSheetColumns, spriteSheetRows, fps) {
+export default class SpriteSheet {
+  constructor(
+    image,
+    width,
+    height,
+    spriteSheetColumns,
+    spriteSheetRows,
+    fps,
+    multirow = false
+  ) {
     this.image = image;
+
     this.spriteSheetColumns = spriteSheetColumns;
     this.spriteSheetRows = spriteSheetRows;
 
@@ -9,6 +18,7 @@ export default class Sprite {
 
     this.frameX = 0;
     this.frameY = 0;
+    this.multirow = multirow;
 
     this.timer = 0;
     this.fps = fps;
@@ -18,6 +28,13 @@ export default class Sprite {
     if (this.frameX < this.spriteSheetColumns) {
       if (this.timer > this.interval) {
         this.frameX++;
+        if (this.multirow && this.frameX === this.spriteSheetColumns) {
+          this.frameY++;
+          this.frameX = 0;
+          if (this.frameY === this.spriteSheetRows) {
+            this.frameY = 0;
+          }
+        }
         this.timer = 0;
       } else {
         this.timer += deltaTime;

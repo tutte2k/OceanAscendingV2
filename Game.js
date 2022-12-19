@@ -20,6 +20,7 @@ import {
   Lionfish,
   Seahorse,
   Jellyfish,
+  Chtullie,
 } from "./Enemy/Enemy.js";
 
 window.addEventListener("load", function () {
@@ -191,15 +192,7 @@ window.addEventListener("load", function () {
             if (enemy.focused && this.focus === enemy) {
               this.focus = null;
             }
-            this.floatingMessages.push(
-              new FloatingMessage(
-                "+" + enemy.score,
-                enemy.x + enemy.width * 0.5,
-                enemy.y + enemy.height * 0.5,
-                "yellow",
-                45
-              )
-            );
+            this.enemyScoreMessage(enemy);
             projectile.markedForDeletion = true;
             enemy.markedForDeletion = true;
 
@@ -220,39 +213,13 @@ window.addEventListener("load", function () {
               );
             }
             if (enemy.type === "hive") {
-              for (let i = 0; i < 5; i++) {
-                this.explosions.push(
-                  new SmokeExplosion(
-                    this,
-                    enemy.x + Math.random() * enemy.width,
-                    enemy.y + Math.random() * enemy.height
-                  )
-                );
-                const indexOfLastWord = this.words.length - 1;
-                const word = this.getNextWord(indexOfLastWord);
-                this.enemies.push(
-                  new Drone(
-                    this,
-                    enemy.x + Math.random() * enemy.width,
-                    enemy.y + Math.random() * enemy.height,
-                    word
-                  )
-                );
-              }
+              this.hiveExplosion(enemy);
             }
           }
         });
         if (enemy.markedForDeletion === true) {
           if (!this.lose) {
-            this.floatingMessages.push(
-              new FloatingMessage(
-                "+" + enemy.score,
-                enemy.x + enemy.width * 0.5,
-                enemy.y + enemy.height * 0.5,
-                "yellow",
-                45
-              )
-            );
+            this.enemyScoreMessage(enemy);
             for (let i = 0; i < enemy.score; i++) {
               this.particles.push(
                 new Particle(
@@ -263,25 +230,7 @@ window.addEventListener("load", function () {
               );
             }
             if (enemy.type === "hive") {
-              for (let i = 0; i < 5; i++) {
-                this.explosions.push(
-                  new SmokeExplosion(
-                    this,
-                    enemy.x + Math.random() * enemy.width,
-                    enemy.y + Math.random() * enemy.height
-                  )
-                );
-                const indexOfLastWord = this.words.length - 1;
-                const word = this.getNextWord(indexOfLastWord);
-                this.enemies.push(
-                  new Drone(
-                    this,
-                    enemy.x + Math.random() * enemy.width,
-                    enemy.y + Math.random() * enemy.height * 0.5,
-                    word
-                  )
-                );
-              }
+              this.hiveExplosion(enemy);
             }
           }
 
@@ -310,6 +259,40 @@ window.addEventListener("load", function () {
         floatingMessage.draw(context)
       );
     }
+    enemyScoreMessage(enemy) {
+      this.floatingMessages.push(
+        new FloatingMessage(
+          "+" + enemy.score,
+          enemy.x + enemy.width * 0.5,
+          enemy.y + enemy.height * 0.5,
+          "yellow",
+          45
+        )
+      );
+    }
+
+    hiveExplosion(enemy) {
+      for (let i = 0; i < 5; i++) {
+        this.explosions.push(
+          new SmokeExplosion(
+            this,
+            enemy.x + Math.random() * enemy.width,
+            enemy.y + Math.random() * enemy.height
+          )
+        );
+        const indexOfLastWord = this.words.length - 1;
+        const word = this.getNextWord(indexOfLastWord);
+        this.enemies.push(
+          new Drone(
+            this,
+            enemy.x + Math.random() * enemy.width * 2,
+            enemy.y + Math.random() * enemy.height * 2,
+            word
+          )
+        );
+      }
+    }
+
     addEnemy() {
       const randomize = Math.random();
       const indexOfLastWord = this.words.length - 1;
@@ -323,6 +306,7 @@ window.addEventListener("load", function () {
     }
     chooseEnemy(value) {
       const enemies = [
+        new Chtullie(this, value),
         new Jellyfish(this, value),
         new Seahorse(this, value),
         new Turtle(this, value),
@@ -479,8 +463,10 @@ window.addEventListener("load", function () {
     const hook = "🪝";
     let levelContainer = window.document.getElementById("levelContainer");
     let maxLevel = 0;
-
+    let total = [];
+    let totalSum = 0;
     let number = 0;
+    let emoji;
 
     while (levelContainer.lastChild) {
       levelContainer.removeChild(levelContainer.lastChild);
@@ -488,13 +474,26 @@ window.addEventListener("load", function () {
     for (let i = 0; i < 10; i++) {
       levelContainer.appendChild(createBtnGrp(i));
     }
+
     for (const level in levelsCompleted) {
       if (Object.hasOwnProperty.call(levelsCompleted, level)) {
-        if (maxLevel % 10 == 0 && maxLevel != 0) {
-          btnGrp.children[number].innerHTML += "asd";
-          number++;
-        }
         let btnGrp = window.document.getElementById(`btnGrp${number}`);
+        if (maxLevel % 10 == 0 && maxLevel != 0) {
+          for (let i = 0; i < total.length; i++) {
+            totalSum += total[i];
+          }
+          let avgScore = totalSum / total.length;
+          if (avgScore >= 75) emoji = perfect;
+          else if (avgScore >= 50) emoji = good;
+          else if (avgScore >= 25) emoji = ok;
+          else if (avgScore < 25) emoji = bad;
+          btnGrp.children[number].innerHTML += `${emoji}${avgScore.toFixed(
+            0
+          )}%`;
+          number++;
+          totalSum = 0;
+          total.length = 0;
+        }
         let availableScore = 0;
         levels[level].forEach((x) => (availableScore += x.length));
         if (availableScore === 0) {
@@ -507,7 +506,7 @@ window.addEventListener("load", function () {
         button.classList.add("btn", "btn-outline-secondary", "p-0", "m-0");
 
         let percent = score / availableScore;
-        let emoji;
+        total.push(percent * 100);
 
         if (percent >= 0.75) emoji = perfect;
         else if (percent >= 0.5) emoji = good;

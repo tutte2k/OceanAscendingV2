@@ -34,7 +34,8 @@ html {
 #jellyfish2,
 #jellyfish3,
 #jellyfish4,
-#jellyfish5 {
+#jellyfish5,
+#chtullie {
   display: none;
 }
 
@@ -48,7 +49,7 @@ html {
   transform: translate(-50%, -50%);
 
   background: linear-gradient(
-    181deg,
+    142deg,
     #6ab7ff,
     #5ca2e4,
     #518cc4,
