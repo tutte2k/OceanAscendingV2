@@ -60,7 +60,7 @@ class Enemy {
     context.shadowOffsetY = 2;
     context.shadowColor = "black";
     this.displayText = this.text.replace(this.completedText, "");
-    context.fillStyle = this.focused ? "silver" : "white";
+    context.fillStyle = this.focused ? "lime" : "white";
     context.font = "40px " + this.font;
     context.fillText(
       this.displayText,
@@ -107,6 +107,7 @@ export class Seahorse extends Enemy {
         30
       )
     );
+    this.type = "mech";
   }
 }
 export class Angler1 extends Enemy {
@@ -123,6 +124,7 @@ export class Angler1 extends Enemy {
         30
       )
     );
+    this.type = "mech";
   }
 }
 export class Angler2 extends Enemy {
@@ -136,6 +138,7 @@ export class Angler2 extends Enemy {
       word,
       new SpriteSheet(image, width, height, 37, spriteSheetRows, 30)
     );
+    this.type = "mech";
   }
 }
 export class LuckyFish extends Enemy {
@@ -149,6 +152,7 @@ export class LuckyFish extends Enemy {
       word,
       new SpriteSheet(image, width, height, 37, spriteSheetRows, 30)
     );
+    this.type = "mech";
   }
 }
 export class HiveWhale extends Enemy {
@@ -181,7 +185,18 @@ export class Chtullie extends Enemy {
     const height = 500;
     const image = document.getElementById(`chtullie`);
     super(game, word, new SpriteSheet(image, width, height, 4, 9, 25, true));
+    this.speedX = -0.6;
+    this.type = "chtullie";
+  }
+}
+export class Angela extends Enemy {
+  constructor(game, word) {
+    const width = 483;
+    const height = 500;
+    const image = document.getElementById(`angela${Helper.randInt(1, 2)}`);
+    super(game, word, new SpriteSheet(image, width, height, 29, 0, 25));
     this.speedX = -1.2;
+    this.type = "angela";
   }
 }
 
@@ -208,5 +223,6 @@ export class Drone extends Enemy {
     );
     this.x = x;
     this.y = y;
+    this.type = "mech";
   }
 }

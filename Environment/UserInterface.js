@@ -39,7 +39,7 @@ export default class UserInterface {
       let message1;
       let message2;
       if (this.game.win) {
-        message1 = "You win!";
+        message1 = "You made it!";
         message2 = "Fishing with dynamite is only illegal if someone hears it!";
       } else if (this.game.lose) {
         message1 = "You ran out of air!";
@@ -61,7 +61,7 @@ export default class UserInterface {
     if (this.game.focus) {
       if (this.game.focus.text.length != 1) {
         context.font = "100" + "px " + this.fontFamily;
-        context.fillStyle = "silver";
+        context.fillStyle = "lime";
         context.fillText(
           this.game.focus.displayText,
           this.game.width / 2,

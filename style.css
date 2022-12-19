@@ -7,7 +7,6 @@ html {
   overflow-y: hidden;
   overflow-x: hidden;
 }
-
 #layer1,
 #layer2,
 #layer3,
@@ -35,7 +34,9 @@ html {
 #jellyfish3,
 #jellyfish4,
 #jellyfish5,
-#chtullie {
+#chtullie,
+#angela1,
+#angela2 {
   display: none;
 }
 

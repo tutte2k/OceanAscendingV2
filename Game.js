@@ -6,7 +6,7 @@ import { Background } from "./Environment/Background.js";
 import UserInterface from "./Environment/UserInterface.js";
 import {
   FireExplosion,
-  RainbowExplosion,
+  RainbowExplosion as InkExplosion,
   SmokeExplosion,
 } from "./Environment/Explosion.js";
 import { Wordstring } from "./Game/Words.js";
@@ -21,6 +21,7 @@ import {
   Seahorse,
   Jellyfish,
   Chtullie,
+  Angela,
 } from "./Enemy/Enemy.js";
 
 window.addEventListener("load", function () {
@@ -215,6 +216,12 @@ window.addEventListener("load", function () {
             if (enemy.type === "hive") {
               this.hiveExplosion(enemy);
             }
+            if (enemy.type === "chtullie") {
+              this.chtullieExplosion(enemy);
+            }
+            if (enemy.type === "mech") {
+              this.mechExplosion(enemy);
+            }
           }
         });
         if (enemy.markedForDeletion === true) {
@@ -231,6 +238,12 @@ window.addEventListener("load", function () {
             }
             if (enemy.type === "hive") {
               this.hiveExplosion(enemy);
+            }
+            if (enemy.type === "chtullie") {
+              this.chtullieExplosion(enemy);
+            }
+            if (enemy.type === "mech") {
+              this.mechExplosion(enemy);
             }
           }
 
@@ -270,7 +283,28 @@ window.addEventListener("load", function () {
         )
       );
     }
-
+    mechExplosion(enemy) {
+      this.explosions.push(
+        new FireExplosion(
+          this,
+          enemy.x + enemy.width * 0.5,
+          enemy.y + enemy.height * 0.5
+        )
+      );
+    }
+    chtullieExplosion(enemy) {
+      for (let i = 0; i < 5; i++) {
+        this.explosions.push(
+          new InkExplosion(
+            this,
+            enemy.x + enemy.width * 0.5 * Math.random(),
+            enemy.y +
+              enemy.height * 0.8 +
+              enemy.height * 0.1 * i * Math.random()
+          )
+        );
+      }
+    }
     hiveExplosion(enemy) {
       for (let i = 0; i < 5; i++) {
         this.explosions.push(
@@ -285,7 +319,7 @@ window.addEventListener("load", function () {
         this.enemies.push(
           new Drone(
             this,
-            enemy.x + Math.random() * enemy.width * 2,
+            enemy.x + Math.random() * enemy.width,
             enemy.y + Math.random() * enemy.height * 2,
             word
           )
@@ -306,6 +340,7 @@ window.addEventListener("load", function () {
     }
     chooseEnemy(value) {
       const enemies = [
+        new Angela(this, value),
         new Chtullie(this, value),
         new Jellyfish(this, value),
         new Seahorse(this, value),
