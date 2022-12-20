@@ -651,6 +651,7 @@ window.addEventListener("load", function () {
         0
       );
     }
+    document.activeElement.blur();
   }
   var audio = new Audio("./assets/level1.flac");
   audio.loop = true;
