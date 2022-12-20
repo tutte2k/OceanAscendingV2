@@ -509,6 +509,7 @@ window.addEventListener("load", function () {
     currentLevel = store.completedLevels.mode[selectedMode].length;
     updateLevelButtons();
     startGame(currentLevel);
+    document.activeElement.blur();
   });
   let game;
   try {
@@ -597,6 +598,7 @@ window.addEventListener("load", function () {
       button.value = level;
       button.addEventListener("click", function (e) {
         startGame(+e.target.value);
+        document.activeElement.blur();
       });
       btnGrp.children[1].appendChild(button);
 
@@ -611,6 +613,7 @@ window.addEventListener("load", function () {
     button.value = maxLevel || +game.specifiedLevel;
     button.addEventListener("click", function (e) {
       startGame(+e.target.value);
+      document.activeElement.blur();
     });
     levelContainer.appendChild(button);
   }
