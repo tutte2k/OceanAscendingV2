@@ -9,7 +9,17 @@ import {
   RainbowExplosion as InkExplosion,
   SmokeExplosion,
 } from "./Environment/Explosion.js";
-import { Wordstring } from "./Game/Words.js";
+import {
+  TibiaMonsters,
+  TibiaPlaces,
+  TibiaSpells,
+  Wordstring,
+  TibiaNpcs,
+  TibiaSlang,
+  TibiaLanguage,
+  TibiaItems,
+  TibiaMisc,
+} from "./Game/Words.js";
 import {
   Angler1,
   Angler2,
@@ -27,19 +37,18 @@ import {
 window.addEventListener("load", function () {
   const canvas = document.getElementById("canvas1");
   const ctx = canvas.getContext("2d");
+
   canvas.width = 2500;
   canvas.height = 1768;
-  var levelsCompleted = JSON.parse(
-    this.localStorage.getItem("levelsCompleted")
-  );
-  if (levelsCompleted === null) {
-    levelsCompleted = {};
-  }
-  var shop = JSON.parse(this.localStorage.getItem("shop"));
+
+  var selectedMode = 0;
+  var store = JSON.parse(this.localStorage.getItem("store"));
   var cashElement = this.document.getElementById("cash");
-  if (shop === null) {
-    shop = {
+
+  if (store === null) {
+    store = {
       cash: 0,
+      completedLevels: { mode: { 0: [], 6: [] } },
       stats: { air: 0, mine: 0, speed: 0 },
       drops: {
         zapper: 0,
@@ -50,13 +59,16 @@ window.addEventListener("load", function () {
     };
     cashElement.innerHTML = 0;
   } else {
-    cashElement.innerHTML = shop["cash"];
+    cashElement.innerHTML = store["cash"];
   }
 
   class Game {
-    constructor(width, height, words, specifiedLevel) {
+    constructor(mode, width, height, words, specifiedLevel) {
+      this.mode = mode;
+      this.specifiedLevel = specifiedLevel;
       this.width = width;
       this.height = height;
+      this.words = words;
       this.background = new Background(this);
       this.player = new Player(this);
       this.inputHandler = new InputHandler(this);
@@ -73,18 +85,16 @@ window.addEventListener("load", function () {
       this.ammoTimer = 0;
       this.ammoInterval = 30000;
       this.lose = false;
-      this.win = false;
       this.gameOver = false;
       this.score = 0;
+      this.win = false;
       this.winningScore = 9999999;
       this.gameTime = 0;
       this.timeLimit = 15000;
       this.speed = 1;
       this.debug = false;
       this.focus = null;
-      this.words = words;
       this.health = 3;
-      this.specifiedLevel = specifiedLevel;
     }
     update(deltaTime) {
       if (this.health < 1) {
@@ -101,27 +111,36 @@ window.addEventListener("load", function () {
 
         let earnedCash;
 
-        if (!levelsCompleted[this.specifiedLevel]) {
-          levelsCompleted[this.specifiedLevel] = this.score;
-          earnedCash =
-            +this.specifiedLevel +
-            Math.round(
-              (this.score / getAvailableScore(this.specifiedLevel)) * 10
-            );
+        let levelObject = store.completedLevels.mode[this.mode].find(
+          (obj) => obj.level === this.specifiedLevel
+        );
 
-          storeCash(earnedCash);
-        } else if (levelsCompleted[this.specifiedLevel] < this.score) {
-          let previousScore = levelsCompleted[this.specifiedLevel];
-          levelsCompleted[this.specifiedLevel] = this.score;
+        if (!levelObject) {
+          levelObject = { level: this.specifiedLevel, score: this.score };
+          store.completedLevels.mode[this.mode].push(levelObject);
+
+          let availableScore = getAvailableScore(this.specifiedLevel);
+
+          earnedCash =
+            this.specifiedLevel +
+            Math.round((this.score / availableScore) * 10);
+
+          storeStore(earnedCash);
+        } else if (levelObject.score < this.score) {
+          let previousScore = levelObject.score;
           let currentScore = this.score;
           let earnableScore = currentScore - previousScore;
+
+          store.completedLevels.mode[this.mode][this.specifiedLevel].score =
+            this.score;
+
           earnedCash = Math.round(
             (earnableScore / getAvailableScore(this.specifiedLevel)) * 10
           );
-          storeCash(earnedCash);
+          storeStore(earnedCash);
         }
-        game.specifiedLevel++;
         updateLevelButtons();
+        game.specifiedLevel++;
       }
       this.gameOver = this.lose == true || this.win === true;
       if (!this.gameOver) {
@@ -316,6 +335,7 @@ window.addEventListener("load", function () {
         );
         const indexOfLastWord = this.words.length - 1;
         const word = this.getNextWord(indexOfLastWord);
+        if (!word) return;
         this.enemies.push(
           new Drone(
             this,
@@ -331,6 +351,7 @@ window.addEventListener("load", function () {
       const randomize = Math.random();
       const indexOfLastWord = this.words.length - 1;
       const word = this.getNextWord(indexOfLastWord);
+      if (!word) return;
       const creature = this.chooseEnemy(word);
       if (randomize < 1) {
         this.enemies.push(creature);
@@ -387,7 +408,7 @@ window.addEventListener("load", function () {
         enemy.focused = true;
         return enemy;
       } else {
-        const controls = ["ArrowDown", "ArrowUp", "ArrowRight"];
+        const controls = ["ArrowDown", "ArrowUp", "ArrowRight", "Shift"];
         if (!controls.includes(key))
           this.floatingMessages.push(
             new FloatingMessage(
@@ -422,54 +443,177 @@ window.addEventListener("load", function () {
         }
       }
       let fallback = this.words.pop();
-      if (fallback) return fallback;
+      if (fallback) return;
       else return "x";
     }
   }
-
-  const sortedWords = Wordstring.split(" ").sort((a, b) => b.length - a.length);
-
-  var levels = [];
-  for (let i = 0; i < 100; i++) {
-    const level = sortedWords.slice(-100);
-    sortedWords.splice(-100);
-    levels.push(level);
-  }
-
-  let currentLevel =
-    +Object.keys(levelsCompleted)[Object.keys(levelsCompleted).length - 1] + 1;
-
-  let game = new Game(
-    canvas.width,
-    canvas.height,
-    levels[currentLevel || 0].slice(),
-    currentLevel || 0
-  );
-
-  function storeCash(earnedCash) {
-    console.log(earnedCash);
+  function storeStore(earnedCash) {
     game.floatingMessages.push(
       new FloatingMessage(
-        `$${earnedCash.toFixed(0)}`,
+        `$${earnedCash}`,
         game.width * 0.9,
         game.height * 0.5,
         "green",
         100
       )
     );
-    shop["cash"] = (+shop["cash"] + earnedCash).toFixed(0);
-    cashElement.innerHTML = shop["cash"];
+    store["cash"] = store["cash"] + earnedCash;
+    cashElement.innerHTML = store["cash"];
 
-    localStorage.setItem("shop", JSON.stringify(shop));
-    localStorage.setItem("levelsCompleted", JSON.stringify(levelsCompleted));
+    localStorage.setItem("store", JSON.stringify(store));
   }
 
   function getAvailableScore(level) {
     let availableScore = 0;
-    levels[level].forEach((x) => (availableScore += x.length));
+    modes[selectedMode].words[level].forEach(
+      (word) => (availableScore += word.length)
+    );
     return availableScore;
   }
 
+  const sortedTibiaMode = [
+    ...TibiaSpells.split(","),
+    ...TibiaPlaces.split(","),
+    ...TibiaMonsters.split(","),
+    ...TibiaNpcs.split(","),
+    ...TibiaSlang.split(","),
+    ...TibiaLanguage.split(","),
+    ...TibiaItems.split(","),
+    ...TibiaMisc.split(","),
+  ].sort((a, b) => b.length - a.length);
+  var tibiaLevels = [];
+  for (let i = 0; i < 4; i++) {
+    const level = sortedTibiaMode.slice(-50);
+    sortedTibiaMode.splice(-50);
+    tibiaLevels.push(level);
+  }
+  const sortedWords = Wordstring.split(" ").sort((a, b) => b.length - a.length);
+  var wordsLevels = [];
+  for (let i = 0; i < 100; i++) {
+    const level = sortedWords.slice(-100);
+    sortedWords.splice(-100);
+    wordsLevels.push(level);
+  }
+  var modes = {
+    0: { words: wordsLevels, levels: 100, groups: 10 },
+    6: { words: tibiaLevels, levels: 4, groups: 1 },
+  };
+
+  var currentLevel = store.completedLevels.mode[selectedMode].length || 0;
+
+  let modeSelectElement = this.document.getElementById("mode-select");
+  modeSelectElement.addEventListener("change", function (e) {
+    let arr = [...e.path[0].children];
+    let selected = arr.find((option) => option.selected === true);
+    selectedMode = selected.value;
+    currentLevel = store.completedLevels.mode[selectedMode].length;
+    updateLevelButtons();
+    startGame(currentLevel);
+  });
+  let game;
+  try {
+    game = new Game(
+      selectedMode,
+      canvas.width,
+      canvas.height,
+      modes[selectedMode].words[currentLevel].slice(),
+      currentLevel
+    );
+  } catch (error) {
+    game = new Game(
+      selectedMode,
+      canvas.width,
+      canvas.height,
+      modes[selectedMode].words[0].slice(),
+      0
+    );
+  }
+
+  updateLevelButtons();
+  function updateLevelButtons() {
+    const bad = "👎";
+    const ok = "🆗";
+    const good = "👍";
+    const perfect = "💯";
+    const hook = "🪝";
+    let levelContainer = window.document.getElementById("levelContainer");
+
+    let maxLevel = 0;
+
+    let total = [];
+    let totalSum = 0;
+    let number = 0;
+
+    let emoji;
+
+    while (levelContainer.lastChild) {
+      levelContainer.removeChild(levelContainer.lastChild);
+    }
+    for (let i = 0; i < modes[selectedMode].groups; i++) {
+      levelContainer.appendChild(createBtnGrp(i));
+    }
+    store.completedLevels.mode[selectedMode].forEach((levelObject) => {
+      let level = levelObject.level;
+      let score = levelObject.score;
+      let btnGrp = window.document.getElementById(`btnGrp${number}`);
+
+      if ((maxLevel + 1) % 10 == 0) {
+        for (let i = 0; i < total.length; i++) {
+          totalSum += total[i];
+        }
+        let avgScore = totalSum / total.length;
+        if (avgScore >= 75) emoji = perfect;
+        else if (avgScore >= 50) emoji = good;
+        else if (avgScore >= 25) emoji = ok;
+        else if (avgScore < 25) emoji = bad;
+        btnGrp.children[0].innerHTML += `${emoji}${avgScore.toFixed(0)}%`;
+        btnGrp.children[0].classList.add("p-0");
+        number++;
+        totalSum = 0;
+        total.length = 0;
+      }
+
+      let availableScore = 0;
+
+      modes[selectedMode].words[level].forEach((word) => {
+        availableScore += word.length;
+      });
+
+      if (availableScore === 0) {
+        modes[selectedMode].words[level + 1].forEach((word) => {
+          availableScore += word.length;
+        });
+      }
+      let button = window.document.createElement("button");
+      button.classList.add("btn", "btn-outline-secondary", "p-0", "m-0");
+      let percent = score / availableScore;
+      total.push(percent * 100);
+      if (percent >= 0.75) emoji = perfect;
+      else if (percent >= 0.5) emoji = good;
+      else if (percent >= 0.25) emoji = ok;
+      else if (percent < 0.25) emoji = bad;
+      else emoji = hook;
+      button.innerHTML = `${level} ${emoji} ${(percent * 100).toFixed(0)}%`;
+      button.value = level;
+      button.addEventListener("click", function (e) {
+        startGame(+e.target.value);
+      });
+      btnGrp.children[1].appendChild(button);
+
+      maxLevel++;
+    });
+    let button = window.document.createElement("button");
+    button.id = "progressBtn";
+    button.classList.add("btn", "btn-success", "mt-2");
+    button.innerHTML = `Go Fish ${hook} Level ${
+      maxLevel || +game.specifiedLevel
+    } `;
+    button.value = maxLevel || +game.specifiedLevel;
+    button.addEventListener("click", function (e) {
+      startGame(+e.target.value);
+    });
+    levelContainer.appendChild(button);
+  }
   function createBtnGrp(id) {
     const btnGrp = window.document.createElement("div");
     btnGrp.id = `btnGrp${id}`;
@@ -489,88 +633,34 @@ window.addEventListener("load", function () {
     return btnGrp;
   }
 
-  updateLevelButtons();
-  function updateLevelButtons() {
-    const bad = "👎";
-    const ok = "🆗";
-    const good = "👍";
-    const perfect = "💯";
-    const hook = "🪝";
-    let levelContainer = window.document.getElementById("levelContainer");
-    let maxLevel = 0;
-    let total = [];
-    let totalSum = 0;
-    let number = 0;
-    let emoji;
-
-    while (levelContainer.lastChild) {
-      levelContainer.removeChild(levelContainer.lastChild);
+  function startGame(levelSelect) {
+    if (levelSelect < modes[selectedMode].levels) {
+      game = new Game(
+        selectedMode,
+        canvas.width,
+        canvas.height,
+        modes[selectedMode].words[levelSelect].slice(),
+        levelSelect
+      );
+    } else {
+      game = new Game(
+        selectedMode,
+        canvas.width,
+        canvas.height,
+        modes[selectedMode].words[0].slice(),
+        0
+      );
     }
-    for (let i = 0; i < 10; i++) {
-      levelContainer.appendChild(createBtnGrp(i));
-    }
-
-    for (const level in levelsCompleted) {
-      if (Object.hasOwnProperty.call(levelsCompleted, level)) {
-        let btnGrp = window.document.getElementById(`btnGrp${number}`);
-        if (maxLevel % 10 == 0 && maxLevel != 0) {
-          for (let i = 0; i < total.length; i++) {
-            totalSum += total[i];
-          }
-          let avgScore = totalSum / total.length;
-          if (avgScore >= 75) emoji = perfect;
-          else if (avgScore >= 50) emoji = good;
-          else if (avgScore >= 25) emoji = ok;
-          else if (avgScore < 25) emoji = bad;
-          btnGrp.children[number].innerHTML += `${emoji}${avgScore.toFixed(
-            0
-          )}%`;
-          number++;
-          totalSum = 0;
-          total.length = 0;
-        }
-        let availableScore = 0;
-        levels[level].forEach((x) => (availableScore += x.length));
-        if (availableScore === 0) {
-          levels[level + 1].forEach((x) => (availableScore += x.length));
-        }
-
-        let score = levelsCompleted[level] || game.score;
-        let button = window.document.createElement("button");
-
-        button.classList.add("btn", "btn-outline-secondary", "p-0", "m-0");
-
-        let percent = score / availableScore;
-        total.push(percent * 100);
-
-        if (percent >= 0.75) emoji = perfect;
-        else if (percent >= 0.5) emoji = good;
-        else if (percent >= 0.25) emoji = ok;
-        else if (percent < 0.25) emoji = bad;
-        else emoji = hook;
-        button.innerHTML = `${level} ${emoji} ${(percent * 100).toFixed(0)}%`;
-        button.value = level;
-        button.addEventListener("click", function (e) {
-          startGame(e.target.value);
-        });
-        btnGrp.children[1].appendChild(button);
-        maxLevel++;
-      }
-    }
-    let button = window.document.createElement("button");
-    button.classList.add("btn", "btn-success", "mt-2");
-    button.innerHTML = `Go Fish ${hook} Level ${
-      maxLevel || +game.specifiedLevel
-    } `;
-    button.value = maxLevel || +game.specifiedLevel;
-    button.addEventListener("click", function (e) {
-      startGame(e.target.value);
-    });
-    levelContainer.appendChild(button);
   }
+  var audio = new Audio("./assets/level1.flac");
+  audio.loop = true;
 
-  function startGame(level) {
-    game = new Game(canvas.width, canvas.height, levels[level].slice(), level);
+  let playbtn = this.document.getElementById("playMusic");
+  playbtn.addEventListener("click", () => playMusic());
+  let playing = false;
+  function playMusic() {
+    playing = !playing;
+    playing ? audio.play() : audio.pause();
   }
 
   let lastTime = 0;
@@ -582,5 +672,6 @@ window.addEventListener("load", function () {
     game.update(deltaTime);
     requestAnimationFrame(animate);
   }
+
   animate(0);
 });

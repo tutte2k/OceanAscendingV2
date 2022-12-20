@@ -1,7 +1,6 @@
 export default class InputHandler {
   constructor(game) {
     this.game = game;
-
     window.addEventListener("keydown", (e) => {
       if (this.game.focus) {
         let hit = this.game.focus.consume(e.key);
@@ -19,6 +18,7 @@ export default class InputHandler {
       ) {
         this.game.keys.push(e.key);
       }
+      return false;
     });
 
     window.addEventListener("keyup", (e) => {
