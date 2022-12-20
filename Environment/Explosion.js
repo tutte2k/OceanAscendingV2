@@ -53,7 +53,7 @@ export class FireExplosion extends Explosion {
     this.image = document.getElementById("fireExplosion");
   }
 }
-export class RainbowExplosion extends Explosion {
+export class InkExplosion extends Explosion {
   constructor(game, x, y) {
     super(game, x, y);
     this.image = document.getElementById("rainbowExplosion");

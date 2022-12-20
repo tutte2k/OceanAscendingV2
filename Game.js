@@ -6,20 +6,10 @@ import { Background } from "./Environment/Background.js";
 import UserInterface from "./Environment/UserInterface.js";
 import {
   FireExplosion,
-  RainbowExplosion as InkExplosion,
+  InkExplosion,
   SmokeExplosion,
 } from "./Environment/Explosion.js";
-import {
-  TibiaMonsters,
-  TibiaPlaces,
-  TibiaSpells,
-  Wordstring,
-  TibiaNpcs,
-  TibiaSlang,
-  TibiaLanguage,
-  TibiaItems,
-  TibiaMisc,
-} from "./Game/Words.js";
+import { TibiaWords, Words10K } from "./Game/Words.js";
 import {
   Angler1,
   Angler2,
@@ -32,6 +22,8 @@ import {
   Jellyfish,
   Chtullie,
   Angela,
+  Goldfish,
+  Shark,
 } from "./Enemy/Enemy.js";
 
 window.addEventListener("load", function () {
@@ -65,44 +57,52 @@ window.addEventListener("load", function () {
   class Game {
     constructor(mode, width, height, words, specifiedLevel) {
       this.mode = mode;
+
       this.specifiedLevel = specifiedLevel;
+      this.words = words;
+
+      this.lose = false;
+      this.win = false;
+      this.score = 0;
+
+      this.gameOver = false;
+
       this.width = width;
       this.height = height;
-      this.words = words;
+
+      this.gameTime = 0;
+
       this.background = new Background(this);
-      this.player = new Player(this);
       this.inputHandler = new InputHandler(this);
       this.userInterface = new UserInterface(this);
+
       this.keys = [];
-      this.enemies = [];
-      this.particles = [];
-      this.explosions = [];
-      this.floatingMessages = [];
-      this.enemyTimer = 0;
-      this.enemyInterval = 1000;
+
+      this.player = new Player(this);
+
+      this.health = 3;
+      this.focus = null;
+
       this.ammo = 1;
       this.maxAmmo = 1;
       this.ammoTimer = 0;
       this.ammoInterval = 30000;
-      this.lose = false;
-      this.gameOver = false;
-      this.score = 0;
-      this.win = false;
-      this.winningScore = 9999999;
-      this.gameTime = 0;
-      this.timeLimit = 15000;
+
+      this.enemies = [];
+      this.particles = [];
+      this.explosions = [];
+
+      this.floatingMessages = [];
+
       this.speed = 1;
-      this.debug = false;
-      this.focus = null;
-      this.health = 3;
+
+      this.enemyTimer = 0;
+      this.enemyInterval = 1000;
     }
     update(deltaTime) {
       if (this.health < 1) {
         this.lose = true;
-      } else if (
-        this.score > this.winningScore ||
-        (this.words.length === 0 && !this.gameOver)
-      ) {
+      } else if (this.words.length === 0 && !this.gameOver) {
         this.win = true;
         this.enemies.forEach((enemy) => {
           this.score += enemy.score;
@@ -361,6 +361,8 @@ window.addEventListener("load", function () {
     }
     chooseEnemy(value) {
       const enemies = [
+        new Shark(this, value),
+        new Goldfish(this, value),
         new Angela(this, value),
         new Chtullie(this, value),
         new Jellyfish(this, value),
@@ -471,27 +473,17 @@ window.addEventListener("load", function () {
     return availableScore;
   }
 
-  const sortedTibiaMode = [
-    ...TibiaSpells.split(","),
-    ...TibiaPlaces.split(","),
-    ...TibiaMonsters.split(","),
-    ...TibiaNpcs.split(","),
-    ...TibiaSlang.split(","),
-    ...TibiaLanguage.split(","),
-    ...TibiaItems.split(","),
-    ...TibiaMisc.split(","),
-  ].sort((a, b) => b.length - a.length);
   var tibiaLevels = [];
   for (let i = 0; i < 4; i++) {
-    const level = sortedTibiaMode.slice(-50);
-    sortedTibiaMode.splice(-50);
+    const level = TibiaWords.slice(-50);
+    TibiaWords.splice(-50);
     tibiaLevels.push(level);
   }
-  const sortedWords = Wordstring.split(" ").sort((a, b) => b.length - a.length);
+
   var wordsLevels = [];
   for (let i = 0; i < 100; i++) {
-    const level = sortedWords.slice(-100);
-    sortedWords.splice(-100);
+    const level = Words10K.slice(-100);
+    Words10K.splice(-100);
     wordsLevels.push(level);
   }
   var modes = {

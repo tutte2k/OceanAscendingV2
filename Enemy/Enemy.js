@@ -17,7 +17,6 @@ class Enemy {
     this.markedForDeletion = false;
 
     this.font = "Carter One";
-
     this.sprite = sprite;
     this.width = sprite.width;
     this.height = sprite.height;
@@ -91,6 +90,33 @@ export class Jellyfish extends Enemy {
     this.y = this.game.height + 100;
     this.speedX = 0;
     this.speedY = -1;
+  }
+}
+export class Goldfish extends Enemy {
+  constructor(game, word) {
+    const width = 228;
+    const height = 118;
+    const image = document.getElementById("goldfish");
+    super(game, word, new SpriteSheet(image, width, height, 9, 0, 8));
+    this.speedX = -0.1;
+  }
+}
+export class Turtle extends Enemy {
+  constructor(game, word) {
+    const width = 225;
+    const height = 221;
+    const image = document.getElementById(`turtle${Helper.randInt(1, 5)}`);
+    super(game, word, new SpriteSheet(image, width, height, 59, 0, 30));
+    this.speedX = -0.2;
+  }
+}
+export class Lionfish extends Enemy {
+  constructor(game, word) {
+    const width = 251;
+    const height = 187;
+    const image = document.getElementById("lionfish1");
+    super(game, word, new SpriteSheet(image, width, height, 60, 0, 30));
+    this.speedX = -0.3;
   }
 }
 export class Seahorse extends Enemy {
@@ -170,15 +196,7 @@ export class HiveWhale extends Enemy {
     this.type = "hive";
   }
 }
-export class Turtle extends Enemy {
-  constructor(game, word) {
-    const width = 225;
-    const height = 221;
-    const image = document.getElementById(`turtle${Helper.randInt(1, 5)}`);
-    super(game, word, new SpriteSheet(image, width, height, 59, 0, 30));
-    this.speedX = -0.1;
-  }
-}
+
 export class Chtullie extends Enemy {
   constructor(game, word) {
     const width = 500;
@@ -194,19 +212,19 @@ export class Angela extends Enemy {
     const width = 483;
     const height = 500;
     const image = document.getElementById(`angela${Helper.randInt(1, 2)}`);
-    super(game, word, new SpriteSheet(image, width, height, 29, 0, 25));
-    this.speedX = -1.2;
+    super(game, word, new SpriteSheet(image, width, height, 29, 0, 20));
+    this.speedX = -1;
     this.type = "angela";
   }
 }
 
-export class Lionfish extends Enemy {
+export class Shark extends Enemy {
   constructor(game, word) {
-    const width = 251;
-    const height = 187;
-    const image = document.getElementById("lionfish1");
-    super(game, word, new SpriteSheet(image, width, height, 60, 0, 30));
-    this.speedX = -0.5;
+    const width = 398;
+    const height = 194;
+    const image = document.getElementById("shark");
+    super(game, word, new SpriteSheet(image, width, height, 7, 0, 20));
+    this.speedX = -1.5;
   }
 }
 
