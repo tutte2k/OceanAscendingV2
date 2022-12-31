@@ -1,4 +1,4 @@
-import SpriteSheet from "../Game/SpriteSheet.js";
+import SpriteSheet from "../Utils/SpriteSheet.js";
 import Helper from "../Utils/Helper.js";
 
 class Enemy {
