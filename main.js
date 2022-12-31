@@ -1,4 +1,4 @@
-import { Words10K,TibiaWords } from "./Data/Words.js";
+import { Words10K, TibiaWords } from "./Data/Words.js";
 import Game from "./Game/Game.js";
 import DataSource from "./Data/DataSource.js";
 import { collisionsMap } from "./Data/collisions.js";
@@ -65,8 +65,8 @@ window.addEventListener("load", function () {
     static height = 66;
     constructor({ position }) {
       this.position = position;
-      this.width = 66
-      this.height = 66
+      this.width = 50
+      this.height = 50
     }
     draw() {
       ctx.fillStyle = "rgba(255,0,0,0)"
@@ -84,7 +84,7 @@ window.addEventListener("load", function () {
       this.content = content;
       this.name = number;
       this.mode = 0;
-      this.words = content;
+      this.words = content
 
       this.maxScore = 0;
       this.words.forEach(
@@ -218,7 +218,8 @@ window.addEventListener("load", function () {
 
   let game;
   let lastTime = 0;
-
+  let state;
+  let nextLevel;
   function animate(timeStamp) {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -227,11 +228,14 @@ window.addEventListener("load", function () {
 
     if (game && game.level) {
       game.draw(ctx);
-      game.update(deltaTime);
-
+      state = game.update(deltaTime);
     }
     else if (game) {
       canvas.classList.remove("underwater");
+      if(nextLevel&&state.win===true){
+        nextLevel.locked=false;
+      }
+      state = null;
       game = null;
     }
 
@@ -249,7 +253,8 @@ window.addEventListener("load", function () {
       player.moving = false;
       if (keys.enter.pressed) {
         for (let i = 0; i < levelsArray.length; i++) {
-          const level = levelsArray[i];
+          const level = levelsArray[i]
+          nextLevel = levelsArray[i+1]
           if (!level.locked && Helper.hasCollided({ rectangle1: player, rectangle2: { ...level, position: { x: level.position.x, y: level.position.y + 3 } } })) {
             game = new Game(
               canvas.width,

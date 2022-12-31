@@ -83,7 +83,9 @@ export default class Game {
     if (this.player.y > 0 - this.player.height * 2 && this.gameOver) {
       this.player.y -= 3;
       if (this.player.y <= 0 - this.player.height) {
+        let state = { score: this.score, level: this.level, win: this.win }
         this.level = null;
+        return state
       }
     }
     if (this.health < 1) {
@@ -145,7 +147,7 @@ export default class Game {
         this.userInterface.cashElement.innerHTML = this.store["cash"];
         this.dataSource.setStore(this.store);
       }
-     this.level.name++;
+      this.level.name++;
     }
     this.gameOver = this.lose == true || this.win === true;
     if (!this.gameOver) {
@@ -365,22 +367,22 @@ export default class Game {
     const tier1 = [HiveWhale, Goldfish, LuckyFish, Jellyfish]
     const tier2 = [Seahorse, Turtle]
     const tier3 = [Angler1, Angler2]
-    const tier4 = [Lionfish,Shark]
+    const tier4 = [Lionfish, Shark]
 
     const bosstier = [Angela, Chtullie]
 
     const enemies = {
       1: [...tier1],
-      2:[...tier1,...tier2],
-      3:[...tier1,...tier2,...tier3],
-      4:[...tier1,...tier2,...tier3,...tier4],
+      2: [...tier1, ...tier2],
+      3: [...tier1, ...tier2, ...tier3],
+      4: [...tier1, ...tier2, ...tier3, ...tier4],
     }
 
     let randomIndex = Math.floor(Math.random() * enemies[value.length].length);
-    let enemy = new enemies[value.length][randomIndex](this,value)
+    let enemy = new enemies[value.length][randomIndex](this, value)
 
-    if(!enemy){
-      return new enemies[4](this,value)
+    if (!enemy) {
+      return new enemies[4](this, value)
     }
 
     return enemy
@@ -417,7 +419,7 @@ export default class Game {
       enemy.focused = true;
       return enemy;
     } else {
-      const controls = ["ArrowLeft","ArrowDown", "ArrowUp", "ArrowRight", "Shift"];
+      const controls = ["ArrowLeft", "ArrowDown", "ArrowUp", "ArrowRight", "Shift"];
       if (!controls.includes(key))
         this.floatingMessages.push(
           new FloatingMessage(

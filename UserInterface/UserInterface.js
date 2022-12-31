@@ -4,6 +4,7 @@ export default class UserInterface {
     this.fontSize = 25;
     this.fontFamily = "Titan One";
     this.color = "white";
+    this.cashElement  =  document.getElementById("cash");
   }
   draw(context) {
     context.save();
