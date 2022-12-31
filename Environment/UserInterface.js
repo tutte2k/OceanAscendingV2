@@ -23,7 +23,7 @@ export default class UserInterface {
     context.fillText("Air: " + this.game.health, this.game.width * 0.15, 30);
 
     context.fillText(
-      "Level " + this.game.specifiedLevel,
+      "Level " + this.game.level.name,
       this.game.width * 0.5,
       60
     );
