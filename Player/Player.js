@@ -1,4 +1,4 @@
-import SpriteSheet from "../Game/Sprite.js";
+import SpriteSheet from "../Game/SpriteSheet.js";
 import Projectile from "./Projectile.js";
 export class Player {
   constructor(game) {

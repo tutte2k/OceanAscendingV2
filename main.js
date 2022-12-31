@@ -1,4 +1,4 @@
-import { TibiaWords, Words10K } from "./Data/Words.js";
+import { Words10K,TibiaWords } from "./Data/Words.js";
 import Game from "./Game/Game.js";
 import DataSource from "./Data/DataSource.js";
 import { collisionsMap } from "./Data/collisions.js";

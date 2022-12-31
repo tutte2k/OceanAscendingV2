@@ -1,5 +1,5 @@
-import SpriteSheet from "../Game/Sprite.js";
-import Helper from "../Game/Helper.js";
+import SpriteSheet from "../Game/SpriteSheet.js";
+import Helper from "../Utils/Helper.js";
 
 class Enemy {
   constructor(game, word, sprite) {
