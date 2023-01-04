@@ -21,14 +21,11 @@ class Enemy {
     this.width = sprite.width;
     this.height = sprite.height;
     this.y = Math.random() * (this.game.height * 0.95 - this.height);
-
     this.element = document.createElement("div")
-
     this.element.classList.add("word")
     this.element.innerHTML = word
     this.element.style.position = "absolute"
     this.game.wordContainer.appendChild(this.element)
-
   }
   update(deltaTime) {
 
@@ -57,6 +54,7 @@ class Enemy {
     }
     this.markedForDeletion = !(this.completedText !== this.text);
     if (this.markedForDeletion) {
+      this.element.hidden = true;
       this.element.remove();
       this.game.score += this.score;
     }
@@ -70,6 +68,9 @@ class Enemy {
     this.element.style.top = (this.y *  (context.canvas.getBoundingClientRect().height/1768))+ "px";
     this.element.style.left = (this.x * (context.canvas.getBoundingClientRect().width/2500)) +"px";
     this.element.innerHTML = this.text.replace(this.completedText, "")
+    this.element.style.color = this.focused ? "lime": "whitesmoke";
+    this.displayText = this.text.replace(this.completedText, "");
+
 
 
     // context.save();
@@ -80,7 +81,6 @@ class Enemy {
     // context.shadowColor = "black";
 
 
-    // this.displayText = this.text.replace(this.completedText, "");
 
     // context.fillStyle = this.focused ? "lime" : "white";
     // context.font = "40px " + this.font;

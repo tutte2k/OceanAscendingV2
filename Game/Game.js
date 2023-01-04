@@ -50,6 +50,8 @@ export default class Game {
 
     this.userInterface = new UserInterface(this);
 
+    UserInterface.UI.classList.remove("invisible")
+
 
 
     this.keys = [];
@@ -86,6 +88,7 @@ export default class Game {
         let state = { score: this.score, level: this.level, win: this.win }
         this.level = null;
         this.wordContainer.innerHTML = '';
+        UserInterface.UI.classList.add("invisible")
         
         return state
       }

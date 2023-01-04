@@ -32,16 +32,17 @@
 
 <div id="container1">
     <canvas id="canvas1"></canvas>
-    <div id="ui">
+    <div id="ui" class ="invisible">
         <div class="d-flex col justify-content-between mx-5">
-
+            <p class="hud visible">Cash: <span id="cash"></span></p>
             <p class="hud">Mine: <span id="mines"></span></p>
             <p class="hud">Air: <span id="air"></span></p>
             <p class="hud">Words left: <span id="wordsLeft"></span></p>
             <p class="hud">Level: <span id="level"></span></p>
             <p class="hud">Depth: <span id="depth"></span></p>
-            <p class="hud">Cash: <span id="cash"></span></p>
         </div>
+        <div id="crosshair" class = "visible"></div>
+        <div class="message"></div>
     </div>
     <div id="words"></div>
 </div>

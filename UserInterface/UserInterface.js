@@ -1,41 +1,39 @@
 export default class UserInterface {
+  static UI = document.getElementById("ui");
+  static Mine = document.getElementById("mines");
+  static Air = document.getElementById("air");
+  static WordsLeft = document.getElementById("wordsLeft");
+  static Level = document.getElementById("level");
+  static Depth = document.getElementById("depth");
+  static Cash = document.getElementById("cash");
+  static Crosshair = document.getElementById("crosshair");
 
   constructor(game) {
     this.game = game;
     this.fontSize = 25;
     this.fontFamily = "Titan One";
     this.color = "white";
-    this.cashElement  =  document.getElementById("cash");
+    this.cashElement = document.getElementById("cash");
     this.canvasRect = document.getElementById("canvas1").getBoundingClientRect();
   }
   draw(context) {
-    // context.save();
-    // context.textAlign = "center";
-    // context.fillStyle = this.color;
-    // context.shadowOffsetX = 2;
-    // context.shadowOffsetT = 2;
-    // context.shadowColor = "black";
-    // context.font = this.fontSize + "px " + this.fontFamily;
-    // const formattedTime = (this.game.gameTime * 0.001).toFixed(1);
-    // context.fillText(
-    //   "Depth: " + formattedTime + "M",
-    //   this.game.width * 0.5,
-    //   this.game.height - 30
-    // );
-    // context.fillText("Mine: " + this.game.ammo, this.game.width * 0.05, 30);
-    // context.fillText("Air: " + this.game.health, this.game.width * 0.15, 30);
+    const formattedTime = (this.game.gameTime * 0.001).toFixed(1);
+    
+    UserInterface.Depth.innerHTML = formattedTime;
+    UserInterface.Air.innerHTML = this.game.health;
+    UserInterface.Mine.innerHTML = this.game.ammo;
+    UserInterface.Level.innerHTML = this.game.level.name;
+    UserInterface.WordsLeft.innerHTML = this.game.words.length;
 
-    // context.fillText(
-    //   "Level " + this.game.level.name,
-    //   this.game.width * 0.5,
-    //   60
-    // );
+    if (this.game.focus) {
+      if (this.game.focus.text.length != 1) {
+        UserInterface.Crosshair.innerHTML = this.game.focus.displayText;
+      }
 
-    // context.fillText(
-    //   "Words left: " + this.game.words.length,
-    //   this.game.width * 0.5,
-    //   30
-    // );
+    } else {
+      UserInterface.Crosshair.innerHTML = ''
+    }
+
 
     // if (this.game.gameOver) {
     //   context.textAlign = "center";
@@ -75,5 +73,5 @@ export default class UserInterface {
     //   }
     // }
     // context.restore();
-   }
+  }
 }
