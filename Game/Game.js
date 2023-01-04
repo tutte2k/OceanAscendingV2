@@ -61,17 +61,16 @@ export default class Game {
 
     this.floatingMessages = [];
 
-    this.speed = 1;
+    this.speed = 2;
 
     this.enemyTimer = 0;
-    this.enemyInterval = 1000;
-
+    this.enemyInterval = 3000;
     this.dataSource = dataSource;
     this.store = dataSource.getStore();
   }
 
   update(deltaTime) {
-  if (this.player.y > 0 - this.player.height * 2 && this.gameOver) {
+    if (this.player.y > 0 - this.player.height * 2 && this.gameOver) {
       this.player.y -= 3;
       if (this.player.y <= 0 - this.player.height) {
         let state = { score: this.score, level: this.level, win: this.win }
@@ -123,7 +122,7 @@ export default class Game {
         let currentScore = this.score;
         let earnableScore = currentScore - previousScore;
 
-        console.log(previousScore,currentScore,earnableScore)
+        console.log(previousScore, currentScore, earnableScore)
         this.store.completedLevels.mode[this.mode][this.level.name].score =
           this.score;
 
@@ -266,6 +265,9 @@ export default class Game {
 
     this.enemies = this.enemies.filter((enemy) => !enemy.markedForDeletion);
 
+    if (this.enemies.length === 0) {
+      this.addEnemy();
+    }
     if (this.enemyTimer > this.enemyInterval && !this.gameOver) {
       this.addEnemy();
       this.enemyTimer = 0;
@@ -348,17 +350,11 @@ export default class Game {
   }
 
   addEnemy() {
-    const randomize = Math.random();
     const indexOfLastWord = this.words.length - 1;
     const word = this.getNextWord(indexOfLastWord);
     if (!word) return;
-
     const creature = this.chooseEnemy(word);
-    if (randomize < 1) {
-      this.enemies.push(creature);
-    } else if (this.enemies.length === 0) {
-      this.enemies.push(creature);
-    }
+    this.enemies.push(creature);
   }
   chooseEnemy(value) {
     const tier1 = [HiveWhale, Goldfish, LuckyFish, Jellyfish]
@@ -377,7 +373,7 @@ export default class Game {
 
     let randomIndex = Math.floor(Math.random() * enemies[value.length].length);
     let enemy = new enemies[value.length][randomIndex](this, value)
-    
+
 
     if (!enemy) {
       return new enemies[4](this, value)
