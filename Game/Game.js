@@ -341,7 +341,7 @@ export default class Game {
       this.enemies.push(
         new Drone(
           this,
-          enemy.x + Math.random() * enemy.width,
+          enemy.x + (enemy.width * i) / 3,
           enemy.y + Math.random() * enemy.height * 2,
           word
         )
