@@ -61,10 +61,10 @@ export default class Game {
 
     this.floatingMessages = [];
 
-    this.speed = 2;
+    this.speed = 1;
 
     this.enemyTimer = 0;
-    this.enemyInterval = 3000;
+    this.enemyInterval = 2000;
     this.dataSource = dataSource;
     this.store = dataSource.getStore();
   }
