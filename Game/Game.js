@@ -328,11 +328,14 @@ export default class Game {
   }
   hiveExplosion(enemy) {
     for (let i = 0; i < 5; i++) {
+      let x = enemy.x + (enemy.width * i) / 3;
+      let y = enemy.y + Math.random() * (enemy.height * 2)
+
       this.explosions.push(
         new SmokeExplosion(
           this,
-          enemy.x + Math.random() * enemy.width,
-          enemy.y + Math.random() * enemy.height
+          x,
+          y
         )
       );
       const indexOfLastWord = this.words.length - 1;
@@ -341,8 +344,8 @@ export default class Game {
       this.enemies.push(
         new Drone(
           this,
-          enemy.x + (enemy.width * i) / 3,
-          enemy.y + Math.random() * enemy.height * 2,
+          x,
+          y,
           word
         )
       );
