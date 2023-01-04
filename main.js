@@ -15,7 +15,6 @@ UserInterface.Cash.innerHTML = dataSource.getStore()["cash"];
 window.addEventListener("load", function () {
   const canvas = document.getElementById("canvas1");
   const ctx = canvas.getContext("2d");
-
   canvas.width = 2500;
   canvas.height = 1768;
 
@@ -24,7 +23,6 @@ window.addEventListener("load", function () {
     x: -1520,
     y: -1050
   }
- 
   collisionsMap.forEach((row, i) => {
     row.forEach((symbol, j) => {
       if (symbol === 1025) {
@@ -32,8 +30,6 @@ window.addEventListener("load", function () {
       }
     })
   })
-
-
   const tibiaLevels = [];
   for (let i = 0; i < 10; i++) {
     const level = TibiaWords.slice(-50);
@@ -67,7 +63,7 @@ window.addEventListener("load", function () {
             nextLevel = levelNumW;
           }
           let locked = !(storedLevel || nextLevel <= levelNumW || levelNumW === 0);
-          levelsArray.push(new Level({mode:0, position: { x: j * Level.width + 590, y: i * Level.height + -1060 }, number: levelNumW, locked: locked, content: wordsLevels[levelNumW] }))
+          levelsArray.push(new Level({ mode: 0, position: { x: j * Level.width + 590, y: i * Level.height + -1060 }, number: levelNumW, locked: locked, content: wordsLevels[levelNumW] }))
           levelNumW++;
         }
         if (symbol === 6) {
@@ -77,7 +73,7 @@ window.addEventListener("load", function () {
             nextLevel = levelNumT;
           }
           let locked = !(storedLevel || nextLevel <= levelNumT || levelNumT === 0);
-          levelsArray.push(new Level({mode:6, position: { x: j * Level.width + 590, y: i * Level.height + -1060 }, number: levelNumT, locked: locked, content: tibiaLevels[levelNumT] }))
+          levelsArray.push(new Level({ mode: 6, position: { x: j * Level.width + 590, y: i * Level.height + -1060 }, number: levelNumT, locked: locked, content: tibiaLevels[levelNumT] }))
           levelNumT++;
         }
       })
@@ -134,7 +130,6 @@ window.addEventListener("load", function () {
     d: { pressed: false },
     enter: { pressed: false },
   }
-
   let movables = [background, ...boundaries, foreground, ...levelsArray]
 
   let game;
@@ -158,7 +153,6 @@ window.addEventListener("load", function () {
       state = null;
       game = null;
     }
-
     else {
       background.draw(ctx)
       boundaries.forEach(boundary => {
@@ -169,10 +163,26 @@ window.addEventListener("load", function () {
       })
       player.draw(ctx);
       foreground.draw(ctx)
-
       let moving = true;
       player.moving = false;
+      for (let i = 0; i < levelsArray.length; i++) {
+        const level = levelsArray[i]
+        let completedlevel;
+        if (Helper.hasCollided({ rectangle1: player, rectangle2: { ...level, position: { x: level.position.x, y: level.position.y + 3 } } })) {
+          completedlevel = dataSource.getStore().completedLevels.mode[level.mode][level.name]
+          if (completedlevel) {
+            UserInterface.Info.innerHTML = "Mode: " + level.mode + "<br>Level: " + completedlevel.level + "<br>Score: " + completedlevel.score + "/" + level.maxScore
+          }
+          else if (level.locked) {
+            UserInterface.Info.innerHTML = "Mode: " + level.mode + "<br>Level: " + level.name + "<br>LOCKED";
+          }
+          else {
+            UserInterface.Info.innerHTML = "Mode: " + level.mode + "<br>Level: " + level.name + "<br>Score: " + 0 + "/" + level.maxScore;
+          }
+        }
+      }
       if (keys.enter.pressed) {
+        UserInterface.Info.innerHTML = "";
         for (let i = 0; i < levelsArray.length; i++) {
           const level = levelsArray[i]
           nextLevel = levelsArray[i + 1]
@@ -188,7 +198,9 @@ window.addEventListener("load", function () {
           }
         }
       }
+      
       if (keys.w.pressed && lastKey === 'w') {
+        UserInterface.Info.innerHTML = "";
         player.moving = true;
         player.image = player.sprites.up
         for (let i = 0; i < boundaries.length; i++) {
@@ -198,12 +210,12 @@ window.addEventListener("load", function () {
             break;
           }
         }
-
         if (moving) {
           movables.forEach((movable) => movable.position.y += 3)
         }
       }
       else if (keys.s.pressed && lastKey === 's') {
+        UserInterface.Info.innerHTML = "";
         player.moving = true;
         player.image = player.sprites.down
         for (let i = 0; i < boundaries.length; i++) {
@@ -218,6 +230,7 @@ window.addEventListener("load", function () {
         }
       }
       else if (keys.a.pressed && lastKey === 'a') {
+        UserInterface.Info.innerHTML = "";
         player.moving = true;
         player.image = player.sprites.left
         for (let i = 0; i < boundaries.length; i++) {
@@ -232,6 +245,7 @@ window.addEventListener("load", function () {
         }
       }
       else if (keys.d.pressed && lastKey === 'd') {
+        UserInterface.Info.innerHTML = "";
         player.moving = true;
         player.image = player.sprites.right
         for (let i = 0; i < boundaries.length; i++) {
@@ -245,9 +259,9 @@ window.addEventListener("load", function () {
           movables.forEach((movable) => movable.position.x -= 3)
         }
       }
+     
+      
     }
-
-
     window.requestAnimationFrame(animate)
   }
   animate(0);
@@ -295,358 +309,12 @@ window.addEventListener("load", function () {
     }
   })
 
-
-  // document.addEventListener("keydown", (event) => {
-  //   if (!enteredLevel) {
-  //     console.log("asd")
-  //     enteredLevel = levelSelectionGame.handleKeyDown(event);
-  //     if (enteredLevel) {
-  //       toggleBubbles();
-  //       
-  //       game = new Game(
-  //         canvas.width,
-  //         canvas.height,
-  //         enteredLevel,
-  //         dataSource
-  //       );
-  //     } else {
-  //       canvas.classList.remove("underwater");
-  //     }
-  //   }
-  // });
-
-
-  // const mapMatrix = [];
-  // for (let i = 0; i < canvas.height / 64; i++) {
-  //   let row = [];
-  //   for (let j = 0; j < canvas.width / 64; j++) {
-  //     row.push(0);
-  //   }
-  //   mapMatrix.push(row);
-  // }
-
-  // const tibiaLevels = [];
-  // for (let i = 0; i < 10; i++) {
-  //   const level = TibiaWords.slice(-50);
-  //   TibiaWords.splice(-50);
-  //   if (level.length !== 50) {
-  //     break
-  //   }
-  //   tibiaLevels.push(level);
-  // }
-
-  // var wordsLevels = [];
-  // for (let i = 0; i < 100; i++) {
-  //   const level = Words10K.slice(-100);
-  //   Words10K.splice(-100);
-  //   wordsLevels.push(level);
-  // }
-
-  // let mapLevels = drawLevels();
-
-  // function drawLevels() {
-  //   let mapLevels = [];
-  //   let levelData = dataSource.getStore()["completedLevels"];
-  //   for (let i = 0; i < tibiaLevels.length; i++) {
-  //     let storedLevel = levelData["mode"][6][i];
-  //     let nextLevel;
-  //     if (levelData["mode"][6][i - 1]) {
-  //       nextLevel = i;
-  //     }
-  //     let locked = !(storedLevel || nextLevel <= i || i === 0);
-  //     mapLevels.push(
-  //       new LevelSelectionLevel(
-  //         i,
-  //         6,
-  //         tibiaLevels[i].slice(),
-  //         i,
-  //         2,
-  //         locked
-  //       )
-  //     );
-  //   }
-  //   let row = 2;
-  //   let col = 25;
-  //   for (let i = 0; i < wordsLevels.length; i++) {
-  //     let storedLevel = levelData["mode"][0][i];
-  //     let nextLevel;
-  //     if (levelData["mode"][0][i - 1]) {
-  //       nextLevel = i;
-  //     }
-  //     let locked = !(storedLevel || nextLevel <= i || i === 0);
-
-  //     if (i % 10 === 0) {
-  //       col++
-  //       row = 2
-  //     }
-  //     mapLevels.push(
-  //       new LevelSelectionLevel(
-  //         i,
-  //         0,
-  //         wordsLevels[i].slice(),
-  //         col,
-  //         row,
-  //         locked
-  //       )
-  //     );
-  //     row++
-  //   }
-  //   return mapLevels;
-  // }
-
-  // let map = new LevelSelectionMap(
-  //   mapMatrix,
-  //   mapLevels,
-  //   canvas.width,
-  //   canvas.height
-  // );
-
-  // let levelSelectionGame = new LevelSelectionGame(map);
-
-  // var game;
-  // let enteredLevel;
-
-  // document.addEventListener("keydown", (event) => {
-  //   if (!enteredLevel) {
-  //     enteredLevel = levelSelectionGame.handleKeyDown(event);
-  //     if (enteredLevel) {
-  //       toggleBubbles();
-  //       canvas.classList.add("underwater");
-  //       game = new Game(
-  //         canvas.width,
-  //         canvas.height,
-  //         enteredLevel,
-  //         dataSource
-  //       );
-  //     } else {
-  //       canvas.classList.remove("underwater");
-  //     }
-  //   }
-  // });
-
-
-
-
-  // let lastTime = 0;
-  // function animate(timeStamp) {
-  //   const deltaTime = timeStamp - lastTime;
-  //   lastTime = timeStamp;
-  //   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  //   if (game && game.level) {
-  //     game.draw(ctx);
-  //     game.update(deltaTime);
-  //   } else {
-  //     if (enteredLevel) {
-  //       levelSelectionGame.map.levels = drawLevels();
-  //       toggleBubbles();
-  //     }
-
-  //     enteredLevel = null;
-  //     levelSelectionGame.draw(ctx);
-  //     levelSelectionGame.map.update(deltaTime);
-  //   }
-  //   requestAnimationFrame(animate);
-  // }
-  // animate(0);
-
-
-
-  // canvas.width = 2500;
-  // canvas.height = 1768;
-
-  // var selectedMode = 0;
-  // var store = JSON.parse(this.localStorage.getItem("store"));
-  // var cashElement = this.document.getElementById("cash");
-
-  // if (store === null) {
-  //   store = {
-  //     cash: 0,
-  //     completedLevels: { mode: { 0: [], 6: [] } },
-  //     stats: { air: 0, mine: 0, speed: 0 },
-  //     drops: {
-  //       zapper: 0,
-  //       shield: 0,
-  //       timewarp: 0,
-  //     },
-  //     regen: { air: 0, mine: 0 },
-  //   };
-  //   cashElement.innerHTML = 0;
-  // } else {
-  //   cashElement.innerHTML = store["cash"];
-  // }
-
-  // var tibiaLevels = [];
-  // for (let i = 0; i < 4; i++) {
-  //   const level = TibiaWords.slice(-50);
-  //   TibiaWords.splice(-50);
-  //   tibiaLevels.push(level);
-  // }
-
-  // var wordsLevels = [];
-  // for (let i = 0; i < 100; i++) {
-  //   const level = Words10K.slice(-100);
-  //   Words10K.splice(-100);
-  //   wordsLevels.push(level);
-  // }
-
-  // var currentLevel = store.completedLevels.mode[selectedMode].length || 0;
-
-  // let modeSelectElement = this.document.getElementById("mode-select");
-  // modeSelectElement.addEventListener("change", function (e) {
-  //   let arr = [...e.path[0].children];
-  //   let selected = arr.find((option) => option.selected === true);
-  //   selectedMode = selected.value;
-  //   currentLevel = store.completedLevels.mode[selectedMode].length;
-  //   updateLevelButtons();
-  //   startGame(currentLevel);
-  //   document.activeElement.blur();
-  // });
-  // let game;
-
-  // try {
-  //   game = new Game(
-  //     selectedMode,
-  //     canvas.width,
-  //     canvas.height,
-  //     modes[selectedMode].words[currentLevel].slice(),
-  //     currentLevel
-  //   );
-  // } catch (error) {
-  //   game = new Game(
-  //     selectedMode,
-  //     canvas.width,
-  //     canvas.height,
-  //     modes[selectedMode].words[0].slice(),
-  //     0
-  //   );
-  // }
-
-  // updateLevelButtons();
-  // function updateLevelButtons() {
   //   const bad = "👎";
   //   const ok = "🆗";
   //   const good = "👍";
   //   const perfect = "💯";
   //   const hook = "🪝";
-  //   let levelContainer = window.document.getElementById("levelContainer");
-  //   let maxLevel = 0;
-  //   let total = [];
-  //   let totalSum = 0;
-  //   let number = 0;
 
-  //   let emoji;
-
-  //   while (levelContainer.lastChild) {
-  //     levelContainer.removeChild(levelContainer.lastChild);
-  //   }
-  //   for (let i = 0; i < modes[selectedMode].groups; i++) {
-  //     levelContainer.appendChild(createBtnGrp(i));
-  //   }
-
-  //   store.completedLevels.mode[selectedMode].forEach((levelObject) => {
-  //     let level = levelObject.level;
-  //     let score = levelObject.score;
-  //     let btnGrp = window.document.getElementById(`btnGrp${number}`);
-
-  //     if ((maxLevel + 1) % 10 == 0) {
-  //       for (let i = 0; i < total.length; i++) {
-  //         totalSum += total[i];
-  //       }
-  //       let avgScore = totalSum / total.length;
-  //       if (avgScore >= 75) emoji = perfect;
-  //       else if (avgScore >= 50) emoji = good;
-  //       else if (avgScore >= 25) emoji = ok;
-  //       else if (avgScore < 25) emoji = bad;
-  //       btnGrp.children[0].innerHTML += `${emoji}${avgScore.toFixed(0)}%`;
-  //       btnGrp.children[0].classList.add("p-0");
-  //       number++;
-  //       totalSum = 0;
-  //       total.length = 0;
-  //     }
-
-  //     let availableScore = 0;
-
-  //     modes[selectedMode].words[level].forEach((word) => {
-  //       availableScore += word.length;
-  //     });
-
-  //     if (availableScore === 0) {
-  //       modes[selectedMode].words[level + 1].forEach((word) => {
-  //         availableScore += word.length;
-  //       });
-  //     }
-  //     let button = window.document.createElement("button");
-  //     button.classList.add("btn", "btn-outline-secondary", "p-0", "m-0");
-  //     let percent = score / availableScore;
-  //     total.push(percent * 100);
-  //     if (percent >= 0.75) emoji = perfect;
-  //     else if (percent >= 0.5) emoji = good;
-  //     else if (percent >= 0.25) emoji = ok;
-  //     else if (percent < 0.25) emoji = bad;
-  //     else emoji = hook;
-  //     button.innerHTML = `${level} ${emoji} ${(percent * 100).toFixed(0)}%`;
-  //     button.value = level;
-  //     button.addEventListener("click", function (e) {
-  //       startGame(+e.target.value);
-  //       document.activeElement.blur();
-  //     });
-  //     btnGrp.children[1].appendChild(button);
-
-  //     maxLevel++;
-  //   });
-  //   let button = window.document.createElement("button");
-  //   button.id = "progressBtn";
-  //   button.classList.add("btn", "btn-success", "mt-2");
-  //   button.innerHTML = `Go Fish ${hook} Level ${
-  //     maxLevel || +game.level.name
-  //   } `;
-  //   button.value = maxLevel || +game.level.name;
-  //   button.addEventListener("click", function (e) {
-  //     startGame(+e.target.value);
-  //     document.activeElement.blur();
-  //   });
-  //   levelContainer.appendChild(button);
-  // }
-
-  // function createBtnGrp(id) {
-  //   const btnGrp = window.document.createElement("div");
-  //   btnGrp.id = `btnGrp${id}`;
-  //   btnGrp.classList.add("btn-group");
-  //   btnGrp.role = "group";
-  //   const displayButton = window.document.createElement("button");
-  //   displayButton.classList.add("btn", "btn-outline-secondary");
-  //   displayButton.setAttribute("aria-expanded", "false");
-  //   displayButton.setAttribute("data-bs-toggle", "dropdown");
-  //   displayButton.innerHTML =
-  //     id == 0 ? 0 + "-" + "9" : id + "0" + "-" + (id + "9");
-  //   btnGrp.appendChild(displayButton);
-  //   const dropdown = window.document.createElement("div");
-  //   dropdown.id = `dropdown${id}`;
-  //   dropdown.classList.add("dropdown-menu", "row-cols-1", "p-0");
-  //   btnGrp.appendChild(dropdown);
-  //   return btnGrp;
-  // }
-
-  // function startGame(levelSelect) {
-  //   if (levelSelect < modes[selectedMode].levels) {
-  //     game = new Game(
-  //       selectedMode,
-  //       canvas.width,
-  //       canvas.height,
-  //       modes[selectedMode].words[levelSelect].slice(),
-  //       levelSelect
-  //     );
-  //   } else {
-  //     game = new Game(
-  //       selectedMode,
-  //       canvas.width,
-  //       canvas.height,
-  //       modes[selectedMode].words[0].slice(),
-  //       0
-  //     );
-  //   }
-  //   document.activeElement.blur();
-  // }
   // var audio = new Audio("./assets/level1.flac");
   // audio.loop = true;
 
@@ -657,16 +325,4 @@ window.addEventListener("load", function () {
   //   playing = !playing;
   //   playing ? audio.play() : audio.pause();
   // }
-
-  // let lastTime = 0;
-  // function animate(timeStamp) {
-  //   const deltaTime = timeStamp - lastTime;
-  //   lastTime = timeStamp;
-  //   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  //   game.draw(ctx);
-  //   game.update(deltaTime);
-  //   requestAnimationFrame(animate);
-  // }
-
-  // animate(0);
 });

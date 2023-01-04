@@ -8,6 +8,7 @@ export default class UserInterface {
   static Cash = document.getElementById("cash");
   static Crosshair = document.getElementById("crosshair");
   static Message = document.getElementById("message");
+  static Info = document.getElementById("info");
 
   constructor(game) {
     this.game = game;

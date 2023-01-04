@@ -28,7 +28,6 @@ import {
 
 export default class Game {
   constructor(width, height, level, dataSource) {
-
     this.wordContainer = document.getElementById("words")
     this.mode = level.mode;
     this.level = level;
@@ -72,8 +71,8 @@ export default class Game {
   }
 
   update(deltaTime) {
-    this.words.pop();
-    if (this.player.y > 0 - this.player.height * 2 && this.gameOver) {
+
+  if (this.player.y > 0 - this.player.height * 2 && this.gameOver) {
       this.player.y -= 3;
       if (this.player.y <= 0 - this.player.height) {
         let state = { score: this.score, level: this.level, win: this.win }
@@ -123,6 +122,8 @@ export default class Game {
         let previousScore = levelObject.score;
         let currentScore = this.score;
         let earnableScore = currentScore - previousScore;
+
+        console.log(previousScore,currentScore,earnableScore)
         this.store.completedLevels.mode[this.mode][this.level.name].score =
           this.score;
 
@@ -141,7 +142,7 @@ export default class Game {
         UserInterface.Cash.innerHTML = this.store["cash"];
         this.dataSource.setStore(this.store);
       }
-      this.level.name++;
+
     }
     this.gameOver = this.lose == true || this.win === true;
     if (!this.gameOver) {
