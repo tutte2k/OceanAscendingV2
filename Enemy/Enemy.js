@@ -37,8 +37,7 @@ class Enemy {
     }
     if (this.x + this.width < 0 || this.y + this.height < 0) {
       this.markedForDeletion = true;
-      this.element.hidden = true;
-      this.element.remove();
+      this.remove();
     }
     this.sprite.update(deltaTime);
   }
@@ -52,9 +51,8 @@ class Enemy {
     }
     this.markedForDeletion = !(this.completedText !== this.text);
     if (this.markedForDeletion) {
-      this.element.hidden = true;
-      this.element.remove();
       this.game.score += this.score;
+      this.remove();
     }
     return isNextChar;
   }
@@ -66,10 +64,12 @@ class Enemy {
     let widthPercentage = (context.canvas.getBoundingClientRect().width / 2500)
     let heightPercentage = (context.canvas.getBoundingClientRect().height / 1768)
     this.sprite.draw(context, this.x, this.y)
+
     this.element.style.top =  (this.y * (heightPercentage)) + "px";
     this.element.style.left = (this.width * (widthPercentage)) / 2 + (this.x * (widthPercentage)) + "px";
     this.element.innerHTML = this.text.replace(this.completedText, "")
     this.element.style.color = this.focused ? "lime" : "whitesmoke";
+
     this.displayText = this.text.replace(this.completedText, "");
   }
 }

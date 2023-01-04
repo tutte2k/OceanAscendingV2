@@ -17,11 +17,8 @@ export default class Level {
       );
     }
     draw(ctx) {
-      // ctx.fillStyle = this.locked === false ? "rgba(0,255,0)" : "rgba(255,0,0)"
-      // ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
       ctx.font = "50px serif";
       ctx.fillStyle = "white";
-      
       let icon = this.locked === false ? "💫" : "⛔"
             ctx.fillText(icon,this.position.x, this.position.y+30)
     }
