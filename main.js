@@ -14,9 +14,13 @@ cashElement.innerHTML = dataSource.getStore()["cash"];
 window.addEventListener("load", function () {
   const canvas = document.getElementById("canvas1");
   const ctx = canvas.getContext("2d");
-
+  
   canvas.width = 2500;
   canvas.height = 1768;
+  console.log(ctx.canvas.getBoundingClientRect())
+
+  const canvasRect = canvas.getBoundingClientRect();
+
 
   const boundaries = []
   const offset = {
@@ -84,7 +88,7 @@ window.addEventListener("load", function () {
       this.content = content;
       this.name = number;
       this.mode = 0;
-      this.words = content
+      this.words = this.getContent()
 
       this.maxScore = 0;
       this.words.forEach(
@@ -94,6 +98,9 @@ window.addEventListener("load", function () {
     draw() {
       ctx.fillStyle = this.locked === false ? "rgba(0,255,0)" : "rgba(255,0,0)"
       ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
+    }
+    getContent(){
+      return this.content.slice();
     }
   }
 
@@ -165,7 +172,7 @@ window.addEventListener("load", function () {
   image.src = "./assets/levelSelection/infinitemapzoom.png";
 
   const foregroundImage = new Image();
-  foregroundImage.src = "./assets/levelSelection/foreground.png";
+  foregroundImage.src = "./assets/levelSelection/foreground.webp";
 
   const playerImage = new Image();
   playerImage.src = "./assets/levelSelection/playerDown.png";
@@ -232,8 +239,8 @@ window.addEventListener("load", function () {
     }
     else if (game) {
       canvas.classList.remove("underwater");
-      if(nextLevel&&state.win===true){
-        nextLevel.locked=false;
+      if (nextLevel && state.win === true) {
+        nextLevel.locked = false;
       }
       state = null;
       game = null;
@@ -254,7 +261,7 @@ window.addEventListener("load", function () {
       if (keys.enter.pressed) {
         for (let i = 0; i < levelsArray.length; i++) {
           const level = levelsArray[i]
-          nextLevel = levelsArray[i+1]
+          nextLevel = levelsArray[i + 1]
           if (!level.locked && Helper.hasCollided({ rectangle1: player, rectangle2: { ...level, position: { x: level.position.x, y: level.position.y + 3 } } })) {
             game = new Game(
               canvas.width,

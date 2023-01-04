@@ -6,25 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ocean Ascending World</title>
-
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
-
-
-
-    <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
-
-    <link href="https://fonts.googleapis.com/css2?family=Paprika&display=swap" rel="stylesheet">
-
-    <link href="https://fonts.googleapis.com/css2?family=Slackey&display=swap" rel="stylesheet">
-
-
-    <link href="https://fonts.googleapis.com/css2?family=Titan+One&display=swap" rel="stylesheet">
-
-    <link href="https://fonts.googleapis.com/css2?family=Carter+One&display=swap" rel="stylesheet">
-
 
     <link rel="stylesheet" href="./style.css">
 
@@ -43,19 +26,37 @@
 </head>
 
 <body>
+
+
+
+
+<div id="container1">
     <canvas id="canvas1"></canvas>
+    <div id="ui">
+        <div class="d-flex col justify-content-between mx-5">
+
+            <p class="hud">Mine: <span id="mines"></span></p>
+            <p class="hud">Air: <span id="air"></span></p>
+            <p class="hud">Words left: <span id="wordsLeft"></span></p>
+            <p class="hud">Level: <span id="level"></span></p>
+            <p class="hud">Depth: <span id="depth"></span></p>
+            <p class="hud">Cash: <span id="cash"></span></p>
+        </div>
+    </div>
+    <div id="words"></div>
+</div>
+
+
+
 
 
     <img src="assets/player.webp" alt="" id="player">
-
     <img src="assets/angler1.png" alt="" id="angler1">
     <img src="assets/angler2.png" alt="" id="angler2">
     <img src="assets/seahorse.webp" alt="" id="seahorse">
-
     <img src="assets/chtullie.webp" alt="" id="chtullie">
     <img src="assets/angela1.webp" alt="" id="angela1">
     <img src="assets/angela2.webp" alt="" id="angela2">
-
     <img src="assets/lucky.png" alt="" id="lucky">
     <img src="assets/turtle1.webp" alt="" id="turtle1">
     <img src="assets/turtle2.webp" alt="" id="turtle2">
@@ -70,84 +71,16 @@
     <img src="assets/lionfish1.webp" alt="" id="lionfish1">
     <img src="assets/goldfish.webp" alt="" id="goldfish">
     <img src="assets/shark.webp" alt="" id="shark">
-
-
     <img src="assets/hivewhale.png" alt="" id="hivewhale">
     <img src="assets/drone.png" alt="" id="drone">
-
     <img src="assets/mine.png" alt="" id="projectile">
     <img src="assets/smokeExplosion.webp" alt="" id="smokeExplosion">
     <img src="assets/fireExplosion.webp" alt="" id="fireExplosion">
     <img src="assets/rainbowExplosion.webp" alt="" id="rainbowExplosion">
-
     <img src="assets/gears.webp" alt="" id="gears">
-
-
     <img src="assets/layer2d.webp" alt="" id="layer2">
     <img src="assets/layer3d.webp" alt="" id="layer3">
-
     <img src="assets/layer4d.webp" alt="" id="layer4">
-
-
-
-   
-    <div class="col-1 position-absolute end-0 top-0 card p-0 m-0 text-muted">
-
-        <h1 class="display-6 card-header p-0 text-center">Shop</h1>
-        <p class="text-success m-2 text-center">coming soon </p>
-        <p class="text-success m-2 text-center">
-            💲<span id="cash"></span>
-        </p>
-
-
-        <div hidden="true">
-            <label class="label text-center" for="">Regeneration</label>
-            <div class="btn-group-vertical w-100" role="group">
-                <button disabled class="btn btn btn-outline-secondary ">Air 💲<span>1</span></button>
-                <button disabled class="btn btn btn-outline-secondary ">Mine 💲<span>1</span></button>
-            </div>
-            <label class="label text-center" for="">Stats</label>
-            <div class="btn-group-vertical w-100" role="group">
-                <button disabled class="btn btn-outline-secondary ">Air 💲<span>1</span></button>
-                <button disabled class="btn btn-outline-secondary ">Mine 💲<span>1</span></button>
-                <button disabled class="btn btn-outline-secondary ">Speed 💲<span>20</span></button>
-            </div>
-
-
-            <label class="text-muted label text-center" for="">Robots</label>
-            <div class="btn-group-vertical w-100" role="group">
-                <button disabled class="btn btn btn-outline-secondary ">Copty 💲<span>1M</span></button>
-                <button disabled class="btn btn btn-outline-secondary ">Smiley 💲<span>5M</span></button>
-                <button disabled class="btn btn btn-outline-secondary ">Mousy 💲<span>15M</span></button>
-            </div>
-            <label class="text-muted label text-center" for="">Powerups</label>
-            <div class="btn-group-vertical w-100" role="group">
-                <button disabled class="btn btn btn-outline-secondary ">Timewarp 💲<span>500</span></button>
-                <button disabled class="btn btn-outline-secondary ">Zapper 💲<span>2000</span></button>
-                <button disabled class="btn btn-outline-secondary ">Shield 💲<span>3000</span></button>
-            </div>
-            <label class="text-muted label text-center" for="">Characters</label>
-            <div class="btn-group-vertical w-100" role="group">
-                <button disabled class="btn btn-outline-secondary ">Navy Seal 💲<span>500K</span></button>
-                <button disabled class="btn btn-outline-secondary ">P.I.B 💲<span>1.5M</span></button>
-                <button disabled class="btn btn btn-outline-secondary ">Sharkzilla 💲<span>20M</span></button>
-
-            </div>
-
-
-        </div>
-
-        <label hidden="true" class="text-muted label text-center" for="">Misc</label>
-        <div hidden="true" class="btn-group-vertical w-100" role="group">
-            <button class="btn btn-dark" id="playMusic">Toggle Music</button>
-        </div>
-
-
-
-
-    </div>
-
-    </div>
 
 
 </body>

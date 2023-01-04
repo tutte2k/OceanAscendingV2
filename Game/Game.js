@@ -27,11 +27,11 @@ import {
 
 export default class Game {
   constructor(width, height, level, dataSource) {
-
+    this.wordContainer = document.getElementById("words")
     this.mode = level.mode;
 
     this.level = level;
-    this.words = level.words;
+    this.words = level.getContent();
 
     this.lose = false;
     this.win = false;
@@ -85,6 +85,8 @@ export default class Game {
       if (this.player.y <= 0 - this.player.height) {
         let state = { score: this.score, level: this.level, win: this.win }
         this.level = null;
+        this.wordContainer.innerHTML = '';
+        
         return state
       }
     }

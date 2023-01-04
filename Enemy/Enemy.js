@@ -21,8 +21,17 @@ class Enemy {
     this.width = sprite.width;
     this.height = sprite.height;
     this.y = Math.random() * (this.game.height * 0.95 - this.height);
+
+    this.element = document.createElement("div")
+
+    this.element.classList.add("word")
+    this.element.innerHTML = word
+    this.element.style.position = "absolute"
+    this.game.wordContainer.appendChild(this.element)
+
   }
   update(deltaTime) {
+
     if (this.speedY) {
       this.y += this.speedY - this.game.speed;
     } else {
@@ -35,6 +44,7 @@ class Enemy {
     if (this.x + this.width < 0 || this.y + this.height < 0) {
       this.markedForDeletion = true;
     }
+
     this.sprite.update(deltaTime);
   }
   consume(key) {
@@ -47,26 +57,39 @@ class Enemy {
     }
     this.markedForDeletion = !(this.completedText !== this.text);
     if (this.markedForDeletion) {
+      this.element.remove();
       this.game.score += this.score;
     }
     return isNextChar;
   }
 
   draw(context) {
-    context.save();
-    this.sprite.draw(context, this.x, this.y);
-    context.shadowOffsetX = 2;
-    context.shadowOffsetY = 2;
-    context.shadowColor = "black";
-    this.displayText = this.text.replace(this.completedText, "");
-    context.fillStyle = this.focused ? "lime" : "white";
-    context.font = "40px " + this.font;
-    context.fillText(
-      this.displayText,
-      this.x + this.width * 0.5,
-      this.y + this.height * 0.5
-    );
-    context.restore();
+    this.sprite.draw(context, this.x, this.y)
+    
+  
+    this.element.style.top = (this.y *  (context.canvas.getBoundingClientRect().height/1768))+ "px";
+    this.element.style.left = (this.x * (context.canvas.getBoundingClientRect().width/2500)) +"px";
+    this.element.innerHTML = this.text.replace(this.completedText, "")
+
+
+    // context.save();
+
+
+    // context.shadowOffsetX = 2;
+    // context.shadowOffsetY = 2;
+    // context.shadowColor = "black";
+
+
+    // this.displayText = this.text.replace(this.completedText, "");
+
+    // context.fillStyle = this.focused ? "lime" : "white";
+    // context.font = "40px " + this.font;
+    // context.fillText(
+    //   this.displayText,
+    //   this.x + this.width * 0.5,
+    //   this.y + this.height * 0.5
+    // );
+    // context.restore();
   }
 }
 export class Jellyfish extends Enemy {
