@@ -71,7 +71,6 @@ export default class Game {
   }
 
   update(deltaTime) {
-
   if (this.player.y > 0 - this.player.height * 2 && this.gameOver) {
       this.player.y -= 3;
       if (this.player.y <= 0 - this.player.height) {
@@ -103,6 +102,7 @@ export default class Game {
         levelObject = { level: this.level.name, score: this.score };
         this.store.completedLevels.mode[this.mode].push(levelObject);
         let availableScore = this.level.maxScore;
+
         earnedCash =
           this.level.name + Math.round((this.score / availableScore) * 10);
 

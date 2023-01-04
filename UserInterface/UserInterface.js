@@ -9,6 +9,7 @@ export default class UserInterface {
   static Crosshair = document.getElementById("crosshair");
   static Message = document.getElementById("message");
   static Info = document.getElementById("info");
+  static Score = document.getElementById("score");
 
   constructor(game) {
     this.game = game;
@@ -20,7 +21,8 @@ export default class UserInterface {
     UserInterface.Mine.innerHTML = this.game.player.ammo;
     UserInterface.Level.innerHTML = this.game.level.name;
     UserInterface.WordsLeft.innerHTML = this.game.words.length;
-    UserInterface.Crosshair.innerHTML = (this.game.focus && this.game.focus.text.length != 1) ? this.game.focus.displayText : ''
+    UserInterface.Crosshair.innerHTML = (this.game.focus && this.game.focus.text.length != 1) ? this.game.focus.displayText : '';
+    UserInterface.Score.innerHTML = this.game.score;
     if (this.game.gameOver) {
       let message1;
       let message2;
