@@ -5,7 +5,6 @@ export default class FloatingMessage {
     this.y = y;
     this.lifeSpan = 150;
     this.lived = 0;
-    this.opacity = 1;
     this.markedForDeletion = false;
     this.size = size;
     this.font = "Carter One";

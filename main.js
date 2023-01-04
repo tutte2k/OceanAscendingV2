@@ -4,105 +4,29 @@ import DataSource from "./Data/DataSource.js";
 import { collisionsMap } from "./Data/collisions.js";
 import { levelsMap } from "./Data/levels.js";
 import Helper from "./Utils/Helper.js";
+import UserInterface from "./UserInterface/UserInterface.js";
+import Level from "./Game/Level.js";
+import Boundary from "./Game/Boundary.js";
+import Sprite from "./Utils/Sprite.js";
 
 const dataSource = new DataSource();
 
-var cashElement = document.getElementById("cash");
-cashElement.innerHTML = dataSource.getStore()["cash"];
-
+UserInterface.Cash.innerHTML = dataSource.getStore()["cash"];
 
 window.addEventListener("load", function () {
   const canvas = document.getElementById("canvas1");
   const ctx = canvas.getContext("2d");
-  
+
   canvas.width = 2500;
   canvas.height = 1768;
-  console.log(ctx.canvas.getBoundingClientRect())
-
-  const canvasRect = canvas.getBoundingClientRect();
-
 
   const boundaries = []
   const offset = {
     x: -1520,
     y: -1050
   }
-  class Sprite {
-    constructor({ position, velocity, image, frames = { max: 1 }, sprites }) {
-      this.position = position
-      this.image = image
-      this.frames = { ...frames, val: 0, elapsed: 0 }
-      this.image.onload = () => {
-        this.width = this.image.width / this.frames.max
-        this.height = this.image.height
-      }
-      this.moving = false;
-      this.sprites = sprites;
-    }
-    draw() {
+ 
 
-      ctx.drawImage(
-        this.image,
-        this.frames.val * this.width,
-        0,
-        this.image.width / this.frames.max,
-        this.image.height,
-        this.position.x,
-        this.position.y,
-        this.image.width / this.frames.max,
-        this.image.height,
-      )
-      if (!this.moving) return;
-      if (this.frames.max > 1) {
-        this.frames.elapsed++;
-      }
-      if (this.frames.elapsed % 10 === 0) {
-        if (this.frames.val < this.frames.max - 1) this.frames.val++;
-        else this.frames.val = 0;
-      }
-
-    }
-
-  }
-  class Boundary {
-    static width = 66;
-    static height = 66;
-    constructor({ position }) {
-      this.position = position;
-      this.width = 50
-      this.height = 50
-    }
-    draw() {
-      ctx.fillStyle = "rgba(255,0,0,0)"
-      ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
-    }
-  }
-  class Level {
-    static width = 66;
-    static height = 66;
-    constructor({ number, position, locked, content }) {
-      this.position = position;
-      this.width = 30;
-      this.height = 30;
-      this.locked = locked;
-      this.content = content;
-      this.name = number;
-      this.mode = 0;
-      this.words = this.getContent()
-
-      this.maxScore = 0;
-      this.words.forEach(
-        (word) => (this.maxScore += word.length)
-      );
-    }
-    draw() {
-      ctx.fillStyle = this.locked === false ? "rgba(0,255,0)" : "rgba(255,0,0)"
-      ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
-    }
-    getContent(){
-      return this.content.slice();
-    }
-  }
 
 
 
@@ -201,12 +125,10 @@ window.addEventListener("load", function () {
       down: playerDownImage,
     }
   })
-
   const background = new Sprite({
     position: { x: offset.x, y: offset.y },
     image: image
   })
-
   const foreground = new Sprite({
     position: { x: offset.x, y: offset.y },
     image: foregroundImage
@@ -222,13 +144,11 @@ window.addEventListener("load", function () {
 
   let movables = [background, ...boundaries, foreground, ...levelsArray]
 
-
   let game;
   let lastTime = 0;
   let state;
   let nextLevel;
   function animate(timeStamp) {
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const deltaTime = timeStamp - lastTime;
     lastTime = timeStamp;
@@ -247,15 +167,16 @@ window.addEventListener("load", function () {
     }
 
     else {
-      background.draw()
+      background.draw(ctx)
       boundaries.forEach(boundary => {
-        boundary.draw()
+        boundary.draw(ctx)
       })
       levelsArray.forEach(level => {
-        level.draw()
+        level.draw(ctx)
       })
-      player.draw();
-      foreground.draw()
+      player.draw(ctx);
+      foreground.draw(ctx)
+      
       let moving = true;
       player.moving = false;
       if (keys.enter.pressed) {

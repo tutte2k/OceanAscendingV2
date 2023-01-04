@@ -24,20 +24,21 @@ import {
   Goldfish,
   Shark,
 } from "../Enemy/Enemy.js";
+import Helper from "../Utils/Helper.js";
 
 export default class Game {
   constructor(width, height, level, dataSource) {
+
     this.wordContainer = document.getElementById("words")
     this.mode = level.mode;
-
     this.level = level;
     this.words = level.getContent();
 
+    this.gameOver = false;
     this.lose = false;
     this.win = false;
     this.score = 0;
 
-    this.gameOver = false;
 
     this.width = width;
     this.height = height;
@@ -45,26 +46,15 @@ export default class Game {
     this.gameTime = 0;
 
     this.background = new Background(this);
-
     this.inputHandler = new InputHandler(this);
-
     this.userInterface = new UserInterface(this);
-
     UserInterface.UI.classList.remove("invisible")
 
-
-
     this.keys = [];
-
     this.player = new Player(this);
 
     this.health = 3;
     this.focus = null;
-
-    this.ammo = 1;
-    this.maxAmmo = 1;
-    this.ammoTimer = 0;
-    this.ammoInterval = 30000;
 
     this.enemies = [];
     this.particles = [];
@@ -88,8 +78,8 @@ export default class Game {
         let state = { score: this.score, level: this.level, win: this.win }
         this.level = null;
         this.wordContainer.innerHTML = '';
-        UserInterface.UI.classList.add("invisible")
-        
+        UserInterface.Message.innerHTML = '';
+        UserInterface.UI.classList.add("invisible");
         return state
       }
     }
@@ -98,6 +88,7 @@ export default class Game {
     } else if (this.words.length === 0 && !this.gameOver) {
       this.win = true;
       this.enemies.forEach((enemy) => {
+        enemy.remove();
         this.score += enemy.score;
         enemy.markedForDeletion = true;
       });
@@ -111,9 +102,7 @@ export default class Game {
       if (!levelObject) {
         levelObject = { level: this.level.name, score: this.score };
         this.store.completedLevels.mode[this.mode].push(levelObject);
-
         let availableScore = this.level.maxScore;
-
         earnedCash =
           this.level.name + Math.round((this.score / availableScore) * 10);
 
@@ -127,13 +116,12 @@ export default class Game {
           )
         );
         this.store["cash"] = this.store["cash"] + earnedCash;
-        this.userInterface.cashElement.innerHTML = this.store["cash"];
+        UserInterface.Cash.innerHTML = this.store["cash"];
         this.dataSource.setStore(this.store);
       } else if (levelObject.score < this.score) {
         let previousScore = levelObject.score;
         let currentScore = this.score;
         let earnableScore = currentScore - previousScore;
-
         this.store.completedLevels.mode[this.mode][this.level.name].score =
           this.score;
 
@@ -149,7 +137,7 @@ export default class Game {
           )
         );
         this.store["cash"] = this.store["cash"] + earnedCash;
-        this.userInterface.cashElement.innerHTML = this.store["cash"];
+        UserInterface.Cash.innerHTML = this.store["cash"];
         this.dataSource.setStore(this.store);
       }
       this.level.name++;
@@ -159,14 +147,6 @@ export default class Game {
       this.gameTime += deltaTime;
       this.background.update();
       this.background.layer4.update();
-      if (this.ammoTimer > this.ammoInterval) {
-        if (this.ammo < this.maxAmmo) {
-          this.ammo++;
-        }
-        this.ammoTimer = 0;
-      } else {
-        this.ammoTimer += deltaTime;
-      }
     }
     this.player.update(deltaTime);
     this.particles.forEach((particle) => particle.update());
@@ -188,11 +168,12 @@ export default class Game {
         this.focus = enemy;
       }
       enemy.update(deltaTime);
-      if (this.checkCollision(this.player, enemy)) {
+      if (Helper.hasCollided(this.player, enemy)) {
         if (enemy.focused && this.focus === enemy) {
           this.focus = null;
         }
         enemy.markedForDeletion = true;
+        enemy.remove();
         this.addExplosion(enemy);
         if (this.health > 0) {
           this.health--;
@@ -219,7 +200,7 @@ export default class Game {
         }
       }
       this.player.projectiles.forEach((projectile) => {
-        if (this.checkCollision(projectile, enemy)) {
+        if (Helper.hasCollided(projectile, enemy)) {
           this.score += enemy.score;
           if (enemy.focused && this.focus === enemy) {
             this.focus = null;
@@ -227,7 +208,7 @@ export default class Game {
           this.enemyScoreMessage(enemy);
           projectile.markedForDeletion = true;
           enemy.markedForDeletion = true;
-
+          enemy.remove();
           this.explosions.push(
             new FireExplosion(
               this,
@@ -277,11 +258,12 @@ export default class Game {
             this.mechExplosion(enemy);
           }
         }
-
         this.focus = null;
       }
     });
+
     this.enemies = this.enemies.filter((enemy) => !enemy.markedForDeletion);
+
     if (this.enemyTimer > this.enemyInterval && !this.gameOver) {
       this.addEnemy();
       this.enemyTimer = 0;
@@ -399,14 +381,6 @@ export default class Game {
         enemy.x + enemy.width * 0.5,
         enemy.y + enemy.height * 0.5
       )
-    );
-  }
-  checkCollision(rect1, rect2) {
-    return (
-      rect1.x < rect2.x + rect2.width &&
-      rect1.x + rect1.width > rect2.x &&
-      rect1.y < rect2.y + rect2.height &&
-      rect1.height + rect1.y > rect2.y
     );
   }
   findFocus(key) {

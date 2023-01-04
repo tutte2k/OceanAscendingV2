@@ -9,6 +9,11 @@ export class Player {
     this.y = 100;
     this.speedY = 0;
     this.maxSpeed = 3;
+
+    this.ammo = 1;
+    this.maxAmmo = 1;
+    this.ammoTimer = 0;
+    this.ammoInterval = 30000;
     this.projectiles = [];
 
     this.sprite = new SpriteSheet(
@@ -46,6 +51,16 @@ export class Player {
       } else if (this.y < -this.height * 0.5) {
         this.y = -this.height * 0.5;
       }
+
+      if (this.ammoTimer > this.ammoInterval) {
+        if (this.ammo < this.maxAmmo) {
+          this.ammo++;
+        }
+        this.ammoTimer = 0;
+      } else {
+        this.ammoTimer += deltaTime;
+      }
+    
     }
     this.projectiles.forEach((projectile) => projectile.update());
 
@@ -90,7 +105,7 @@ export class Player {
   }
 
   shootTop() {
-    if (this.game.ammo > 0) {
+    if (this.ammo > 0) {
       this.projectiles.push(
         new Projectile(
           this.game,
@@ -98,7 +113,7 @@ export class Player {
           this.y + this.height * 0.5
         )
       );
-      this.game.ammo--;
+      this.ammo--;
     }
   }
 }

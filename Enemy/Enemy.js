@@ -8,19 +8,17 @@ class Enemy {
     this.completedText = "";
     this.displayText = this.text;
     this.score = this.text.length;
-    this.lives = this.text.length;
     this.focused = false;
-
     this.x = this.game.width;
 
     this.speedX = -this.game.speed;
     this.markedForDeletion = false;
 
-    this.font = "Carter One";
     this.sprite = sprite;
     this.width = sprite.width;
     this.height = sprite.height;
     this.y = Math.random() * (this.game.height * 0.95 - this.height);
+
     this.element = document.createElement("div")
     this.element.classList.add("word")
     this.element.innerHTML = word
@@ -28,7 +26,6 @@ class Enemy {
     this.game.wordContainer.appendChild(this.element)
   }
   update(deltaTime) {
-
     if (this.speedY) {
       this.y += this.speedY - this.game.speed;
     } else {
@@ -40,8 +37,9 @@ class Enemy {
     }
     if (this.x + this.width < 0 || this.y + this.height < 0) {
       this.markedForDeletion = true;
+      this.element.hidden = true;
+      this.element.remove();
     }
-
     this.sprite.update(deltaTime);
   }
   consume(key) {
@@ -60,36 +58,19 @@ class Enemy {
     }
     return isNextChar;
   }
-
+  remove(){
+    this.element.hidden = true;
+    this.element.remove();
+  }
   draw(context) {
+    let widthPercentage = (context.canvas.getBoundingClientRect().width / 2500)
+    let heightPercentage = (context.canvas.getBoundingClientRect().height / 1768)
     this.sprite.draw(context, this.x, this.y)
-    
-  
-    this.element.style.top = (this.y *  (context.canvas.getBoundingClientRect().height/1768))+ "px";
-    this.element.style.left = (this.x * (context.canvas.getBoundingClientRect().width/2500)) +"px";
+    this.element.style.top =  (this.y * (heightPercentage)) + "px";
+    this.element.style.left = (this.width * (widthPercentage)) / 2 + (this.x * (widthPercentage)) + "px";
     this.element.innerHTML = this.text.replace(this.completedText, "")
-    this.element.style.color = this.focused ? "lime": "whitesmoke";
+    this.element.style.color = this.focused ? "lime" : "whitesmoke";
     this.displayText = this.text.replace(this.completedText, "");
-
-
-
-    // context.save();
-
-
-    // context.shadowOffsetX = 2;
-    // context.shadowOffsetY = 2;
-    // context.shadowColor = "black";
-
-
-
-    // context.fillStyle = this.focused ? "lime" : "white";
-    // context.font = "40px " + this.font;
-    // context.fillText(
-    //   this.displayText,
-    //   this.x + this.width * 0.5,
-    //   this.y + this.height * 0.5
-    // );
-    // context.restore();
   }
 }
 export class Jellyfish extends Enemy {
