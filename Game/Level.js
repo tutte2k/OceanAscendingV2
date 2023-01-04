@@ -1,14 +1,14 @@
 export default class Level {
     static width = 66;
     static height = 66;
-    constructor({ number, position, locked, content }) {
+    constructor({mode, number, position, locked, content }) {
       this.position = position;
       this.width = 30;
       this.height = 30;
       this.locked = locked;
       this.content = content;
       this.name = number;
-      this.mode = 0;
+      this.mode = mode;
       this.words = this.getContent()
 
       this.maxScore = 0;

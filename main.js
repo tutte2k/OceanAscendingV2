@@ -10,7 +10,6 @@ import Boundary from "./Game/Boundary.js";
 import Sprite from "./Utils/Sprite.js";
 
 const dataSource = new DataSource();
-
 UserInterface.Cash.innerHTML = dataSource.getStore()["cash"];
 
 window.addEventListener("load", function () {
@@ -26,10 +25,6 @@ window.addEventListener("load", function () {
     y: -1050
   }
  
-
-
-
-
   collisionsMap.forEach((row, i) => {
     row.forEach((symbol, j) => {
       if (symbol === 1025) {
@@ -62,6 +57,7 @@ window.addEventListener("load", function () {
     let levelNumW = 0;
     let levelNumT = 0;
     let levelData = dataSource.getStore()["completedLevels"];
+
     levelsMap.forEach((row, i) => {
       row.forEach((symbol, j) => {
         if (symbol === 1) {
@@ -71,7 +67,7 @@ window.addEventListener("load", function () {
             nextLevel = levelNumW;
           }
           let locked = !(storedLevel || nextLevel <= levelNumW || levelNumW === 0);
-          levelsArray.push(new Level({ position: { x: j * Level.width + 590, y: i * Level.height + -1060 }, number: levelNumW, locked: locked, content: wordsLevels[levelNumW] }))
+          levelsArray.push(new Level({mode:0, position: { x: j * Level.width + 590, y: i * Level.height + -1060 }, number: levelNumW, locked: locked, content: wordsLevels[levelNumW] }))
           levelNumW++;
         }
         if (symbol === 6) {
@@ -81,17 +77,14 @@ window.addEventListener("load", function () {
             nextLevel = levelNumT;
           }
           let locked = !(storedLevel || nextLevel <= levelNumT || levelNumT === 0);
-          levelsArray.push(new Level({ position: { x: j * Level.width + 590, y: i * Level.height + -1060 }, number: levelNumT, locked: locked, content: tibiaLevels[levelNumT] }))
+          levelsArray.push(new Level({mode:6, position: { x: j * Level.width + 590, y: i * Level.height + -1060 }, number: levelNumT, locked: locked, content: tibiaLevels[levelNumT] }))
           levelNumT++;
         }
       })
     })
+
     return levelsArray;
-
   }
-
-
-
   const image = new Image();
   image.src = "./assets/levelSelection/infinitemapzoom.png";
 
@@ -176,7 +169,7 @@ window.addEventListener("load", function () {
       })
       player.draw(ctx);
       foreground.draw(ctx)
-      
+
       let moving = true;
       player.moving = false;
       if (keys.enter.pressed) {

@@ -24,7 +24,7 @@ import {
   Goldfish,
   Shark,
 } from "../Enemy/Enemy.js";
-import Helper from "../Utils/Helper.js";
+
 
 export default class Game {
   constructor(width, height, level, dataSource) {
@@ -72,6 +72,7 @@ export default class Game {
   }
 
   update(deltaTime) {
+    this.words.pop();
     if (this.player.y > 0 - this.player.height * 2 && this.gameOver) {
       this.player.y -= 3;
       if (this.player.y <= 0 - this.player.height) {
@@ -168,7 +169,7 @@ export default class Game {
         this.focus = enemy;
       }
       enemy.update(deltaTime);
-      if (Helper.hasCollided(this.player, enemy)) {
+      if (this.checkCollision(this.player, enemy)) {
         if (enemy.focused && this.focus === enemy) {
           this.focus = null;
         }
@@ -200,7 +201,7 @@ export default class Game {
         }
       }
       this.player.projectiles.forEach((projectile) => {
-        if (Helper.hasCollided(projectile, enemy)) {
+        if (this.checkCollision(projectile, enemy)) {
           this.score += enemy.score;
           if (enemy.focused && this.focus === enemy) {
             this.focus = null;
@@ -270,6 +271,14 @@ export default class Game {
     } else {
       this.enemyTimer += deltaTime;
     }
+  }
+  checkCollision(rect1, rect2) {
+    return (
+      rect1.x < rect2.x + rect2.width &&
+      rect1.x + rect1.width > rect2.x &&
+      rect1.y < rect2.y + rect2.height &&
+      rect1.height + rect1.y > rect2.y
+    );
   }
   draw(context) {
     this.background.draw(context);
@@ -367,6 +376,7 @@ export default class Game {
 
     let randomIndex = Math.floor(Math.random() * enemies[value.length].length);
     let enemy = new enemies[value.length][randomIndex](this, value)
+    
 
     if (!enemy) {
       return new enemies[4](this, value)
