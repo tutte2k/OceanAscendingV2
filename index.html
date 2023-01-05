@@ -1,90 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ocean Ascending World</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./style.css" />
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
 
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-        crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+      crossorigin="anonymous"
+    ></script>
 
     <script type="module" src="./main.js"></script>
+  </head>
 
-
-
-</head>
-
-<body>
-
-
-
-
-<div id="container1">
-    <canvas id="canvas1"></canvas>
-    <div id="ui" class ="invisible">
+  <body>
+    <div id="container1">
+      <canvas id="canvas1"></canvas>
+      <div id="ui" class="invisible">
         <div class="d-flex col justify-content-between mx-3">
-            <div id="inv">
-                <p class="hud visible">Cash: <span id="cash"></span></p>
-                <p class="hud">Mines: <span id="mines"></span></p>
-                <p class="hud">Air: <span id="air"></span></p>
-            </div>
-            <div class="row">
-                <p class="hud">Level: <span id="level"></span></p>
-                <p class="hud">Words left: <span id="wordsLeft"></span></p>
-                <p class="hud">Score: <span id="score"></span></p>
-            </div>
-            <p class="hud">Depth: <span id="depth"></span></p>
+          <div id="inv">
+            <p class="hud visible">Cash: $<span id="cash"></span></p>
+            <p class="hud">Mines: <span id="mines"></span></p>
+            <p class="hud">Air: <span id="air"></span></p>
+          </div>
+          <div class="row">
+            <p class="hud">Level: <span id="level"></span></p>
+            <p class="hud">Words left: <span id="wordsLeft"></span></p>
+            <p class="hud">Score: <span id="score"></span></p>
+          </div>
+          <p class="hud">Depth: <span id="depth"></span></p>
         </div>
         <div id="info" class="visible"></div>
         <div id="crosshair" class="visible"></div>
         <div id="message"></div>
+        <div id="shop" hidden="true" class="visible text-white w-25">
+          <table
+            class="table table-sm table-striped border table-dark table-responsive table-hover"
+          >
+            <tr>
+              <th>Current</th>
+              <th>Item</th>
+              <th>Price</th>
+              <th>Shop</th>
+            </tr>
+            <tr>
+              <td><span id="currentAirSlot"></span></td>
+              <td>Air Slot</td>
+              <td>$<span id="airSlotPrice"></span></td>
+              <td><div id="airSlot" class="btn btn-sm btn-danger">Buy</div></td>
+            </tr>
+            <tr>
+              <td><span id="currentAirReg"></span></td>
+              <td>Air Regeneration</td>
+              <td>$<span id="airRegPrice"></span></td>
+              <td><div id="airReg" class="btn btn-sm btn-danger">Buy</div></td>
+            </tr>
+            <tr>
+              <td><span id="currentMineSlot"></span></td>
+              <td>Mine Slot</td>
+              <td>$<span id="mineSlotPrice"></span></td>
+              <td>
+                <div id="mineSlot" class="btn btn-sm btn-danger">Buy</div>
+              </td>
+            </tr>
+            <tr>
+              <td><span id="currentMineReg"></span></td>
+              <td>Mine Regeneration</td>
+              <td>$<span id="mineRegPrice"></span></td>
+              <td><div id="mineReg" class="btn btn-sm btn-danger">Buy</div></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div id="words"></div>
     </div>
-    <div id="words"></div>
-</div>
-    <img src="assets/player.webp" alt="" id="player">
-    <img src="assets/angler1.png" alt="" id="angler1">
-    <img src="assets/angler2.png" alt="" id="angler2">
-    <img src="assets/seahorse.webp" alt="" id="seahorse">
-    <img src="assets/chtullie.webp" alt="" id="chtullie">
-    <img src="assets/angela1.webp" alt="" id="angela1">
-    <img src="assets/angela2.webp" alt="" id="angela2">
-    <img src="assets/lucky.png" alt="" id="lucky">
-    <img src="assets/turtle1.webp" alt="" id="turtle1">
-    <img src="assets/turtle2.webp" alt="" id="turtle2">
-    <img src="assets/turtle3.webp" alt="" id="turtle3">
-    <img src="assets/turtle4.webp" alt="" id="turtle4">
-    <img src="assets/turtle5.webp" alt="" id="turtle5">
-    <img src="assets/jellyfish1.webp" alt="" id="jellyfish1">
-    <img src="assets/jellyfish2.webp" alt="" id="jellyfish2">
-    <img src="assets/jellyfish3.webp" alt="" id="jellyfish3">
-    <img src="assets/jellyfish4.webp" alt="" id="jellyfish4">
-    <img src="assets/jellyfish5.webp" alt="" id="jellyfish5">
-    <img src="assets/lionfish1.webp" alt="" id="lionfish1">
-    <img src="assets/goldfish.webp" alt="" id="goldfish">
-    <img src="assets/shark.webp" alt="" id="shark">
-    <img src="assets/hivewhale.png" alt="" id="hivewhale">
-    <img src="assets/drone.png" alt="" id="drone">
-    <img src="assets/mine.png" alt="" id="projectile">
-    <img src="assets/smokeExplosion.webp" alt="" id="smokeExplosion">
-    <img src="assets/fireExplosion.webp" alt="" id="fireExplosion">
-    <img src="assets/rainbowExplosion.webp" alt="" id="rainbowExplosion">
-    <img src="assets/gears.webp" alt="" id="gears">
-    <img src="assets/layer2d.webp" alt="" id="layer2">
-    <img src="assets/layer3d.webp" alt="" id="layer3">
-    <img src="assets/layer4d.webp" alt="" id="layer4">
-
-
-</body>
-
+    <img src="assets/player.webp" alt="" id="player" />
+    <img src="assets/angler1.png" alt="" id="angler1" />
+    <img src="assets/angler2.png" alt="" id="angler2" />
+    <img src="assets/seahorse.webp" alt="" id="seahorse" />
+    <img src="assets/chtullie.webp" alt="" id="chtullie" />
+    <img src="assets/angela1.webp" alt="" id="angela1" />
+    <img src="assets/angela2.webp" alt="" id="angela2" />
+    <img src="assets/lucky.png" alt="" id="lucky" />
+    <img src="assets/turtle1.webp" alt="" id="turtle1" />
+    <img src="assets/turtle2.webp" alt="" id="turtle2" />
+    <img src="assets/turtle3.webp" alt="" id="turtle3" />
+    <img src="assets/turtle4.webp" alt="" id="turtle4" />
+    <img src="assets/turtle5.webp" alt="" id="turtle5" />
+    <img src="assets/jellyfish1.webp" alt="" id="jellyfish1" />
+    <img src="assets/jellyfish2.webp" alt="" id="jellyfish2" />
+    <img src="assets/jellyfish3.webp" alt="" id="jellyfish3" />
+    <img src="assets/jellyfish4.webp" alt="" id="jellyfish4" />
+    <img src="assets/jellyfish5.webp" alt="" id="jellyfish5" />
+    <img src="assets/lionfish1.webp" alt="" id="lionfish1" />
+    <img src="assets/goldfish.webp" alt="" id="goldfish" />
+    <img src="assets/shark.webp" alt="" id="shark" />
+    <img src="assets/hivewhale.png" alt="" id="hivewhale" />
+    <img src="assets/drone.png" alt="" id="drone" />
+    <img src="assets/mine.png" alt="" id="projectile" />
+    <img src="assets/smokeExplosion.webp" alt="" id="smokeExplosion" />
+    <img src="assets/fireExplosion.webp" alt="" id="fireExplosion" />
+    <img src="assets/rainbowExplosion.webp" alt="" id="rainbowExplosion" />
+    <img src="assets/gears.webp" alt="" id="gears" />
+    <img src="assets/layer2d.webp" alt="" id="layer2" />
+    <img src="assets/layer3d.webp" alt="" id="layer3" />
+    <img src="assets/layer4d.webp" alt="" id="layer4" />
+  </body>
 </html>

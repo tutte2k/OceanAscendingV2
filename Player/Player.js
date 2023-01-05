@@ -9,12 +9,20 @@ export class Player {
     this.y = 100;
     this.speedY = 0;
     this.maxSpeed = 3;
+    console.log(this.game.store.shop)
 
-    this.air = 3;
-    this.ammo = 1;
-    this.maxAmmo = 1;
+    this.air = this.game.store.shop.airSlot;
+    this.maxAir = this.game.store.shop.airSlot;
+  
+    this.airTimer = 0;
+    this.airInterval = 30000 - this.game.store.shop.airReg * 2000;
+
+    this.ammo = this.game.store.shop.mineSlot;
+    this.maxAmmo = this.game.store.shop.mineSlot;
+
     this.ammoTimer = 0;
-    this.ammoInterval = 30000;
+    this.ammoInterval = 30000 - this.game.store.shop.mineReg * 2000;
+
     this.projectiles = [];
 
     this.sprite = new SpriteSheet(
@@ -60,6 +68,14 @@ export class Player {
         this.ammoTimer = 0;
       } else {
         this.ammoTimer += deltaTime;
+      }
+      if (this.airTimer > this.airInterval) {
+        if (this.air < this.maxAir) {
+          this.air++;
+        }
+        this.airTimer = 0;
+      } else {
+        this.airTimer += deltaTime;
       }
     }
     this.projectiles.forEach((projectile) => projectile.update());

@@ -2,7 +2,7 @@ import SpriteSheet from "../Utils/SpriteSheet.js";
 import Helper from "../Utils/Helper.js";
 import Particle from "../Environment/Particle.js";
 import Word from "../Utils/Word.js";
-import { SmokeExplosion, FireExplosion } from "../Environment/Explosion.js";
+import { SmokeExplosion, FireExplosion,InkExplosion } from "../Environment/Explosion.js";
 
 export class Enemy {
   constructor(game, word, sprite) {
@@ -177,7 +177,24 @@ export class Lionfish extends Fish {
     this.speedX = -0.3;
   }
 }
-
+export class Angela extends Fish {
+  constructor(game, word) {
+    const width = 483;
+    const height = 500;
+    const image = document.getElementById(`angela${Helper.randInt(1, 2)}`);
+    super(game, word, new SpriteSheet(image, width, height, 29, 0, 20));
+    this.speedX = -1;
+  }
+}
+export class Shark extends Fish {
+  constructor(game, word) {
+    const width = 398;
+    const height = 194;
+    const image = document.getElementById("shark");
+    super(game, word, new SpriteSheet(image, width, height, 7, 0, 20));
+    this.speedX = -1.5;
+  }
+}
 class Mech extends Enemy {
   constructor(game, word, spritesheet) {
     super(game, word, spritesheet);
@@ -223,7 +240,6 @@ export class Angler1 extends Mech {
         30
       )
     );
-    this.type = "mech";
   }
 }
 export class Angler2 extends Mech {
@@ -237,7 +253,6 @@ export class Angler2 extends Mech {
       word,
       new SpriteSheet(image, width, height, 37, spriteSheetRows, 30)
     );
-    this.type = "mech";
   }
 }
 export class LuckyFish extends Mech {
@@ -251,7 +266,6 @@ export class LuckyFish extends Mech {
       word,
       new SpriteSheet(image, width, height, 37, spriteSheetRows, 30)
     );
-    this.type = "mech";
   }
 }
 export class HiveWhale extends Mech {
@@ -280,39 +294,7 @@ export class HiveWhale extends Mech {
     }
   }
 }
-
-export class Chtullie extends Enemy {
-  constructor(game, word) {
-    const width = 500;
-    const height = 500;
-    const image = document.getElementById(`chtullie`);
-    super(game, word, new SpriteSheet(image, width, height, 4, 9, 25, true));
-    this.speedX = -0.6;
-    this.type = "chtullie";
-  }
-}
-export class Angela extends Fish {
-  constructor(game, word) {
-    const width = 483;
-    const height = 500;
-    const image = document.getElementById(`angela${Helper.randInt(1, 2)}`);
-    super(game, word, new SpriteSheet(image, width, height, 29, 0, 20));
-    this.speedX = -1;
-    this.type = "angela";
-  }
-}
-
-export class Shark extends Fish {
-  constructor(game, word) {
-    const width = 398;
-    const height = 194;
-    const image = document.getElementById("shark");
-    super(game, word, new SpriteSheet(image, width, height, 7, 0, 20));
-    this.speedX = -1.5;
-  }
-}
-
-export class Drone extends Mech {
+class Drone extends Mech {
   constructor(game, x, y, word) {
     const width = 115;
     const height = 95;
@@ -328,3 +310,31 @@ export class Drone extends Mech {
     this.type = "mech";
   }
 }
+class Octopus extends Enemy{
+  constructor(game, word, spritesheet) {
+    super(game, word, spritesheet);
+  }
+  die() {
+    super.die();
+    for (let i = 0; i < 5; i++) {
+      this.explosions.push(
+        new InkExplosion(
+          this.game,
+          this.x + this.width * 0.5 * Math.random(),
+          this.y + this.height * 0.8 + this.height * 0.1 * i * Math.random()
+        )
+      );
+    }
+  }
+}
+export class Chtullie extends Octopus {
+  constructor(game, word) {
+    const width = 500;
+    const height = 500;
+    const image = document.getElementById(`chtullie`);
+    super(game, word, new SpriteSheet(image, width, height, 4, 9, 25, true));
+    this.speedX = -0.6;
+  }
+}
+
+

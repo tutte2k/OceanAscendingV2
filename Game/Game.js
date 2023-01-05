@@ -1,14 +1,14 @@
-import FloatingMessage from "../UserInterface/FloatingMessage.js";
 import InputHandler from "../UserInput/InputHandler.js";
 import { Background } from "../Environment/Background.js";
 import UserInterface from "../UserInterface/UserInterface.js";
-import { InkExplosion } from "../Environment/Explosion.js";
 import { Player } from "../Player/Player.js";
 import { Enemy } from "../Enemy/Enemy.js";
 import Word from "../Utils/Word.js";
 
 export default class Game {
   constructor(width, height, level, dataSource) {
+    this.dataSource = dataSource;
+    this.store = dataSource.getStore();
     this.wordContainer = document.getElementById("words");
     this.mode = level.mode;
     this.level = level;
@@ -30,6 +30,7 @@ export default class Game {
     UserInterface.UI.classList.remove("invisible");
 
     this.keys = [];
+
     this.player = new Player(this);
 
     this.focus = null;
@@ -44,9 +45,6 @@ export default class Game {
 
     this.enemyTimer = 0;
     this.enemyInterval = 2000;
-
-    this.dataSource = dataSource;
-    this.store = dataSource.getStore();
   }
 
   update(deltaTime) {
@@ -137,13 +135,10 @@ export default class Game {
         if (enemy.focused && this.focus === enemy) {
           this.focus = null;
         }
-        enemy.markedForDeletion = true;
-
         enemy.die();
-
+        enemy.markedForDeletion = true;
         if (this.player.air > 0) {
           this.player.air--;
-
           if (!this.gameOver) {
             this.userInterface.displayPlayerDamage();
           }
@@ -158,36 +153,25 @@ export default class Game {
           }
           projectile.explode();
           enemy.die();
-
           this.userInterface.displayScoreMessage(enemy);
-
           projectile.markedForDeletion = true;
           enemy.markedForDeletion = true;
-
-          if (enemy.type === "chtullie") {
-            this.chtullieExplosion(enemy);
-          }
         }
       });
       if (enemy.markedForDeletion === true) {
         if (!this.lose) {
           enemy.die();
           this.userInterface.displayScoreMessage(enemy);
-
-          if (enemy.type === "chtullie") {
-            this.chtullieExplosion(enemy);
-          }
         }
         this.focus = null;
       }
     });
-
     this.enemies = this.enemies.filter((enemy) => !enemy.markedForDeletion);
 
-    if (this.enemies.length === 0) {
-      this.addEnemy();
-    }
-    if (this.enemyTimer > this.enemyInterval && !this.gameOver) {
+    if (
+      (this.enemyTimer > this.enemyInterval && !this.gameOver) ||
+      this.enemies.length === 0
+    ) {
       this.addEnemy();
       this.enemyTimer = 0;
     } else {
@@ -213,18 +197,6 @@ export default class Game {
     this.floatingMessages.forEach((floatingMessage) =>
       floatingMessage.draw(context)
     );
-  }
-  enemyScoreMessage(enemy) {}
-  chtullieExplosion(enemy) {
-    for (let i = 0; i < 5; i++) {
-      this.explosions.push(
-        new InkExplosion(
-          this,
-          enemy.x + enemy.width * 0.5 * Math.random(),
-          enemy.y + enemy.height * 0.8 + enemy.height * 0.1 * i * Math.random()
-        )
-      );
-    }
   }
 
   addEnemy() {

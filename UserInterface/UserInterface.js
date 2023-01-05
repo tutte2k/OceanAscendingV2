@@ -14,6 +14,30 @@ export default class UserInterface {
   static Info = document.getElementById("info");
   static Score = document.getElementById("score");
 
+  static Shop = document.getElementById("shop");
+  static ShopContent = {
+    airSlot: {
+      price: 20,
+      current: document.getElementById("currentAirSlot"),
+      priceElement: document.getElementById("airSlotPrice"),
+    },
+    airReg: {
+      price: 30,
+      current: document.getElementById("currentAirReg"),
+      priceElement: document.getElementById("airRegPrice"),
+    },
+    mineSlot: {
+      price: 10,
+      current: document.getElementById("currentMineSlot"),
+      priceElement: document.getElementById("mineSlotPrice"),
+    },
+    mineReg: {
+      price: 20,
+      current: document.getElementById("currentMineReg"),
+      priceElement: document.getElementById("mineRegPrice"),
+    },
+  };
+
   constructor(game) {
     this.game = game;
   }

@@ -8,9 +8,41 @@ import UserInterface from "./UserInterface/UserInterface.js";
 import Level from "./Game/Level.js";
 import Boundary from "./Game/Boundary.js";
 import Sprite from "./Utils/Sprite.js";
+import LandTile from "./Game/LandTile.js";
 
 const dataSource = new DataSource();
-UserInterface.Cash.innerHTML = dataSource.getStore()["cash"];
+const store = dataSource.getStore();
+
+UserInterface.Cash.innerHTML = store.cash;
+UserInterface.ShopContent.airSlot.current.innerHTML = store.shop.airSlot;
+UserInterface.ShopContent.airReg.current.innerHTML = store.shop.airReg;
+UserInterface.ShopContent.mineReg.current.innerHTML = store.shop.mineReg;
+UserInterface.ShopContent.mineSlot.current.innerHTML = store.shop.mineSlot;
+
+UserInterface.ShopContent.airSlot.priceElement.innerHTML =
+  UserInterface.ShopContent.airSlot.price;
+UserInterface.ShopContent.airReg.priceElement.innerHTML =
+  UserInterface.ShopContent.airReg.price;
+UserInterface.ShopContent.mineReg.priceElement.innerHTML =
+  UserInterface.ShopContent.mineReg.price;
+UserInterface.ShopContent.mineSlot.priceElement.innerHTML =
+  UserInterface.ShopContent.mineSlot.price;
+
+UserInterface.Shop.addEventListener("click", (e) => {
+  let cash = dataSource.getStore()["cash"];
+  let btn = UserInterface.ShopContent[e.target.id];
+  btn &&
+    UserInterface.ShopContent[e.target.id].price <= cash &&
+    buy(e.target.id, cash);
+});
+
+function buy(id, cash) {
+  let store = dataSource.getStore();
+  store.shop[id]++;
+  store.cash = cash - UserInterface.ShopContent[id].price;
+  UserInterface.Cash.innerHTML = store.cash;
+  dataSource.setStore(store);
+}
 
 window.addEventListener("load", function () {
   const canvas = document.getElementById("canvas1");
@@ -19,10 +51,13 @@ window.addEventListener("load", function () {
   canvas.height = 1768;
 
   const boundaries = [];
+
   const offset = {
     x: -1520,
     y: -1050,
   };
+  const landTiles = [];
+
   collisionsMap.forEach((row, i) => {
     row.forEach((symbol, j) => {
       if (symbol === 1025) {
@@ -37,6 +72,7 @@ window.addEventListener("load", function () {
       }
     });
   });
+
   const tibiaLevels = [];
   for (let i = 0; i < 10; i++) {
     const level = TibiaWords.slice(-50);
@@ -55,6 +91,7 @@ window.addEventListener("load", function () {
   }
 
   let levelsArray = maplevels();
+
   function maplevels() {
     const levelsArray = [];
     let levelNumW = 0;
@@ -113,9 +150,18 @@ window.addEventListener("load", function () {
           );
           levelNumT++;
         }
+        if (symbol === 99) {
+          landTiles.push(
+            new LandTile({
+              position: {
+                x: j * LandTile.width + 590,
+                y: i * LandTile.height + -1060,
+              },
+            })
+          );
+        }
       });
     });
-
     return levelsArray;
   }
   const image = new Image();
@@ -139,6 +185,16 @@ window.addEventListener("load", function () {
   const playerDownImage = new Image();
   playerDownImage.src = "./assets/levelSelection/playerDown.png";
 
+  const playerSwimDown = new Image();
+  playerSwimDown.src = "./assets/levelSelection/playerSwimDown.png";
+
+  const playerSwimUp = new Image();
+  playerSwimUp.src = "./assets/levelSelection/playerSwimUp.png";
+  const playerSwimLeft = new Image();
+  playerSwimLeft.src = "./assets/levelSelection/playerSwimLeft.png";
+  const playerSwimRight = new Image();
+  playerSwimRight.src = "./assets/levelSelection/playerSwimRight.png";
+
   const player = new Sprite({
     position: {
       x: canvas.width / 2 - 192 / 4 / 2,
@@ -151,7 +207,12 @@ window.addEventListener("load", function () {
       left: playerLeftImage,
       right: playerRightImage,
       down: playerDownImage,
+      swimDown: playerSwimDown,
+      swimUp: playerSwimUp,
+      swimLeft: playerSwimLeft,
+      swimRight: playerSwimRight,
     },
+    swimming: false,
   });
   const background = new Sprite({
     position: { x: offset.x, y: offset.y },
@@ -168,13 +229,21 @@ window.addEventListener("load", function () {
     s: { pressed: false },
     d: { pressed: false },
     enter: { pressed: false },
+    q: { pressed: false },
   };
-  let movables = [background, ...boundaries, foreground, ...levelsArray];
+  let movables = [
+    background,
+    ...boundaries,
+    foreground,
+    ...levelsArray,
+    ...landTiles,
+  ];
 
   let game;
   let lastTime = 0;
   let state;
   let nextLevel;
+
   function animate(timeStamp) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const deltaTime = timeStamp - lastTime;
@@ -195,11 +264,15 @@ window.addEventListener("load", function () {
       boundaries.forEach((boundary) => {
         boundary.draw(ctx);
       });
+      landTiles.forEach((landtile) => {
+        landtile.draw(ctx);
+      });
       levelsArray.forEach((level) => {
         level.draw(ctx);
       });
       player.draw(ctx);
       foreground.draw(ctx);
+
       let moving = true;
       player.moving = false;
       for (let i = 0; i < levelsArray.length; i++) {
@@ -242,6 +315,11 @@ window.addEventListener("load", function () {
           }
         }
       }
+      if (keys.q.pressed) {
+        UserInterface.Shop.hidden = false;
+      } else {
+        UserInterface.Shop.hidden = true;
+      }
       if (keys.enter.pressed) {
         UserInterface.Info.innerHTML = "";
         for (let i = 0; i < levelsArray.length; i++) {
@@ -267,7 +345,31 @@ window.addEventListener("load", function () {
       if (keys.w.pressed && lastKey === "w") {
         UserInterface.Info.innerHTML = "";
         player.moving = true;
-        player.image = player.sprites.up;
+        player.image = player.swimming
+          ? player.sprites.swimUp
+          : player.sprites.up;
+
+        for (let i = 0; i < landTiles.length; i++) {
+          const landtile = landTiles[i];
+          if (
+            Helper.hasCollided({
+              rectangle1: player,
+              rectangle2: {
+                ...landtile,
+                position: {
+                  x: landtile.position.x,
+                  y: landtile.position.y + 3,
+                },
+              },
+            })
+          ) {
+            player.swimming = false;
+            break;
+          } else {
+            player.swimming = true;
+          }
+        }
+
         for (let i = 0; i < boundaries.length; i++) {
           const boundary = boundaries[i];
           if (
@@ -292,7 +394,30 @@ window.addEventListener("load", function () {
       } else if (keys.s.pressed && lastKey === "s") {
         UserInterface.Info.innerHTML = "";
         player.moving = true;
-        player.image = player.sprites.down;
+        player.image = player.swimming
+          ? player.sprites.swimDown
+          : player.sprites.down;
+
+        for (let i = 0; i < landTiles.length; i++) {
+          const landtile = landTiles[i];
+          if (
+            Helper.hasCollided({
+              rectangle1: player,
+              rectangle2: {
+                ...landtile,
+                position: {
+                  x: landtile.position.x,
+                  y: landtile.position.y - 3,
+                },
+              },
+            })
+          ) {
+            player.swimming = false;
+            break;
+          } else {
+            player.swimming = true;
+          }
+        }
         for (let i = 0; i < boundaries.length; i++) {
           const boundary = boundaries[i];
           if (
@@ -317,7 +442,9 @@ window.addEventListener("load", function () {
       } else if (keys.a.pressed && lastKey === "a") {
         UserInterface.Info.innerHTML = "";
         player.moving = true;
-        player.image = player.sprites.left;
+        player.image = player.swimming
+          ? player.sprites.swimLeft
+          : player.sprites.left;
         for (let i = 0; i < boundaries.length; i++) {
           const boundary = boundaries[i];
           if (
@@ -342,7 +469,9 @@ window.addEventListener("load", function () {
       } else if (keys.d.pressed && lastKey === "d") {
         UserInterface.Info.innerHTML = "";
         player.moving = true;
-        player.image = player.sprites.right;
+        player.image = player.swimming
+          ? player.sprites.swimRight
+          : player.sprites.right;
         for (let i = 0; i < boundaries.length; i++) {
           const boundary = boundaries[i];
           if (
@@ -391,8 +520,12 @@ window.addEventListener("load", function () {
       case "Enter":
         keys.enter.pressed = true;
         break;
+      case "q":
+        keys.q.pressed = true;
+        break;
     }
   });
+
   window.addEventListener("keyup", (e) => {
     switch (e.key) {
       case "w":
@@ -409,6 +542,9 @@ window.addEventListener("load", function () {
         break;
       case "Enter":
         keys.enter.pressed = false;
+        break;
+      case "q":
+        keys.q.pressed = false;
         break;
     }
   });
