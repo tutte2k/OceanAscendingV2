@@ -15,8 +15,8 @@ const store = dataSource.getStore();
 
 UserInterface.Cash.innerHTML = store.cash;
 UserInterface.ShopContent.airSlot.current.innerHTML = store.shop.airSlot;
-UserInterface.ShopContent.airReg.current.innerHTML = store.shop.airReg;
-UserInterface.ShopContent.mineReg.current.innerHTML = store.shop.mineReg;
+UserInterface.ShopContent.airReg.current.innerHTML =(30 - store.shop.airReg * 2) + " seconds";
+UserInterface.ShopContent.mineReg.current.innerHTML =(30 -  store.shop.mineReg * 2)+ " seconds";
 UserInterface.ShopContent.mineSlot.current.innerHTML = store.shop.mineSlot;
 
 UserInterface.ShopContent.airSlot.priceElement.innerHTML =
@@ -165,7 +165,7 @@ window.addEventListener("load", function () {
     return levelsArray;
   }
   const image = new Image();
-  image.src = "./assets/levelSelection/infinitemapzoom.png";
+  image.src = "./assets/levelSelection/infinitemapzoom.webp";
 
   const foregroundImage = new Image();
   foregroundImage.src = "./assets/levelSelection/foreground.webp";
