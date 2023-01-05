@@ -10,4 +10,7 @@ export default class Helper {
   static randInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
+  static randomIndexInArr(arr){
+    return Math.floor(Math.random() * arr.length)
+  }
 }

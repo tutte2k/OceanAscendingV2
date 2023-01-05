@@ -205,6 +205,7 @@ export default class Game {
     const indexOfLastWord = this.words.length - 1;
     const word = Word.Next(this, indexOfLastWord);
     if (!word) return;
+
     const creature = Enemy.Next(this, word);
     this.enemies.push(creature);
   }

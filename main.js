@@ -111,7 +111,6 @@ window.addEventListener("load", function () {
     let levelNumT = 0;
     let levelNumS = 0;
     let levelData = dataSource.getStore()["completedLevels"];
-
     levelsMap.forEach((row, i) => {
       row.forEach((symbol, j) => {
         if (symbol === 1) {
@@ -194,8 +193,7 @@ window.addEventListener("load", function () {
               },
               number: levelNumS,
               locked: locked,
-              content: specialLevels[levelNumS]
-              ,
+              content: specialLevels[levelNumS],
             })
           );
           levelNumS++;

@@ -101,14 +101,13 @@ export class Enemy {
       1: [...tier1],
       2: [...tier1, ...tier2],
       3: [...tier1, ...tier2, ...tier3],
-      4: [...tier1, ...tier2, ...tier3, ...tier4],
+      4: [...tier1, ...tier2, ...tier3, ...tier4,...bosstier],
     };
-    let randomIndex = Math.floor(Math.random() * enemies[value.length].length);
-
-    let enemy = new enemies[value.length][randomIndex](game, value);
-    if (!enemy) {
-      return new enemies[4](game, value);
+    if (!enemies[value.length]) {
+      return new enemies[4][Helper.randomIndexInArr(enemies[4])](game, value);
     }
+    let randomIndex = Helper.randomIndexInArr(enemies[value.length])
+    let enemy = new enemies[value.length][randomIndex](game, value);
     return enemy;
   }
 }
