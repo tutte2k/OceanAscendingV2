@@ -1,7 +1,11 @@
 import SpriteSheet from "../Utils/SpriteSheet.js";
 import Helper from "../Utils/Helper.js";
+import Particle from "../Environment/Particle.js";
+import Word from "../Utils/Word.js";
+import { SmokeExplosion, FireExplosion } from "../Environment/Explosion.js";
 
-class Enemy {
+export class Enemy {
+
   constructor(game, word, sprite) {
     this.game = game;
     this.text = word;
@@ -24,6 +28,7 @@ class Enemy {
     this.element.innerHTML = word
     this.element.style.position = "absolute"
     this.game.wordContainer.appendChild(this.element)
+    
   }
   update(deltaTime) {
     if (this.speedY) {
@@ -52,11 +57,23 @@ class Enemy {
     this.markedForDeletion = !(this.completedText !== this.text);
     if (this.markedForDeletion) {
       this.game.score += this.score;
-      this.remove();
     }
     return isNextChar;
   }
-  remove(){
+  die() {
+    for (let i = 0; i < this.score; i++) {
+      this.game.particles.push(
+        new Particle(
+          this.game,
+          this.x + this.width * 0.5,
+          this.y + this.height * 0.5
+        )
+      );
+    }
+    this.remove();
+  }
+
+  remove() {
     this.element.hidden = true;
     this.element.remove();
   }
@@ -65,15 +82,53 @@ class Enemy {
     let heightPercentage = (context.canvas.getBoundingClientRect().height / 1768)
     this.sprite.draw(context, this.x, this.y)
 
-    this.element.style.top =  (this.y * (heightPercentage)) + "px";
+    this.element.style.top = (this.y * (heightPercentage)) + "px";
     this.element.style.left = (this.width * (widthPercentage)) / 2 + (this.x * (widthPercentage)) + "px";
     this.element.innerHTML = this.text.replace(this.completedText, "")
     this.element.style.color = this.focused ? "lime" : "whitesmoke";
 
     this.displayText = this.text.replace(this.completedText, "");
   }
+
+  static Next(game,value) {
+    const tier1 = [HiveWhale, Goldfish, LuckyFish, Jellyfish]
+    const tier2 = [Seahorse, Turtle]
+    const tier3 = [Angler1, Angler2]
+    const tier4 = [Lionfish, Shark]
+
+    const bosstier = [Angela, Chtullie]
+
+    const enemies = {
+      1: [...tier1],
+      2: [...tier1, ...tier2],
+      3: [...tier1, ...tier2, ...tier3],
+      4: [...tier1, ...tier2, ...tier3, ...tier4],
+    }
+    let randomIndex = Math.floor(Math.random() * enemies[value.length].length);
+
+    let enemy = new enemies[value.length][randomIndex](game, value)
+    if (!enemy) {
+      return new enemies[4](game, value)
+    }
+    return enemy
+  }
 }
-export class Jellyfish extends Enemy {
+class Fish extends Enemy {
+  constructor(game, word, spritesheet) {
+    super(game, word, spritesheet)
+  }
+  die() {
+    super.die();
+    this.game.explosions.push(
+      new SmokeExplosion(
+        this.game,
+        this.x + this.width * 0.5,
+        this.y + this.height * 0.5
+      )
+    );
+  }
+}
+export class Jellyfish extends Fish {
   constructor(game, word) {
     super(
       game,
@@ -96,7 +151,7 @@ export class Jellyfish extends Enemy {
     this.speedY = -1;
   }
 }
-export class Goldfish extends Enemy {
+export class Goldfish extends Fish {
   constructor(game, word) {
     const width = 228;
     const height = 118;
@@ -105,7 +160,7 @@ export class Goldfish extends Enemy {
     this.speedX = -0.1;
   }
 }
-export class Turtle extends Enemy {
+export class Turtle extends Fish {
   constructor(game, word) {
     const width = 225;
     const height = 221;
@@ -114,7 +169,7 @@ export class Turtle extends Enemy {
     this.speedX = -0.2;
   }
 }
-export class Lionfish extends Enemy {
+export class Lionfish extends Fish {
   constructor(game, word) {
     const width = 251;
     const height = 187;
@@ -123,7 +178,23 @@ export class Lionfish extends Enemy {
     this.speedX = -0.3;
   }
 }
-export class Seahorse extends Enemy {
+
+class Mech extends Enemy {
+  constructor(game, word, spritesheet) {
+    super(game, word, spritesheet)
+  }
+  die() {
+    super.die();
+    this.game.explosions.push(
+      new FireExplosion(
+        this.game,
+        this.x + this.width * 0.5,
+        this.y + this.height * 0.5
+      )
+    );
+  }
+}
+export class Seahorse extends Mech {
   constructor(game, word) {
     super(
       game,
@@ -137,10 +208,10 @@ export class Seahorse extends Enemy {
         30
       )
     );
-    this.type = "mech";
+
   }
 }
-export class Angler1 extends Enemy {
+export class Angler1 extends Mech {
   constructor(game, word) {
     super(
       game,
@@ -157,7 +228,7 @@ export class Angler1 extends Enemy {
     this.type = "mech";
   }
 }
-export class Angler2 extends Enemy {
+export class Angler2 extends Mech {
   constructor(game, word) {
     const width = 213;
     const height = 165;
@@ -171,7 +242,7 @@ export class Angler2 extends Enemy {
     this.type = "mech";
   }
 }
-export class LuckyFish extends Enemy {
+export class LuckyFish extends Mech {
   constructor(game, word) {
     const width = 99;
     const height = 95;
@@ -185,7 +256,7 @@ export class LuckyFish extends Enemy {
     this.type = "mech";
   }
 }
-export class HiveWhale extends Enemy {
+export class HiveWhale extends Mech {
   constructor(game, word) {
     const width = 400;
     const height = 227;
@@ -197,7 +268,31 @@ export class HiveWhale extends Enemy {
       new SpriteSheet(image, width, height, 37, spriteSheetRows, 30)
     );
     this.speedX = -0.2;
-    this.type = "hive";
+  }
+  die() {
+    super.die();
+    for (let i = 0; i < 5; i++) {
+      let x = this.x + (this.width * i) / 3;
+      let y = this.y + Math.random() * (this.height * 2)
+      this.game.explosions.push(
+        new SmokeExplosion(
+          this.game,
+          x,
+          y
+        )
+      );
+      const indexOfLastWord = this.game.words.length - 1;
+      const word = Word.Next(this.game, indexOfLastWord);
+      if (!word) return;
+      this.game.enemies.push(
+        new Drone(
+          this.game,
+          x,
+          y,
+          word
+        )
+      );
+    }
   }
 }
 
@@ -211,7 +306,7 @@ export class Chtullie extends Enemy {
     this.type = "chtullie";
   }
 }
-export class Angela extends Enemy {
+export class Angela extends Fish {
   constructor(game, word) {
     const width = 483;
     const height = 500;
@@ -222,7 +317,7 @@ export class Angela extends Enemy {
   }
 }
 
-export class Shark extends Enemy {
+export class Shark extends Fish {
   constructor(game, word) {
     const width = 398;
     const height = 194;
@@ -232,7 +327,7 @@ export class Shark extends Enemy {
   }
 }
 
-export class Drone extends Enemy {
+export class Drone extends Mech {
   constructor(game, x, y, word) {
     const width = 115;
     const height = 95;

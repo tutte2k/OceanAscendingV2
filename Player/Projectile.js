@@ -1,10 +1,11 @@
+import { FireExplosion } from "../Environment/Explosion.js";
 export default class Projectile {
   constructor(game, x, y) {
     this.game = game;
     this.x = x;
     this.y = y;
-    this.width = 10;
-    this.height = 3;
+    this.width = 45;
+    this.height = 45;
     this.speed = 3;
     this.markedForDeletion = false;
     this.image = document.getElementById("projectile");
@@ -16,6 +17,15 @@ export default class Projectile {
     if (this.y < 0) {
       this.markedForDeletion = true;
     }
+  }
+  explode(){
+    this.game.explosions.push(
+      new FireExplosion(
+        this.game,
+        this.x + this.width * 0.5,
+        this.y + this.height * 0.5
+      )
+    );
   }
   draw(context) {
     context.drawImage(this.image, this.x, this.y);

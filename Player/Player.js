@@ -10,6 +10,7 @@ export class Player {
     this.speedY = 0;
     this.maxSpeed = 3;
 
+    this.air = 3
     this.ammo = 1;
     this.maxAmmo = 1;
     this.ammoTimer = 0;
