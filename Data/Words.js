@@ -1,18 +1,26 @@
 const SpecialChars = `! " # ¤ % & / ( ) = ? ^ * _ : ; > < @ £ $ € { } [ ] ~ ' ¨ - . , | µ §`;
 const Lowercase = `a b c d e f g h i j k l m n o p q r s t u v x y z å ä ö`;
 const Uppercase = Lowercase.toUpperCase();
-const Numbers = Array.from(Array(100).keys()).sort(() => Math.random() - 0.5)
-const Buttons = ["Control","Shift","CapsLock","ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Tab","Enter"]
+const Numbers = Array.from(Array(100).keys()).sort(() => Math.random() - 0.5);
+const Buttons = [
+  "Control",
+  "Shift",
+  "CapsLock",
+  "ArrowLeft",
+  "ArrowRight",
+  "ArrowUp",
+  "ArrowDown",
+  "Tab",
+  "Enter",
+];
 
 export const SpecialMode = [
   ...SpecialChars.split(" "),
   ...Lowercase.split(" "),
   ...Uppercase.split(" "),
   ...Numbers.toString().split(","),
-  ...Buttons
+  ...Buttons,
 ];
-
-console.log(SpecialMode)
 
 const TibiaSpells = `adana mort,exana pox,exori,exana ina,exeta res,adevo ina,exevo con,exevo con mort,adeta sio,utevo res ina ",adito tera,adito grav,exeta vis,exevo vis lux,adevo grav vis,exori vis,adevo mas grav vis,exevo mort hur,adevo mas vis,adevo res pox,adevo mas hur,exevo con flam,exiva ",adevo grav flam,adevo mas grav flam,exevo flam hur,adori flam,adevo mas flam,exori flam,exevo pan,exori mort,exevo gran vis lux,adori gran flam,utevo gran lux,utani hur,exura sio ",adori gran,exura gran,adura gran,exura gran,adura gran,utana vid,exani hur "up,exani hur "down,utevo lux,exura,adori,exani tera,utamo vita,adevo grav tera,exura gran mas res,adana ani,adevo grav pox,exevo gran mas pox,adevo mas grav pox,adevo mas pox,exevo con pox,exevo con vis,adevo res flam,utani gran hur,adori vita vis,exevo gran mas vis,exura vita,adura vita,utevo vis lux,exana mas mort,exevo grav vita,aleta sio,aleta grav`;
 

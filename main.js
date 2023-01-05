@@ -103,7 +103,6 @@ window.addEventListener("load", function () {
     }
     specialLevels.push(level);
   }
-  console.log(specialLevels)
   let levelsArray = maplevels();
 
   function maplevels() {
