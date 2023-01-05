@@ -10,7 +10,9 @@ export default class Game {
     this.dataSource = dataSource;
     this.store = dataSource.getStore();
     this.wordContainer = document.getElementById("words");
+    
     this.mode = level.mode;
+
     this.level = level;
     this.words = level.getContent();
 
@@ -48,6 +50,7 @@ export default class Game {
   }
 
   update(deltaTime) {
+    this.words.pop()
     if (this.player.y > 0 - this.player.height * 2 && this.gameOver) {
       this.player.y -= 3;
       if (this.player.y <= 0 - this.player.height) {

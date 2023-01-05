@@ -1,4 +1,4 @@
-import { Words10K, TibiaWords } from "./Data/Words.js";
+import { Words10K, TibiaWords, SpecialMode } from "./Data/Words.js";
 import Game from "./Game/Game.js";
 import DataSource from "./Data/DataSource.js";
 import { collisionsMap } from "./Data/collisions.js";
@@ -15,8 +15,10 @@ const store = dataSource.getStore();
 
 UserInterface.Cash.innerHTML = store.cash;
 UserInterface.ShopContent.airSlot.current.innerHTML = store.shop.airSlot;
-UserInterface.ShopContent.airReg.current.innerHTML =(30 - store.shop.airReg * 2) + " seconds";
-UserInterface.ShopContent.mineReg.current.innerHTML =(30 -  store.shop.mineReg * 2)+ " seconds";
+UserInterface.ShopContent.airReg.current.innerHTML =
+  30 - store.shop.airReg * 2 + " seconds";
+UserInterface.ShopContent.mineReg.current.innerHTML =
+  30 - store.shop.mineReg * 2 + " seconds";
 UserInterface.ShopContent.mineSlot.current.innerHTML = store.shop.mineSlot;
 
 UserInterface.ShopContent.airSlot.priceElement.innerHTML =
@@ -73,6 +75,8 @@ window.addEventListener("load", function () {
     });
   });
 
+
+
   const tibiaLevels = [];
   for (let i = 0; i < 10; i++) {
     const level = TibiaWords.slice(-50);
@@ -90,12 +94,23 @@ window.addEventListener("load", function () {
     wordsLevels.push(level);
   }
 
+  var specialLevels = [];
+  for (let i = 0; i < 10; i++) {
+    const level = SpecialMode.slice(-50);
+    SpecialMode.splice(-50);
+    if (level.length !== 50) {
+      break;
+    }
+    specialLevels.push(level);
+  }
+  console.log(specialLevels)
   let levelsArray = maplevels();
 
   function maplevels() {
     const levelsArray = [];
     let levelNumW = 0;
     let levelNumT = 0;
+    let levelNumS = 0;
     let levelData = dataSource.getStore()["completedLevels"];
 
     levelsMap.forEach((row, i) => {
@@ -159,6 +174,32 @@ window.addEventListener("load", function () {
               },
             })
           );
+        }
+        if (symbol === 2) {
+          let storedLevel = levelData["mode"][2][levelNumS];
+          let nextLevel;
+          if (levelData["mode"][2][levelNumS - 1]) {
+            nextLevel = levelNumS;
+          }
+          let locked = !(
+            storedLevel ||
+            nextLevel <= levelNumS ||
+            levelNumS === 0
+          );
+          levelsArray.push(
+            new Level({
+              mode: 2,
+              position: {
+                x: j * Level.width + 590,
+                y: i * Level.height + -1060,
+              },
+              number: levelNumS,
+              locked: locked,
+              content: specialLevels[levelNumS]
+              ,
+            })
+          );
+          levelNumS++;
         }
       });
     });

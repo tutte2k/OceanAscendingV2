@@ -9,7 +9,6 @@ export class Player {
     this.y = 100;
     this.speedY = 0;
     this.maxSpeed = 3;
-    console.log(this.game.store.shop)
 
     this.air = this.game.store.shop.airSlot;
     this.maxAir = this.game.store.shop.airSlot;
