@@ -10,16 +10,20 @@ import Boundary from "./Game/Boundary.js";
 import Sprite from "./Utils/Sprite.js";
 import LandTile from "./Game/LandTile.js";
 
+
 const dataSource = new DataSource();
 const store = dataSource.getStore();
 
-UserInterface.Cash.innerHTML = store.cash;
-UserInterface.ShopContent.airSlot.current.innerHTML = store.shop.airSlot;
-UserInterface.ShopContent.airReg.current.innerHTML =
-  30 - store.shop.airReg * 2 + " seconds";
-UserInterface.ShopContent.mineReg.current.innerHTML =
-  30 - store.shop.mineReg * 2 + " seconds";
-UserInterface.ShopContent.mineSlot.current.innerHTML = store.shop.mineSlot;
+setUi(store);
+function setUi(store){
+  UserInterface.Cash.innerHTML = store.cash;
+  UserInterface.ShopContent.airSlot.current.innerHTML = store.shop.airSlot;
+  UserInterface.ShopContent.airReg.current.innerHTML =
+    30 - store.shop.airReg * 2 + " seconds";
+  UserInterface.ShopContent.mineReg.current.innerHTML =
+    30 - store.shop.mineReg * 2 + " seconds";
+  UserInterface.ShopContent.mineSlot.current.innerHTML = store.shop.mineSlot;
+}
 
 UserInterface.ShopContent.airSlot.priceElement.innerHTML =
   UserInterface.ShopContent.airSlot.price;
@@ -38,11 +42,12 @@ UserInterface.Shop.addEventListener("click", (e) => {
     buy(e.target.id, cash);
 });
 
+
 function buy(id, cash) {
   let store = dataSource.getStore();
   store.shop[id]++;
   store.cash = cash - UserInterface.ShopContent[id].price;
-  UserInterface.Cash.innerHTML = store.cash;
+  setUi(store);
   dataSource.setStore(store);
 }
 
@@ -74,6 +79,8 @@ window.addEventListener("load", function () {
       }
     });
   });
+
+
 
   const tibiaLevels = [];
   for (let i = 0; i < 100; i++) {
@@ -537,6 +544,7 @@ window.addEventListener("load", function () {
   animate(0);
   let lastKey = "";
   window.addEventListener("keydown", (e) => {
+    e.preventDefault();
     switch (e.key) {
       case "w":
         keys.w.pressed = true;

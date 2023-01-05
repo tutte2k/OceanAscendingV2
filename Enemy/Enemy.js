@@ -316,7 +316,7 @@ class Octopus extends Enemy{
   die() {
     super.die();
     for (let i = 0; i < 5; i++) {
-      this.explosions.push(
+      this.game.explosions.push(
         new InkExplosion(
           this.game,
           this.x + this.width * 0.5 * Math.random(),

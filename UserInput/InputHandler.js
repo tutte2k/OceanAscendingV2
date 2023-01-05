@@ -2,6 +2,7 @@ export default class InputHandler {
   constructor(game) {
     this.game = game;
       window.addEventListener("keydown", (e) => {
+        e.preventDefault();
         if (this.game.focus) {
           let hit = this.game.focus.consume(e.key);
           if (hit) this.game.player.shootTop();
