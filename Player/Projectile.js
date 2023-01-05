@@ -18,7 +18,7 @@ export default class Projectile {
       this.markedForDeletion = true;
     }
   }
-  explode(){
+  explode() {
     this.game.explosions.push(
       new FireExplosion(
         this.game,

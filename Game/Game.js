@@ -4,13 +4,12 @@ import { Background } from "../Environment/Background.js";
 import UserInterface from "../UserInterface/UserInterface.js";
 import { InkExplosion } from "../Environment/Explosion.js";
 import { Player } from "../Player/Player.js";
-import {Enemy} from "../Enemy/Enemy.js";
+import { Enemy } from "../Enemy/Enemy.js";
 import Word from "../Utils/Word.js";
-
 
 export default class Game {
   constructor(width, height, level, dataSource) {
-    this.wordContainer = document.getElementById("words")
+    this.wordContainer = document.getElementById("words");
     this.mode = level.mode;
     this.level = level;
     this.words = level.getContent();
@@ -28,11 +27,10 @@ export default class Game {
     this.background = new Background(this);
     this.inputHandler = new InputHandler(this);
     this.userInterface = new UserInterface(this);
-    UserInterface.UI.classList.remove("invisible")
+    UserInterface.UI.classList.remove("invisible");
 
     this.keys = [];
     this.player = new Player(this);
-
 
     this.focus = null;
 
@@ -55,10 +53,10 @@ export default class Game {
     if (this.player.y > 0 - this.player.height * 2 && this.gameOver) {
       this.player.y -= 3;
       if (this.player.y <= 0 - this.player.height) {
-        let state = { score: this.score, level: this.level, win: this.win }
+        let state = { score: this.score, level: this.level, win: this.win };
         this.level = null;
-        this.wordContainer.innerHTML = '';
-        UserInterface.Message.innerHTML = '';
+        this.wordContainer.innerHTML = "";
+        UserInterface.Message.innerHTML = "";
         UserInterface.UI.classList.add("invisible");
         return state;
       }
@@ -106,7 +104,6 @@ export default class Game {
         this.userInterface.displayEarnedCash(earnedCash);
         this.dataSource.setStore(this.store);
       }
-
     }
     this.gameOver = this.lose == true || this.win === true;
     if (!this.gameOver) {
@@ -130,13 +127,11 @@ export default class Game {
       (floatingMessage) => !floatingMessage.markedForDeletion
     );
 
-
     this.enemies.forEach((enemy) => {
       if (enemy.focused === true) {
         this.focus = enemy;
       }
       enemy.update(deltaTime);
-
 
       if (this.checkCollision(this.player, enemy)) {
         if (enemy.focused && this.focus === enemy) {
@@ -144,9 +139,7 @@ export default class Game {
         }
         enemy.markedForDeletion = true;
 
-
         enemy.die();
-
 
         if (this.player.air > 0) {
           this.player.air--;
@@ -166,7 +159,6 @@ export default class Game {
           projectile.explode();
           enemy.die();
 
-
           this.userInterface.displayScoreMessage(enemy);
 
           projectile.markedForDeletion = true;
@@ -175,7 +167,6 @@ export default class Game {
           if (enemy.type === "chtullie") {
             this.chtullieExplosion(enemy);
           }
-
         }
       });
       if (enemy.markedForDeletion === true) {
@@ -186,7 +177,6 @@ export default class Game {
           if (enemy.type === "chtullie") {
             this.chtullieExplosion(enemy);
           }
-
         }
         this.focus = null;
       }
@@ -224,9 +214,7 @@ export default class Game {
       floatingMessage.draw(context)
     );
   }
-  enemyScoreMessage(enemy) {
-
-  }
+  enemyScoreMessage(enemy) {}
   chtullieExplosion(enemy) {
     for (let i = 0; i < 5; i++) {
       this.explosions.push(
@@ -243,11 +231,9 @@ export default class Game {
     const indexOfLastWord = this.words.length - 1;
     const word = Word.Next(this, indexOfLastWord);
     if (!word) return;
-    const creature = Enemy.Next(this,word);
+    const creature = Enemy.Next(this, word);
     this.enemies.push(creature);
   }
-
-
 
   findFocus(key) {
     let enemy = this.enemies.find((enemy) => {
@@ -257,12 +243,15 @@ export default class Game {
       enemy.focused = true;
       return enemy;
     } else {
-      const controls = ["ArrowLeft", "ArrowDown", "ArrowUp", "ArrowRight", "Shift"];
-      if (!controls.includes(key))
-        this.userInterface.displayMissedKey(key)
+      const controls = [
+        "ArrowLeft",
+        "ArrowDown",
+        "ArrowUp",
+        "ArrowRight",
+        "Shift",
+      ];
+      if (!controls.includes(key)) this.userInterface.displayMissedKey(key);
       return null;
     }
   }
-
-
 }

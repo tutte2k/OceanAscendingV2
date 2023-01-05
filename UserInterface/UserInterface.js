@@ -25,7 +25,10 @@ export default class UserInterface {
     UserInterface.Mine.innerHTML = this.game.player.ammo;
     UserInterface.Level.innerHTML = this.game.level.name;
     UserInterface.WordsLeft.innerHTML = this.game.words.length;
-    UserInterface.Crosshair.innerHTML = (this.game.focus && this.game.focus.text.length != 1) ? this.game.focus.displayText : '';
+    UserInterface.Crosshair.innerHTML =
+      this.game.focus && this.game.focus.text.length != 1
+        ? this.game.focus.displayText
+        : "";
     UserInterface.Score.innerHTML = this.game.score;
 
     if (this.game.gameOver) {
@@ -38,12 +41,10 @@ export default class UserInterface {
         message1 = "You ran out of air!";
         message2 = "If you can't catch em, flee!";
       }
-      UserInterface.Message.innerHTML = message1 + "<br>" + message2
+      UserInterface.Message.innerHTML = message1 + "<br>" + message2;
     }
-
-
   }
-  displayPlayerDamage(){
+  displayPlayerDamage() {
     for (let i = 0; i < 5; i++) {
       this.game.particles.push(
         new Particle(
@@ -63,7 +64,7 @@ export default class UserInterface {
       )
     );
   }
-  displayEarnedCash(earnedCash){
+  displayEarnedCash(earnedCash) {
     this.game.floatingMessages.push(
       new FloatingMessage(
         `$${earnedCash}`,
@@ -74,7 +75,7 @@ export default class UserInterface {
       )
     );
   }
-  displayMissedKey(key){
+  displayMissedKey(key) {
     this.game.floatingMessages.push(
       new FloatingMessage(
         key,
@@ -85,7 +86,7 @@ export default class UserInterface {
       )
     );
   }
-  displayScoreMessage(enemy){
+  displayScoreMessage(enemy) {
     this.game.floatingMessages.push(
       new FloatingMessage(
         "+" + enemy.score,

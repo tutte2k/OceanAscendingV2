@@ -5,7 +5,6 @@ import Word from "../Utils/Word.js";
 import { SmokeExplosion, FireExplosion } from "../Environment/Explosion.js";
 
 export class Enemy {
-
   constructor(game, word, sprite) {
     this.game = game;
     this.text = word;
@@ -23,12 +22,11 @@ export class Enemy {
     this.height = sprite.height;
     this.y = Math.random() * (this.game.height * 0.95 - this.height);
 
-    this.element = document.createElement("div")
-    this.element.classList.add("word")
-    this.element.innerHTML = word
-    this.element.style.position = "absolute"
-    this.game.wordContainer.appendChild(this.element)
-    
+    this.element = document.createElement("div");
+    this.element.classList.add("word");
+    this.element.innerHTML = word;
+    this.element.style.position = "absolute";
+    this.game.wordContainer.appendChild(this.element);
   }
   update(deltaTime) {
     if (this.speedY) {
@@ -78,44 +76,45 @@ export class Enemy {
     this.element.remove();
   }
   draw(context) {
-    let widthPercentage = (context.canvas.getBoundingClientRect().width / 2500)
-    let heightPercentage = (context.canvas.getBoundingClientRect().height / 1768)
-    this.sprite.draw(context, this.x, this.y)
+    let widthPercentage = context.canvas.getBoundingClientRect().width / 2500;
+    let heightPercentage = context.canvas.getBoundingClientRect().height / 1768;
+    this.sprite.draw(context, this.x, this.y);
 
-    this.element.style.top = (this.y * (heightPercentage)) + "px";
-    this.element.style.left = (this.width * (widthPercentage)) / 2 + (this.x * (widthPercentage)) + "px";
-    this.element.innerHTML = this.text.replace(this.completedText, "")
+    this.element.style.top = this.y * heightPercentage + "px";
+    this.element.style.left =
+      (this.width * widthPercentage) / 2 + this.x * widthPercentage + "px";
+    this.element.innerHTML = this.text.replace(this.completedText, "");
     this.element.style.color = this.focused ? "lime" : "whitesmoke";
 
     this.displayText = this.text.replace(this.completedText, "");
   }
 
-  static Next(game,value) {
-    const tier1 = [HiveWhale, Goldfish, LuckyFish, Jellyfish]
-    const tier2 = [Seahorse, Turtle]
-    const tier3 = [Angler1, Angler2]
-    const tier4 = [Lionfish, Shark]
+  static Next(game, value) {
+    const tier1 = [HiveWhale, Goldfish, LuckyFish, Jellyfish];
+    const tier2 = [Seahorse, Turtle];
+    const tier3 = [Angler1, Angler2];
+    const tier4 = [Lionfish, Shark];
 
-    const bosstier = [Angela, Chtullie]
+    const bosstier = [Angela, Chtullie];
 
     const enemies = {
       1: [...tier1],
       2: [...tier1, ...tier2],
       3: [...tier1, ...tier2, ...tier3],
       4: [...tier1, ...tier2, ...tier3, ...tier4],
-    }
+    };
     let randomIndex = Math.floor(Math.random() * enemies[value.length].length);
 
-    let enemy = new enemies[value.length][randomIndex](game, value)
+    let enemy = new enemies[value.length][randomIndex](game, value);
     if (!enemy) {
-      return new enemies[4](game, value)
+      return new enemies[4](game, value);
     }
-    return enemy
+    return enemy;
   }
 }
 class Fish extends Enemy {
   constructor(game, word, spritesheet) {
-    super(game, word, spritesheet)
+    super(game, word, spritesheet);
   }
   die() {
     super.die();
@@ -181,7 +180,7 @@ export class Lionfish extends Fish {
 
 class Mech extends Enemy {
   constructor(game, word, spritesheet) {
-    super(game, word, spritesheet)
+    super(game, word, spritesheet);
   }
   die() {
     super.die();
@@ -208,7 +207,6 @@ export class Seahorse extends Mech {
         30
       )
     );
-
   }
 }
 export class Angler1 extends Mech {
@@ -273,25 +271,12 @@ export class HiveWhale extends Mech {
     super.die();
     for (let i = 0; i < 5; i++) {
       let x = this.x + (this.width * i) / 3;
-      let y = this.y + Math.random() * (this.height * 2)
-      this.game.explosions.push(
-        new SmokeExplosion(
-          this.game,
-          x,
-          y
-        )
-      );
+      let y = this.y + Math.random() * (this.height * 2);
+      this.game.explosions.push(new SmokeExplosion(this.game, x, y));
       const indexOfLastWord = this.game.words.length - 1;
       const word = Word.Next(this.game, indexOfLastWord);
       if (!word) return;
-      this.game.enemies.push(
-        new Drone(
-          this.game,
-          x,
-          y,
-          word
-        )
-      );
+      this.game.enemies.push(new Drone(this.game, x, y, word));
     }
   }
 }

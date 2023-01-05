@@ -1,7 +1,6 @@
 export default class DataSource {
   constructor() {}
 
-
   getStore() {
     let storage = JSON.parse(localStorage.getItem("store"));
     if (storage) return storage;
@@ -18,10 +17,7 @@ export default class DataSource {
     };
   }
 
-
   setStore(store) {
     localStorage.setItem("store", JSON.stringify(store));
   }
-
-  
 }
