@@ -75,10 +75,8 @@ window.addEventListener("load", function () {
     });
   });
 
-
-
   const tibiaLevels = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 100; i++) {
     const level = TibiaWords.slice(-50);
     TibiaWords.splice(-50);
     if (level.length !== 50) {
@@ -95,7 +93,7 @@ window.addEventListener("load", function () {
   }
 
   var specialLevels = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 100; i++) {
     const level = SpecialMode.slice(-50);
     SpecialMode.splice(-50);
     if (level.length !== 50) {
@@ -103,6 +101,7 @@ window.addEventListener("load", function () {
     }
     specialLevels.push(level);
   }
+
   let levelsArray = maplevels();
 
   function maplevels() {
