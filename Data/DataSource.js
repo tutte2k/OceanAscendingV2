@@ -1,7 +1,7 @@
 export default class DataSource {
   constructor() {}
   getStore() {
-    let storage = JSON.parse(localStorage.getItem("store"));
+    let storage = JSON.parse(localStorage.getItem("data"));
     if (storage) return storage;
     return {
       cash: 0,
@@ -10,6 +10,6 @@ export default class DataSource {
     };
   }
   setStore(store) {
-    localStorage.setItem("store", JSON.stringify(store));
+    localStorage.setItem("data", JSON.stringify(store));
   }
 }
