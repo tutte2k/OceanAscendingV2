@@ -1,4 +1,6 @@
-import { Words10K, TibiaWords, SpecialMode } from "./Data/Words.js";
+import { Words10K } from "./Data/Words.js";
+import { TibiaWords } from "./Data/Tibia.js";
+import { SpecialMode } from "./Data/Special.js";
 import { SvenskaMode } from "./Data/Svenska.js";
 import Game from "./Game/Game.js";
 import DataSource from "./Data/DataSource.js";
@@ -79,6 +81,21 @@ window.addEventListener("load", function () {
     });
   });
 
+
+
+  function getLevelContents(contentArr,levelSize,numberOfLevels = 1000){
+    const levelContents = [];
+    for (let i = 0; i < numberOfLevels; i++) {
+      const levelContent = contentArr.slice(-levelSize);
+      contentArr.splice(-levelSize)
+      if(levelContent.length!==levelSize){
+        break;
+      }
+      levelContents.push(levelContent)
+    }
+    return levelContents
+  }
+
   const tibiaLevels = [];
   for (let i = 0; i < 100; i++) {
     const level = TibiaWords.slice(-50);
@@ -88,6 +105,7 @@ window.addEventListener("load", function () {
     }
     tibiaLevels.push(level);
   }
+  console.log(tibiaLevels)
 
   var wordsLevels = [];
   for (let i = 0; i < 100; i++) {
@@ -127,6 +145,7 @@ window.addEventListener("load", function () {
   let levelNumSv = 0;
 
   let levelData = store["completedLevels"];
+
   levelsMap.forEach((row, i) => {
     row.forEach((symbol, j) => {
       if (symbol === 1) {
@@ -268,8 +287,10 @@ window.addEventListener("load", function () {
 
   const playerSwimUp = new Image();
   playerSwimUp.src = "./assets/levelSelection/playerSwimUp.png";
+
   const playerSwimLeft = new Image();
   playerSwimLeft.src = "./assets/levelSelection/playerSwimLeft.png";
+
   const playerSwimRight = new Image();
   playerSwimRight.src = "./assets/levelSelection/playerSwimRight.png";
 
@@ -292,10 +313,12 @@ window.addEventListener("load", function () {
     },
     swimming: false,
   });
+
   const background = new Sprite({
     position: { x: offset.x, y: offset.y },
     image: image,
   });
+  
   const foreground = new Sprite({
     position: { x: offset.x, y: offset.y },
     image: foregroundImage,
@@ -373,30 +396,7 @@ window.addEventListener("load", function () {
         ) {
           completedlevel =
             dataSource.getStore().completedLevels.mode[level.mode][level.name];
-          if (completedlevel) {
-            UserInterface.Info.innerHTML =
-              "Mode: " +
-              level.mode +
-              "<br>Level: " +
-              completedlevel.level +
-              "<br>Score: " +
-              completedlevel.score +
-              "/" +
-              level.maxScore;
-          } else if (level.locked) {
-            UserInterface.Info.innerHTML =
-              "Mode: " + level.mode + "<br>Level: " + level.name + "<br>LOCKED";
-          } else {
-            UserInterface.Info.innerHTML =
-              "Mode: " +
-              level.mode +
-              "<br>Level: " +
-              level.name +
-              "<br>Score: " +
-              0 +
-              "/" +
-              level.maxScore;
-          }
+          UserInterface.displayLevelInfo(completedlevel, level);
         }
       }
       if (keys.q.pressed) {
@@ -586,6 +586,8 @@ window.addEventListener("load", function () {
       }
     }
     window.requestAnimationFrame(animate);
+
+    
   }
   animate(0);
   let lastKey = "";

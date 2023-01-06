@@ -13,7 +13,6 @@ export default class UserInterface {
   static Message = document.getElementById("message");
   static Info = document.getElementById("info");
   static Score = document.getElementById("score");
-
   static Shop = document.getElementById("shop");
   static ShopContent = {
     airSlot: {
@@ -43,7 +42,6 @@ export default class UserInterface {
   }
   draw(context) {
     const formattedTime = (this.game.gameTime * 0.001).toFixed(1);
-
     UserInterface.Depth.innerHTML = formattedTime;
     UserInterface.Air.innerHTML = this.game.player.air;
     UserInterface.Mine.innerHTML = this.game.player.ammo;
@@ -120,5 +118,31 @@ export default class UserInterface {
         45
       )
     );
+  }
+  static displayLevelInfo(completedlevel, level) {
+    if (completedlevel) {
+      UserInterface.Info.innerHTML =
+        "Mode: " +
+        level.mode +
+        "<br>Level: " +
+        completedlevel.level +
+        "<br>Score: " +
+        completedlevel.score +
+        "/" +
+        level.maxScore;
+    } else if (level.locked) {
+      UserInterface.Info.innerHTML =
+        "Mode: " + level.mode + "<br>Level: " + level.name + "<br>LOCKED";
+    } else {
+      UserInterface.Info.innerHTML =
+        "Mode: " +
+        level.mode +
+        "<br>Level: " +
+        level.name +
+        "<br>Score: " +
+        0 +
+        "/" +
+        level.maxScore;
+    }
   }
 }

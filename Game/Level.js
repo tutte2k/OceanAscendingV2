@@ -10,7 +10,6 @@ export default class Level {
     this.name = number;
     this.mode = mode;
     this.words = this.getContent();
-
     this.maxScore = 0;
     this.words.forEach((word) => (this.maxScore += word.length));
   }
