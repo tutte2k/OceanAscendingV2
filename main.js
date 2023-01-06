@@ -1,5 +1,5 @@
 import { Words10K, TibiaWords, SpecialMode } from "./Data/Words.js";
-import { SvenskaMode } from "../Data/Svenska.js";
+import { SvenskaMode } from "./Data/Svenska.js";
 import Game from "./Game/Game.js";
 import DataSource from "./Data/DataSource.js";
 import { collisionsMap } from "./Data/collisions.js";
