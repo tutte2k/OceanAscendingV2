@@ -6,7 +6,7 @@ import { Enemy } from "../Enemy/Enemy.js";
 import Word from "../Utils/Word.js";
 
 export default class Game {
-  constructor(width, height, level, dataSource) {
+  constructor(width, height, level, nextLevel, dataSource) {
     this.dataSource = dataSource;
     this.store = dataSource.getStore();
     this.wordContainer = document.getElementById("words");
@@ -14,6 +14,7 @@ export default class Game {
     this.mode = level.mode;
 
     this.level = level;
+    this.nextLevel = nextLevel;
     this.words = level.getContent();
 
     this.gameOver = false;
@@ -50,10 +51,17 @@ export default class Game {
   }
 
   update(deltaTime) {
+    this.words.pop();
     if (this.player.y > 0 - this.player.height * 2 && this.gameOver) {
       this.player.y -= 3;
       if (this.player.y <= 0 - this.player.height) {
-        let state = { score: this.score, level: this.level, win: this.win };
+        console.log(this.nextLevel)
+        this.nextLevel.locked = false;
+        let state = {
+          score: this.score,
+          level: this.level,
+          win: this.win,
+        };
         this.level = null;
         this.wordContainer.innerHTML = "";
         UserInterface.Message.innerHTML = "";
