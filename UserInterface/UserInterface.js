@@ -145,4 +145,37 @@ export default class UserInterface {
         level.maxScore;
     }
   }
+  static setUi(store) {
+    UserInterface.Cash.innerHTML = store.cash;
+    UserInterface.ShopContent.airSlot.current.innerHTML = store.shop.airSlot;
+    UserInterface.ShopContent.airReg.current.innerHTML =
+      30 - store.shop.airReg * 2 + " seconds";
+    UserInterface.ShopContent.mineReg.current.innerHTML =
+      30 - store.shop.mineReg * 2 + " seconds";
+    UserInterface.ShopContent.mineSlot.current.innerHTML = store.shop.mineSlot;
+  }
+  static setUpShop(dataSource) {
+    UserInterface.ShopContent.airSlot.priceElement.innerHTML =
+      UserInterface.ShopContent.airSlot.price;
+    UserInterface.ShopContent.airReg.priceElement.innerHTML =
+      UserInterface.ShopContent.airReg.price;
+    UserInterface.ShopContent.mineReg.priceElement.innerHTML =
+      UserInterface.ShopContent.mineReg.price;
+    UserInterface.ShopContent.mineSlot.priceElement.innerHTML =
+      UserInterface.ShopContent.mineSlot.price;
+    UserInterface.Shop.addEventListener("click", (e) => {
+      let cash = dataSource.getStore()["cash"];
+      let btn = UserInterface.ShopContent[e.target.id];
+      btn &&
+        UserInterface.ShopContent[e.target.id].price <= cash &&
+        UserInterface.buy(e.target.id, cash,dataSource);
+    });
+  }
+  static buy(id,cash,dataSource){
+      let store = dataSource.getStore();
+      store.shop[id]++;
+      store.cash = cash - UserInterface.ShopContent[id].price;
+      UserInterface.setUi(store);
+      dataSource.setStore(store);
+  }
 }
