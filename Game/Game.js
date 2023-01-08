@@ -54,7 +54,6 @@ export default class Game {
     if (this.player.y > 0 - this.player.height * 2 && this.gameOver) {
       this.player.y -= 3;
       if (this.player.y <= 0 - this.player.height) {
-        console.log(this.nextLevel)
         this.nextLevel.locked = false;
         const state = {
           score: this.score,
@@ -80,7 +79,7 @@ export default class Game {
 
       let earnedCash;
 
-      const levelObject = this.store.completedLevels.mode[this.mode].find(
+      let levelObject = this.store.completedLevels.mode[this.mode].find(
         (obj) => obj.level === this.level.name
       );
 

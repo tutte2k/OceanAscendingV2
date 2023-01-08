@@ -93,7 +93,7 @@ export class Player {
       0,
       this.y + this.height * 0.5
     );
-    const red = true;
+    let red = true;
     for (let i = 0; i < 10; i++) {
       const color = red ? "red" : "orange";
       gradient.addColorStop(`0.${i}`, color);
