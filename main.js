@@ -58,13 +58,13 @@ window.addEventListener("load", function () {
   canvas.width = 2500;
   canvas.height = 1768;
 
-  const boundaries = [];
-
   const offset = {
     x: -1520,
     y: -1050,
   };
+
   const landTiles = [];
+  const boundaries = [];
 
   collisionsMap.forEach((row, i) => {
     row.forEach((symbol, j) => {
@@ -81,57 +81,22 @@ window.addEventListener("load", function () {
     });
   });
 
+  const tibiaLevels = getLevelsWithContent(TibiaWords, 50);
+  const wordsLevels = getLevelsWithContent(Words10K, 100);
+  const specialLevels = getLevelsWithContent(SpecialMode, 50);
+  const svenskaLevels = getLevelsWithContent(SvenskaMode, 275);
 
-
-  function getLevelContents(contentArr,levelSize,numberOfLevels = 1000){
+  function getLevelsWithContent(contentArr, levelSize, numberOfLevels = 1000) {
     const levelContents = [];
     for (let i = 0; i < numberOfLevels; i++) {
       const levelContent = contentArr.slice(-levelSize);
-      contentArr.splice(-levelSize)
-      if(levelContent.length!==levelSize){
+      contentArr.splice(-levelSize);
+      if (levelContent.length !== levelSize) {
         break;
       }
-      levelContents.push(levelContent)
+      levelContents.push(levelContent);
     }
-    return levelContents
-  }
-
-  const tibiaLevels = [];
-  for (let i = 0; i < 100; i++) {
-    const level = TibiaWords.slice(-50);
-    TibiaWords.splice(-50);
-    if (level.length !== 50) {
-      break;
-    }
-    tibiaLevels.push(level);
-  }
-  console.log(tibiaLevels)
-
-  var wordsLevels = [];
-  for (let i = 0; i < 100; i++) {
-    const level = Words10K.slice(-100);
-    Words10K.splice(-100);
-    wordsLevels.push(level);
-  }
-
-  var specialLevels = [];
-  for (let i = 0; i < 100; i++) {
-    const level = SpecialMode.slice(-50);
-    SpecialMode.splice(-50);
-    if (level.length !== 50) {
-      break;
-    }
-    specialLevels.push(level);
-  }
-
-  const svenskaLevels = [];
-  for (let i = 0; i < 500; i++) {
-    const level = SvenskaMode.slice(-275);
-    SvenskaMode.splice(-275);
-    if (level.length !== 275) {
-      break;
-    }
-    svenskaLevels.push(level);
+    return levelContents;
   }
 
   let svenskaLevelsArray = [];
@@ -146,58 +111,29 @@ window.addEventListener("load", function () {
 
   let levelData = store["completedLevels"];
 
+  function addLevel(mode, contentArr, levelArr, counter, j, i) {
+    let storedLevel = levelData["mode"][mode][counter];
+    let initNextLevel;
+    if (levelData["mode"][mode][counter - 1]) {
+      initNextLevel = counter;
+    }
+    let locked = !(storedLevel || initNextLevel <= counter || counter === 0);
+    levelArr.push(
+      new Level({
+        mode: mode,
+        position: {
+          x: j * Level.width + 590,
+          y: i * Level.height + -1060,
+        },
+        number: counter,
+        locked: locked,
+        content: contentArr[counter],
+      })
+    );
+  }
+
   levelsMap.forEach((row, i) => {
     row.forEach((symbol, j) => {
-      if (symbol === 1) {
-        let storedLevel = levelData["mode"][0][levelNumW];
-        let initNextLevel;
-        if (levelData["mode"][0][levelNumW - 1]) {
-          initNextLevel = levelNumW;
-        }
-        let locked = !(
-          storedLevel ||
-          initNextLevel <= levelNumW ||
-          levelNumW === 0
-        );
-        wordsLevelsArray.push(
-          new Level({
-            mode: 0,
-            position: {
-              x: j * Level.width + 590,
-              y: i * Level.height + -1060,
-            },
-            number: levelNumW,
-            locked: locked,
-            content: wordsLevels[levelNumW],
-          })
-        );
-        levelNumW++;
-      }
-      if (symbol === 6) {
-        let storedLevel = levelData["mode"][6][levelNumT];
-        let initNextLevel;
-        if (levelData["mode"][6][levelNumT - 1]) {
-          initNextLevel = levelNumT;
-        }
-        let locked = !(
-          storedLevel ||
-          initNextLevel <= levelNumT ||
-          levelNumT === 0
-        );
-        tibiaLevelsArray.push(
-          new Level({
-            mode: 6,
-            position: {
-              x: j * Level.width + 590,
-              y: i * Level.height + -1060,
-            },
-            number: levelNumT,
-            locked: locked,
-            content: tibiaLevels[levelNumT],
-          })
-        );
-        levelNumT++;
-      }
       if (symbol === 99) {
         landTiles.push(
           new LandTile({
@@ -208,55 +144,114 @@ window.addEventListener("load", function () {
           })
         );
       }
+      if (symbol === 1) {
+        addLevel(0, wordsLevels, wordsLevelsArray, levelNumW, j, i);
+        levelNumW++;
+        // let storedLevel = levelData["mode"][0][levelNumW];
+        // let initNextLevel;
+        // if (levelData["mode"][0][levelNumW - 1]) {
+        //   initNextLevel = levelNumW;
+        // }
+        // let locked = !(
+        //   storedLevel ||
+        //   initNextLevel <= levelNumW ||
+        //   levelNumW === 0
+        // );
+        // wordsLevelsArray.push(
+        //   new Level({
+        //     mode: 0,
+        //     position: {
+        //       x: j * Level.width + 590,
+        //       y: i * Level.height + -1060,
+        //     },
+        //     number: levelNumW,
+        //     locked: locked,
+        //     content: wordsLevels[levelNumW],
+        //   })
+        // );
+        // levelNumW++;
+      }
+      if (symbol === 6) {
+        addLevel(6, tibiaLevels, tibiaLevelsArray, levelNumT, j, i);
+        levelNumT++;
+        // let storedLevel = levelData["mode"][6][levelNumT];
+        // let initNextLevel;
+        // if (levelData["mode"][6][levelNumT - 1]) {
+        //   initNextLevel = levelNumT;
+        // }
+        // let locked = !(
+        //   storedLevel ||
+        //   initNextLevel <= levelNumT ||
+        //   levelNumT === 0
+        // );
+        // tibiaLevelsArray.push(
+        //   new Level({
+        //     mode: 6,
+        //     position: {
+        //       x: j * Level.width + 590,
+        //       y: i * Level.height + -1060,
+        //     },
+        //     number: levelNumT,
+        //     locked: locked,
+        //     content: tibiaLevels[levelNumT],
+        //   })
+        // );
+        // levelNumT++;
+      }
+
       if (symbol === 2) {
-        let storedLevel = levelData["mode"][2][levelNumS];
-        let initNextLevel;
-        if (levelData["mode"][2][levelNumS - 1]) {
-          initNextLevel = levelNumS;
-        }
-        let locked = !(
-          storedLevel ||
-          initNextLevel <= levelNumS ||
-          levelNumS === 0
-        );
-        specialLevelsArray.push(
-          new Level({
-            mode: 2,
-            position: {
-              x: j * Level.width + 590,
-              y: i * Level.height + -1060,
-            },
-            number: levelNumS,
-            locked: locked,
-            content: specialLevels[levelNumS],
-          })
-        );
+        addLevel(2, specialLevels, specialLevelsArray, levelNumS, j, i);
         levelNumS++;
+        // let storedLevel = levelData["mode"][2][levelNumS];
+        // let initNextLevel;
+        // if (levelData["mode"][2][levelNumS - 1]) {
+        //   initNextLevel = levelNumS;
+        // }
+        // let locked = !(
+        //   storedLevel ||
+        //   initNextLevel <= levelNumS ||
+        //   levelNumS === 0
+        // );
+        // specialLevelsArray.push(
+        //   new Level({
+        //     mode: 2,
+        //     position: {
+        //       x: j * Level.width + 590,
+        //       y: i * Level.height + -1060,
+        //     },
+        //     number: levelNumS,
+        //     locked: locked,
+        //     content: specialLevels[levelNumS],
+        //   })
+        // );
+        // levelNumS++;
       }
       if (symbol === 3) {
-        let storedLevel = levelData["mode"][3][levelNumSv];
-        let initNextLevel;
-        if (levelData["mode"][3][levelNumSv - 1]) {
-          initNextLevel = levelNumSv;
-        }
-        let locked = !(
-          storedLevel ||
-          initNextLevel <= levelNumSv ||
-          levelNumSv === 0
-        );
-        svenskaLevelsArray.push(
-          new Level({
-            mode: 3,
-            position: {
-              x: j * Level.width + 590,
-              y: i * Level.height + -1060,
-            },
-            number: levelNumSv,
-            locked: locked,
-            content: svenskaLevels[levelNumSv],
-          })
-        );
+        addLevel(3, svenskaLevels, svenskaLevelsArray, levelNumSv, j, i);
         levelNumSv++;
+        // let storedLevel = levelData["mode"][3][levelNumSv];
+        // let initNextLevel;
+        // if (levelData["mode"][3][levelNumSv - 1]) {
+        //   initNextLevel = levelNumSv;
+        // }
+        // let locked = !(
+        //   storedLevel ||
+        //   initNextLevel <= levelNumSv ||
+        //   levelNumSv === 0
+        // );
+        // svenskaLevelsArray.push(
+        //   new Level({
+        //     mode: 3,
+        //     position: {
+        //       x: j * Level.width + 590,
+        //       y: i * Level.height + -1060,
+        //     },
+        //     number: levelNumSv,
+        //     locked: locked,
+        //     content: svenskaLevels[levelNumSv],
+        //   })
+        // );
+        // levelNumSv++;
       }
     });
   });
@@ -318,7 +313,7 @@ window.addEventListener("load", function () {
     position: { x: offset.x, y: offset.y },
     image: image,
   });
-  
+
   const foreground = new Sprite({
     position: { x: offset.x, y: offset.y },
     image: foregroundImage,
@@ -586,8 +581,6 @@ window.addEventListener("load", function () {
       }
     }
     window.requestAnimationFrame(animate);
-
-    
   }
   animate(0);
   let lastKey = "";

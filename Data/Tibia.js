@@ -147,8 +147,27 @@ const helmets = [
   "Terracotta Helmet",
   "Viking Helmet",
 ];
-const locations = [  "Ab'Dendriel",  "Ankrahmun",  "Carlin",  "Darashia",  "Edron",  "Farmine",  "Gray Beach",  "Kazordoon",  "Liberty Bay",  "Mintwallin",  "Port Hope",  "Rathleton",  "Rookgaard",  "Svargrond",  "Thais",  "Venore",  "Yalahar",  "Zao",  "Zzrat"]
-
+const locations = [
+  "Ab'Dendriel",
+  "Ankrahmun",
+  "Carlin",
+  "Darashia",
+  "Edron",
+  "Farmine",
+  "Gray Beach",
+  "Kazordoon",
+  "Liberty Bay",
+  "Mintwallin",
+  "Port Hope",
+  "Rathleton",
+  "Rookgaard",
+  "Svargrond",
+  "Thais",
+  "Venore",
+  "Yalahar",
+  "Zao",
+  "Zzrat",
+];
 
 const chatgpt = [
   ...monsters,
@@ -156,8 +175,8 @@ const chatgpt = [
   ...swords,
   ...axes,
   ...helmets,
-  ...locations
-]
+  ...locations,
+];
 
 const TibiaNpcs = `al dee,obi,seymour,cipfried,norma,captain bluebear,aruda,king tibianus`;
 
@@ -185,5 +204,3 @@ export const TibiaWords = [
   ...TibiaShorts.split(","),
   ...chatgpt,
 ].sort((a, b) => b.length - a.length);
-
-console.log(TibiaWords)
