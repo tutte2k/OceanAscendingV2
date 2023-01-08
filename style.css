@@ -134,7 +134,15 @@ html {
 #angela1,
 #angela2,
 #goldfish,
-#shark {
+#shark,
+#playerUp,
+#playerDown,
+#playerLeft,
+#playerRight,
+#playerSwimUp,
+#playerSwimDown,
+#playerSwimLeft,
+#playerSwimRight,#map,#foreground {
   display: none;
 }
 

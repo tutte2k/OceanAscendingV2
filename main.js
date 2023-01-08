@@ -4,7 +4,7 @@ import { SpecialMode } from "./Data/Special.js";
 import { SvenskaMode } from "./Data/Svenska.js";
 import Game from "./Game/Game.js";
 import DataSource from "./Data/DataSource.js";
-import {  mapData } from "./Data/mapData.js";
+import { mapData } from "./Data/mapData.js";
 import Helper from "./Utils/Helper.js";
 import UserInterface from "./UserInterface/UserInterface.js";
 import Level from "./Game/Level.js";
@@ -17,7 +17,6 @@ const store = dataSource.getStore();
 
 UserInterface.setUi(store);
 UserInterface.setUpShop(dataSource);
-
 
 window.addEventListener("load", function () {
   const canvas = document.getElementById("canvas1");
@@ -129,49 +128,34 @@ window.addEventListener("load", function () {
   const foregroundImage = new Image();
   foregroundImage.src = "./assets/levelSelection/foreground.webp";
 
-  const playerImage = new Image();
-  playerImage.src = "./assets/levelSelection/playerDown.png";
+  const playerSprites = {
+    up: this.document.getElementById("playerUp"),
+    down: this.document.getElementById("playerDown"),
+    left: this.document.getElementById("playerLeft"),
+    right: this.document.getElementById("playerRight"),
 
-  const playerUpImage = new Image();
-  playerUpImage.src = "./assets/levelSelection/playerUp.png";
-
-  const playerLeftImage = new Image();
-  playerLeftImage.src = "./assets/levelSelection/playerLeft.png";
-
-  const playerRightImage = new Image();
-  playerRightImage.src = "./assets/levelSelection/playerRight.png";
-
-  const playerDownImage = new Image();
-  playerDownImage.src = "./assets/levelSelection/playerDown.png";
-
-  const playerSwimDown = new Image();
-  playerSwimDown.src = "./assets/levelSelection/playerSwimDown.png";
-
-  const playerSwimUp = new Image();
-  playerSwimUp.src = "./assets/levelSelection/playerSwimUp.png";
-
-  const playerSwimLeft = new Image();
-  playerSwimLeft.src = "./assets/levelSelection/playerSwimLeft.png";
-
-  const playerSwimRight = new Image();
-  playerSwimRight.src = "./assets/levelSelection/playerSwimRight.png";
+    swimUp: this.document.getElementById("playerSwimUp"),
+    swimDown: this.document.getElementById("playerSwimDown"),
+    swimLeft: this.document.getElementById("playerSwimLeft"),
+    swimRight: this.document.getElementById("playerSwimRight"),
+  };
 
   const player = new Sprite({
     position: {
       x: canvas.width / 2 - 192 / 4 / 2,
       y: canvas.height / 2 - 68 / 4,
     },
-    image: playerDownImage,
+    image: playerSprites.down,
     frames: { max: 4 },
     sprites: {
-      up: playerUpImage,
-      left: playerLeftImage,
-      right: playerRightImage,
-      down: playerDownImage,
-      swimDown: playerSwimDown,
-      swimUp: playerSwimUp,
-      swimLeft: playerSwimLeft,
-      swimRight: playerSwimRight,
+      up: playerSprites.up,
+      down: playerSprites.down,
+      left: playerSprites.left,
+      right: playerSprites.right,
+      swimDown: playerSprites.swimDown,
+      swimUp: playerSprites.swimUp,
+      swimLeft: playerSprites.swimLeft,
+      swimRight: playerSprites.swimRight,
     },
     swimming: false,
   });
@@ -240,6 +224,7 @@ window.addEventListener("load", function () {
       });
 
       player.draw(ctx);
+
       foreground.draw(ctx);
 
       let moving = true;
