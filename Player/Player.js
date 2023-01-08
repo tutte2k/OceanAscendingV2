@@ -87,15 +87,15 @@ export class Player {
   }
   draw(context) {
     context.beginPath();
-    var gradient = context.createLinearGradient(
+    const gradient = context.createLinearGradient(
       0,
       0,
       0,
       this.y + this.height * 0.5
     );
-    let red = true;
+    const red = true;
     for (let i = 0; i < 10; i++) {
-      let color = red ? "red" : "orange";
+      const color = red ? "red" : "orange";
       gradient.addColorStop(`0.${i}`, color);
       red = !red;
     }

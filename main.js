@@ -59,7 +59,7 @@ window.addEventListener("load", function () {
   let levelNumS = 0;
   let levelNumSv = 0;
 
-  let levelData = store["completedLevels"];
+  const levelData = store["completedLevels"];
 
   mapData.forEach((row, i) => {
     row.forEach((symbol, j) => {
@@ -103,12 +103,12 @@ window.addEventListener("load", function () {
   });
 
   function addLevel(mode, contentArr, levelArr, counter, j, i) {
-    let storedLevel = levelData["mode"][mode][counter];
+    const storedLevel = levelData["mode"][mode][counter];
     let initNextLevel;
     if (levelData["mode"][mode][counter - 1]) {
       initNextLevel = counter;
     }
-    let locked = !(storedLevel || initNextLevel <= counter || counter === 0);
+    const locked = !(storedLevel || initNextLevel <= counter || counter === 0);
     levelArr.push(
       new Level({
         mode: mode,
@@ -280,7 +280,7 @@ window.addEventListener("load", function () {
               },
             })
           ) {
-            let nextLevel = levelsArray[i + 1];
+            const nextLevel = levelsArray[i + 1];
             game = new Game(
               canvas.width,
               canvas.height,
@@ -508,7 +508,7 @@ window.addEventListener("load", function () {
   //   const perfect = "💯";
   //   const hook = "🪝";
 
-  // var audio = new Audio("./assets/level1.flac");
+  // const audio = new Audio("./assets/level1.flac");
   // audio.loop = true;
 
   // let playbtn = this.document.getElementById("playMusic");

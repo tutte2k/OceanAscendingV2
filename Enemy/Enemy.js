@@ -45,8 +45,8 @@ export class Enemy {
     this.sprite.update(deltaTime);
   }
   consume(key) {
-    var length = this.completedText.length + 1;
-    let isNextChar =
+    const length = this.completedText.length + 1;
+    const isNextChar =
       this.text.substring(0, length) === this.completedText + key;
     if (isNextChar) {
       this.completedText += key;
@@ -76,8 +76,8 @@ export class Enemy {
     this.element.remove();
   }
   draw(context) {
-    let widthPercentage = context.canvas.getBoundingClientRect().width / 2500;
-    let heightPercentage = context.canvas.getBoundingClientRect().height / 1768;
+    const widthPercentage = context.canvas.getBoundingClientRect().width / 2500;
+    const heightPercentage = context.canvas.getBoundingClientRect().height / 1768;
     this.sprite.draw(context, this.x, this.y);
 
     this.element.style.top = this.y * heightPercentage + "px";
@@ -106,7 +106,7 @@ export class Enemy {
     if (!enemies[value.length]) {
       return new enemies[4][Helper.randomIndexInArr(enemies[4])](game, value);
     }
-    let randomIndex = Helper.randomIndexInArr(enemies[value.length])
+    const randomIndex = Helper.randomIndexInArr(enemies[value.length])
     let enemy = new enemies[value.length][randomIndex](game, value);
     return enemy;
   }
@@ -283,8 +283,8 @@ export class HiveWhale extends Mech {
   die() {
     super.die();
     for (let i = 0; i < 5; i++) {
-      let x = this.x + (this.width * i) / 3;
-      let y = this.y + Math.random() * (this.height * 2);
+      const x = this.x + (this.width * i) / 3;
+      const y = this.y + Math.random() * (this.height * 2);
       this.game.explosions.push(new SmokeExplosion(this.game, x, y));
       const indexOfLastWord = this.game.words.length - 1;
       const word = Word.Next(this.game, indexOfLastWord);

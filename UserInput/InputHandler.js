@@ -4,12 +4,12 @@ export default class InputHandler {
       window.addEventListener("keydown", (e) => {
         e.preventDefault();
         if (this.game.focus) {
-          let hit = this.game.focus.consume(e.key);
+          const hit = this.game.focus.consume(e.key);
           if (hit) this.game.player.shootTop();
         } else {
           this.game.focus = this.game.findFocus(e.key);
           if (this.game.focus) {
-            let hit = this.game.focus.consume(e.key);
+            const hit = this.game.focus.consume(e.key);
             if (hit) this.game.player.shootTop();
           }
         }

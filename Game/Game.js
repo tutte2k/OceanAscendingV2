@@ -56,7 +56,7 @@ export default class Game {
       if (this.player.y <= 0 - this.player.height) {
         console.log(this.nextLevel)
         this.nextLevel.locked = false;
-        let state = {
+        const state = {
           score: this.score,
           level: this.level,
           win: this.win,
@@ -80,14 +80,14 @@ export default class Game {
 
       let earnedCash;
 
-      let levelObject = this.store.completedLevels.mode[this.mode].find(
+      const levelObject = this.store.completedLevels.mode[this.mode].find(
         (obj) => obj.level === this.level.name
       );
 
       if (!levelObject) {
         levelObject = { level: this.level.name, score: this.score };
         this.store.completedLevels.mode[this.mode].push(levelObject);
-        let availableScore = this.level.maxScore;
+        const availableScore = this.level.maxScore;
         earnedCash =
           this.level.name + Math.round((this.score / availableScore) * 10);
 
@@ -97,9 +97,9 @@ export default class Game {
         this.userInterface.displayEarnedCash(earnedCash);
         this.dataSource.setStore(this.store);
       } else if (levelObject.score < this.score) {
-        let previousScore = levelObject.score;
-        let currentScore = this.score;
-        let earnableScore = currentScore - previousScore;
+        const previousScore = levelObject.score;
+        const currentScore = this.score;
+        const earnableScore = currentScore - previousScore;
 
         this.store.completedLevels.mode[this.mode][this.level.name].score =
           this.score;
@@ -218,7 +218,7 @@ export default class Game {
   }
 
   findFocus(key) {
-    let enemy = this.enemies.find((enemy) => {
+    const enemy = this.enemies.find((enemy) => {
       return enemy.text.startsWith(key);
     });
     if (enemy && !this.lose) {

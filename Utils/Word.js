@@ -1,6 +1,6 @@
 export default class Word {
   static Next(game, startIndex) {
-    let notAvailableChars = [];
+    const notAvailableChars = [];
     for (let i = 0; i < game.enemies.length; i++) {
       if (game.enemies[i]) {
         if (!notAvailableChars.includes(game.enemies[i].text.charAt(0))) {
@@ -19,7 +19,7 @@ export default class Word {
         }
       }
     }
-    let fallback = game.words.pop();
+    const fallback = game.words.pop();
     if (fallback) return;
     else return "x";
   }

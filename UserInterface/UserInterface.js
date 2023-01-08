@@ -164,8 +164,8 @@ export default class UserInterface {
     UserInterface.ShopContent.mineSlot.priceElement.innerHTML =
       UserInterface.ShopContent.mineSlot.price;
     UserInterface.Shop.addEventListener("click", (e) => {
-      let cash = dataSource.getStore()["cash"];
-      let btn = UserInterface.ShopContent[e.target.id];
+      const cash = dataSource.getStore()["cash"];
+      const btn = UserInterface.ShopContent[e.target.id];
       btn &&
         UserInterface.ShopContent[e.target.id].price <= cash &&
         UserInterface.buy(e.target.id, cash,dataSource);

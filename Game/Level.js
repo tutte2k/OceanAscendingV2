@@ -16,7 +16,7 @@ export default class Level {
   draw(ctx) {
     ctx.font = "50px serif";
     ctx.fillStyle = "white";
-    let icon = this.locked === false ? "💫" : "⛔";
+    const icon = this.locked === false ? "💫" : "⛔";
     ctx.fillText(icon, this.position.x, this.position.y + 30);
   }
   getContent() {

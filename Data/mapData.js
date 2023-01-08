@@ -1,9 +1,9 @@
-let X = 1025;
-let W = 1;
-let T = 6;
-let G = 99;
-let M = 2;
-let S = 3;
+const X = 1025;
+const W = 1;
+const T = 6;
+const G = 99;
+const M = 2;
+const S = 3;
 
 export const mapData = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
