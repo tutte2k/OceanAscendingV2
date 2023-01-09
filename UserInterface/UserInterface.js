@@ -130,12 +130,9 @@ export default class UserInterface {
         completedlevel.score +
         "/" +
         level.maxScore;
-    }  else {
+    } else if (!level.locked) {
       UserInterface.Info.innerHTML =
-        "Mode: " +
-        level.mode +
-        "<br>Level: " +
-        level.name 
+        "Mode: " + level.mode + "<br>Level: " + level.name;
     }
   }
   static setUi(store) {
@@ -161,14 +158,14 @@ export default class UserInterface {
       const btn = UserInterface.ShopContent[e.target.id];
       btn &&
         UserInterface.ShopContent[e.target.id].price <= cash &&
-        UserInterface.buy(e.target.id, cash,dataSource);
+        UserInterface.buy(e.target.id, cash, dataSource);
     });
   }
-  static buy(id,cash,dataSource){
-      let store = dataSource.getStore();
-      store.shop[id]++;
-      store.cash = cash - UserInterface.ShopContent[id].price;
-      UserInterface.setUi(store);
-      dataSource.setStore(store);
+  static buy(id, cash, dataSource) {
+    let store = dataSource.getStore();
+    store.shop[id]++;
+    store.cash = cash - UserInterface.ShopContent[id].price;
+    UserInterface.setUi(store);
+    dataSource.setStore(store);
   }
 }
