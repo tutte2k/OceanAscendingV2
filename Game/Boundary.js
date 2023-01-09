@@ -1,10 +1,10 @@
 export default class Boundary {
-  static width = 66;
-  static height = 66;
+  static width = 47;
+  static height = 47;
   constructor({ position }) {
     this.position = position;
-    this.width = 48;
-    this.height = 48;
+    this.width = 20;
+    this.height = 20;
   }
   draw(ctx) {
     ctx.fillStyle = "rgba(255,0,0,0)";

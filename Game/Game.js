@@ -4,10 +4,11 @@ import UserInterface from "../UserInterface/UserInterface.js";
 import { Player } from "../Player/Player.js";
 import { Enemy } from "../Enemy/Enemy.js";
 import Word from "../Utils/Word.js";
+import DataSource from "../Data/DataSource.js";
 
 export default class Game {
-  constructor(width, height, level, nextLevel, dataSource) {
-    this.dataSource = dataSource;
+  constructor(width, height, level, nextLevel,dataSource) {
+    this.dataSource = dataSource
     this.store = dataSource.getStore();
     this.wordContainer = document.getElementById("words");
 

@@ -1,6 +1,6 @@
 export default class LandTile {
-    static width = 66;
-    static height = 66;
+    static width = 47;
+    static height = 47;
     constructor({position}) {
       this.position = position;
       this.width = 20;

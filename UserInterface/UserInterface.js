@@ -130,19 +130,12 @@ export default class UserInterface {
         completedlevel.score +
         "/" +
         level.maxScore;
-    } else if (level.locked) {
-      UserInterface.Info.innerHTML =
-        "Mode: " + level.mode + "<br>Level: " + level.name + "<br>LOCKED";
-    } else {
+    }  else {
       UserInterface.Info.innerHTML =
         "Mode: " +
         level.mode +
         "<br>Level: " +
-        level.name +
-        "<br>Score: " +
-        0 +
-        "/" +
-        level.maxScore;
+        level.name 
     }
   }
   static setUi(store) {
