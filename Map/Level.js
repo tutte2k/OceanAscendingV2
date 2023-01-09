@@ -11,15 +11,13 @@ export default class Level {
     this.mode = mode;
     this.words = this.getContent();
     this.maxScore = 0;
-    if(content!="math"){
-      this.words.forEach((word) => (this.maxScore += word.length));
-    }
+    this.words.forEach((word) => (this.maxScore += word.length));
   }
   draw(ctx) {
-    if(!this.locked){
+    if (!this.locked) {
       ctx.font = "24px serif";
       ctx.fillStyle = "white";
-      const icon = this.locked === false ? "⭐": "🔒";
+      const icon = this.locked === false ? "⭐" : "🔒";
       ctx.fillText(icon, this.position.x, this.position.y + 30);
     }
   }

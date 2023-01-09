@@ -146,8 +146,6 @@ export default class UserInterface {
     UserInterface.ShopContent.mineReg.current.innerHTML =
       30 - store.shop.mineReg * 2 + " seconds";
     UserInterface.ShopContent.mineSlot.current.innerHTML = store.shop.mineSlot;
-
-
     UserInterface.ShopContent.airSlot.priceElement.innerHTML =
       UserInterface.ShopContent.airSlot.price;
     UserInterface.ShopContent.airReg.priceElement.innerHTML =

@@ -1,5 +1,5 @@
 import InputHandler from "../UserInput/InputHandler.js";
-import { Background } from "../Environment/Background.js";
+import Background from "../Environment/Background.js";
 import UserInterface from "../UserInterface/UserInterface.js";
 import Player from "../Player/Player.js";
 import Enemy from "../Enemy/Enemy.js";
@@ -48,6 +48,7 @@ export default class Game {
   }
 
   update(deltaTime) {
+    this.words.pop();
     if (this.player.y > 0 - this.player.height * 2 && this.gameOver) {
       this.player.y -= 3;
       if (this.player.y <= 0 - this.player.height) {

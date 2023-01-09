@@ -1,6 +1,7 @@
 import DataSource from "./Data/DataSource.js";
 import UserInterface from "./UserInterface/UserInterface.js";
-import Map from "./Game/Map.js";
+import Map from "./Map/Map.js";
+
 
 const canvas = document.getElementById("canvas1");
 const ctx = canvas.getContext("2d");
@@ -8,6 +9,8 @@ canvas.width = 2500;
 canvas.height = 1768;
 const dataSource = new DataSource();
 const map = new Map(dataSource, canvas);
+
+
 UserInterface.setUpShop(dataSource);
 
 window.addEventListener("load", function () {
