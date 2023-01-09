@@ -204,3 +204,4 @@ export const TibiaWords = [
   ...TibiaShorts.split(","),
   ...chatgpt,
 ].sort((a, b) => b.length - a.length);
+

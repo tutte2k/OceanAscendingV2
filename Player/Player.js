@@ -1,6 +1,6 @@
 import SpriteSheet from "../Utils/SpriteSheet.js";
 import Projectile from "./Projectile.js";
-export class Player {
+export default class Player {
   constructor(game) {
     this.game = game;
     this.width = 180;

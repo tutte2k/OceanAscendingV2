@@ -1,19 +1,14 @@
 import InputHandler from "../UserInput/InputHandler.js";
 import { Background } from "../Environment/Background.js";
 import UserInterface from "../UserInterface/UserInterface.js";
-import { Player } from "../Player/Player.js";
-import { Enemy } from "../Enemy/Enemy.js";
+import Player from "../Player/Player.js";
+import Enemy from "../Enemy/Enemy.js";
 import Word from "../Utils/Word.js";
-import DataSource from "../Data/DataSource.js";
 
 export default class Game {
-  constructor(width, height, level, nextLevel,dataSource) {
-    this.dataSource = dataSource
+  constructor(width, height, level, nextLevel, dataSource) {
     this.store = dataSource.getStore();
-    this.wordContainer = document.getElementById("words");
-
-    this.mode = level.mode;
-
+    this.wordContainer = UserInterface.WordContainer;
     this.level = level;
     this.nextLevel = nextLevel;
     this.words = level.getContent();
@@ -31,6 +26,7 @@ export default class Game {
     this.background = new Background(this);
     this.inputHandler = new InputHandler(this);
     this.userInterface = new UserInterface(this);
+
     UserInterface.UI.classList.remove("invisible");
 
     this.keys = [];
@@ -55,16 +51,14 @@ export default class Game {
     if (this.player.y > 0 - this.player.height * 2 && this.gameOver) {
       this.player.y -= 3;
       if (this.player.y <= 0 - this.player.height) {
-        this.nextLevel.locked = false;
         const state = {
-          score: this.score,
           level: this.level,
+          nextLevel: this.nextLevel,
+          score: this.score,
           win: this.win,
         };
         this.level = null;
-        this.wordContainer.innerHTML = "";
-        UserInterface.Message.innerHTML = "";
-        UserInterface.UI.classList.add("invisible");
+        this.userInterface.clear();
         return state;
       }
     }
@@ -74,43 +68,8 @@ export default class Game {
       this.win = true;
       this.enemies.forEach((enemy) => {
         enemy.die();
-        this.score += enemy.score;
         enemy.markedForDeletion = true;
       });
-
-      let earnedCash;
-
-      let levelObject = this.store.completedLevels.mode[this.mode].find(
-        (obj) => obj.level === this.level.name
-      );
-
-      if (!levelObject) {
-        levelObject = { level: this.level.name, score: this.score };
-        this.store.completedLevels.mode[this.mode].push(levelObject);
-        const availableScore = this.level.maxScore;
-        earnedCash =
-          this.level.name + Math.round((this.score / availableScore) * 10);
-
-        this.store["cash"] = this.store["cash"] + earnedCash;
-        UserInterface.Cash.innerHTML = this.store["cash"];
-
-        this.userInterface.displayEarnedCash(earnedCash);
-        this.dataSource.setStore(this.store);
-      } else if (levelObject.score < this.score) {
-        const previousScore = levelObject.score;
-        const currentScore = this.score;
-        const earnableScore = currentScore - previousScore;
-
-        this.store.completedLevels.mode[this.mode][this.level.name].score =
-          this.score;
-
-        earnedCash = Math.round((earnableScore / this.level.maxScore) * 10);
-        this.store["cash"] = this.store["cash"] + earnedCash;
-
-        UserInterface.Cash.innerHTML = this.store["cash"];
-        this.userInterface.displayEarnedCash(earnedCash);
-        this.dataSource.setStore(this.store);
-      }
     }
     this.gameOver = this.lose == true || this.win === true;
     if (!this.gameOver) {
@@ -139,7 +98,6 @@ export default class Game {
         this.focus = enemy;
       }
       enemy.update(deltaTime);
-
       if (this.checkCollision(this.player, enemy)) {
         if (enemy.focused && this.focus === enemy) {
           this.focus = null;
@@ -153,10 +111,8 @@ export default class Game {
           }
         }
       }
-
       this.player.projectiles.forEach((projectile) => {
         if (this.checkCollision(projectile, enemy)) {
-          this.score += enemy.score;
           if (enemy.focused && this.focus === enemy) {
             this.focus = null;
           }
@@ -177,10 +133,10 @@ export default class Game {
     });
     this.enemies = this.enemies.filter((enemy) => !enemy.markedForDeletion);
 
-    if (
-      (this.enemyTimer > this.enemyInterval && !this.gameOver) ||
-      this.enemies.length === 0
-    ) {
+    const boardClear = this.enemies.length === 0;
+    const spawnTimerElapsed = this.enemyTimer > this.enemyInterval;
+
+    if ((boardClear || spawnTimerElapsed) && !this.gameOver) {
       this.addEnemy();
       this.enemyTimer = 0;
     } else {
@@ -212,7 +168,6 @@ export default class Game {
     const indexOfLastWord = this.words.length - 1;
     const word = Word.Next(this, indexOfLastWord);
     if (!word) return;
-
     const creature = Enemy.Next(this, word);
     this.enemies.push(creature);
   }

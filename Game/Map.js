@@ -10,9 +10,10 @@ import Sprite from "../Utils/Sprite.js";
 import MapInputHandler from "../UserInput/MapInputHandler.js";
 
 export default class Map {
-  constructor(store, canvas) {
+  constructor(dataSource, canvas) {
+    this.dataSource = dataSource;
     this.canvas = canvas;
-    this.levelData = store["completedLevels"];
+    this.levelData = dataSource.getStore()["completedLevels"];
     this.offset = {
       x: -1140,
       y: -1725,
@@ -60,6 +61,7 @@ export default class Map {
     this.tibiaCounter = 0;
     this.specialCounter = 0;
     this.svenskaCounter = 0;
+
 
     this.setUp();
 

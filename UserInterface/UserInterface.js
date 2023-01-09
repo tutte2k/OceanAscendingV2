@@ -2,6 +2,7 @@ import FloatingMessage from "./FloatingMessage.js";
 import Particle from "../Environment/Particle.js";
 
 export default class UserInterface {
+  static WordContainer = document.getElementById("words");
   static UI = document.getElementById("ui");
   static Mine = document.getElementById("mines");
   static Air = document.getElementById("air");
@@ -135,16 +136,18 @@ export default class UserInterface {
         "Mode: " + level.mode + "<br>Level: " + level.name;
     }
   }
-  static setUi(store) {
-    UserInterface.Cash.innerHTML = store.cash;
+
+  static setUpShop(dataSource) {
+    const store = dataSource.getStore();
+    UserInterface.setCash(store["cash"])
     UserInterface.ShopContent.airSlot.current.innerHTML = store.shop.airSlot;
     UserInterface.ShopContent.airReg.current.innerHTML =
       30 - store.shop.airReg * 2 + " seconds";
     UserInterface.ShopContent.mineReg.current.innerHTML =
       30 - store.shop.mineReg * 2 + " seconds";
     UserInterface.ShopContent.mineSlot.current.innerHTML = store.shop.mineSlot;
-  }
-  static setUpShop(dataSource) {
+
+
     UserInterface.ShopContent.airSlot.priceElement.innerHTML =
       UserInterface.ShopContent.airSlot.price;
     UserInterface.ShopContent.airReg.priceElement.innerHTML =
@@ -153,6 +156,7 @@ export default class UserInterface {
       UserInterface.ShopContent.mineReg.price;
     UserInterface.ShopContent.mineSlot.priceElement.innerHTML =
       UserInterface.ShopContent.mineSlot.price;
+
     UserInterface.Shop.addEventListener("click", (e) => {
       const cash = dataSource.getStore()["cash"];
       const btn = UserInterface.ShopContent[e.target.id];
@@ -167,5 +171,13 @@ export default class UserInterface {
     store.cash = cash - UserInterface.ShopContent[id].price;
     UserInterface.setUi(store);
     dataSource.setStore(store);
+  }
+  clear(){
+    UserInterface.WordContainer.innerHTML = "";
+    UserInterface.Message.innerHTML = "";
+    UserInterface.UI.classList.add("invisible");
+  }
+  static setCash(cash){
+    UserInterface.Cash.innerHTML = cash;
   }
 }

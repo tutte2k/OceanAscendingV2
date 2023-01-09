@@ -5,7 +5,6 @@ const Letters = [...Lowercase.split(" "), ...Uppercase.split(" ")].sort(
   () => Math.random() - 0.5
 );
 const Numbers = Array.from(Array(100).keys()).sort(() => Math.random() - 0.5);
-
 const Combinations = [
   "9470723886",
   "2841408059",

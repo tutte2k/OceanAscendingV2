@@ -11,7 +11,9 @@ export default class Level {
     this.mode = mode;
     this.words = this.getContent();
     this.maxScore = 0;
-    this.words.forEach((word) => (this.maxScore += word.length));
+    if(content!="math"){
+      this.words.forEach((word) => (this.maxScore += word.length));
+    }
   }
   draw(ctx) {
     if(!this.locked){
