@@ -67,13 +67,13 @@ export default class MapInputHandler {
       }
     });
   }
-  handle(dataSource) {
+  handle() {
     for (let i = 0; i < this.map.levelsArray.length; i++) {
       const level = this.map.levelsArray[i];
       let completedlevel;
       if (Collision.check(this.map.player, level, 0, 0)) {
         completedlevel =
-          dataSource.getStore().completedLevels.mode[level.mode][level.name];
+          this.map.dataSource.getStore().completedLevels.mode[level.mode][level.name];
         UserInterface.displayLevelInfo(completedlevel, level);
       }
     }

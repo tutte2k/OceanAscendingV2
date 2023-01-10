@@ -9,15 +9,19 @@ export default class Level {
     this.content = content;
     this.name = number;
     this.mode = mode;
-    this.words = this.getContent();
-    this.maxScore = 0;
-    this.words.forEach((word) => (this.maxScore += word.length));
+    if (this.mode === 4) {
+      this.maxScore=1;
+    } else {
+      this.words = this.getContent();
+      this.maxScore = 0;
+      this.words.forEach((word) => (this.maxScore += word.length));
+    }
   }
   draw(ctx) {
     if (!this.locked) {
       ctx.font = "24px serif";
       ctx.fillStyle = "white";
-      const icon = this.locked === false ? "⭐" : "🔒";
+      const icon = this.locked === false ? "⭐" : "🚫";
       ctx.fillText(icon, this.position.x, this.position.y + 30);
     }
   }

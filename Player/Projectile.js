@@ -26,6 +26,7 @@ export default class Projectile {
         this.y + this.height * 0.5
       )
     );
+    this.markedForDeletion = true;
   }
   draw(context) {
     context.drawImage(this.image, this.x, this.y);

@@ -8,15 +8,14 @@ import LandTile from "./LandTile.js";
 import Level from "./Level.js";
 import Sprite from "../Utils/Sprite.js";
 import MapInputHandler from "../UserInput/MapInputHandler.js";
+import UserInterface from "../UserInterface/UserInterface.js";
 
 export default class Map {
-
   constructor(dataSource, canvas) {
-    
+    UserInterface.setUpShop(dataSource);
     this.dataSource = dataSource;
     this.canvas = canvas;
     this.levelData = dataSource.getStore()["completedLevels"];
-
     this.offset = {
       x: -1140,
       y: -1725,
@@ -59,20 +58,21 @@ export default class Map {
     this.svenskaLevelsArray = [];
     this.tibiaLevelsArray = [];
     this.wordsLevelsArray = [];
+    this.mathLevelsArray = [];
 
     this.wordsCounter = 0;
     this.tibiaCounter = 0;
     this.specialCounter = 0;
     this.svenskaCounter = 0;
+    this.mathCounter = 0;
 
-
-    this.setUp();
-
+    this.init();
     this.levelsArray = [
       ...this.wordsLevelsArray,
       ...this.tibiaLevelsArray,
       ...this.specialLevelsArray,
       ...this.svenskaLevelsArray,
+      ...this.mathLevelsArray
     ];
     this.movables = [
       this.background,
@@ -84,7 +84,7 @@ export default class Map {
     this.moving = true;
     this.inputHandler = new MapInputHandler(this);
   }
-  setUp() {
+  init() {
     const tibiaContent = Level.setContent(TibiaWords, 50);
     const wordsContent = Level.setContent(Words10K, 100);
     const specialContent = Level.setContent(SpecialMode, 50);
@@ -155,6 +155,17 @@ export default class Map {
             i
           );
           this.svenskaCounter++;
+        }
+        if (symbol === 4) {
+          this.mapLevel(
+            4,
+            Array.from(Array(100).keys()),
+            this.mathLevelsArray,
+            this.mathCounter,
+            j,
+            i
+          );
+          this.mathCounter++;
         }
       });
     });

@@ -73,6 +73,7 @@ export default class Enemy {
         )
       );
     }
+    this.markedForDeletion = true;
     this.remove();
   }
   remove() {
@@ -84,14 +85,20 @@ export default class Enemy {
     const heightPercentage =
       context.canvas.getBoundingClientRect().height / 1768;
     this.sprite.draw(context, this.x, this.y);
-
     this.element.style.top = this.y * heightPercentage + "px";
     this.element.style.left =
       (this.width * widthPercentage) / 2 + this.x * widthPercentage + "px";
-    this.element.innerHTML = this.text.replace(this.completedText, "");
     this.element.style.color = this.focused ? "lime" : "whitesmoke";
+    if (this.game.level.mode === 4) {
 
-    this.displayText = this.text.replace(this.completedText, "");
+    }
+    else{
+      this.element.innerHTML = this.text.replace(this.completedText, "");
+      this.displayText = this.text.replace(this.completedText, "");
+    }
+  }
+  static NextMath(game, value) {
+    return new Lionfish(game, value);
   }
 
   static Next(game, value) {

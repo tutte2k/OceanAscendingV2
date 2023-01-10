@@ -1,5 +1,4 @@
 export default class Helper {
-
   static hasCollided({ rectangle1, rectangle2 }) {
     return (
       rectangle1.position.x + rectangle1.width >= rectangle2.position.x &&

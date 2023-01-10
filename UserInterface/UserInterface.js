@@ -39,6 +39,7 @@ export default class UserInterface {
   };
 
   constructor(game) {
+    UserInterface.UI.classList.remove("invisible");
     this.game = game;
   }
   draw(context) {
@@ -48,10 +49,13 @@ export default class UserInterface {
     UserInterface.Mine.innerHTML = this.game.player.ammo;
     UserInterface.Level.innerHTML = this.game.level.name;
     UserInterface.WordsLeft.innerHTML = this.game.words.length;
-    UserInterface.Crosshair.innerHTML =
-      this.game.focus && this.game.focus.text.length != 1
-        ? this.game.focus.displayText
-        : "";
+    if (this.game.level.mode !== 4) {
+      UserInterface.Crosshair.innerHTML =
+        this.game.focus && this.game.focus.text.length != 1
+          ? this.game.focus.displayText
+          : "";
+    }
+
     UserInterface.Score.innerHTML = this.game.score;
 
     if (this.game.gameOver) {
@@ -139,7 +143,7 @@ export default class UserInterface {
 
   static setUpShop(dataSource) {
     const store = dataSource.getStore();
-    UserInterface.setCash(store["cash"])
+    UserInterface.setCash(store["cash"]);
     UserInterface.ShopContent.airSlot.current.innerHTML = store.shop.airSlot;
     UserInterface.ShopContent.airReg.current.innerHTML =
       30 - store.shop.airReg * 2 + " seconds";
@@ -170,12 +174,12 @@ export default class UserInterface {
     UserInterface.setUi(store);
     dataSource.setStore(store);
   }
-  clear(){
+  clear() {
     UserInterface.WordContainer.innerHTML = "";
     UserInterface.Message.innerHTML = "";
     UserInterface.UI.classList.add("invisible");
   }
-  static setCash(cash){
+  static setCash(cash) {
     UserInterface.Cash.innerHTML = cash;
   }
 }

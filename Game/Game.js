@@ -4,14 +4,17 @@ import UserInterface from "../UserInterface/UserInterface.js";
 import Player from "../Player/Player.js";
 import Enemy from "../Enemy/Enemy.js";
 import Word from "../Utils/Word.js";
+import Helper from "../Utils/Helper.js";
 
 export default class Game {
   constructor(width, height, level, nextLevel, dataSource) {
     this.store = dataSource.getStore();
     this.wordContainer = UserInterface.WordContainer;
     this.level = level;
+
     this.nextLevel = nextLevel;
-    this.words = level.getContent();
+    this.words =
+      this.level.mode === 4 ? Array.from(Array(25).keys()) : level.getContent();
 
     this.gameOver = false;
     this.lose = false;
@@ -26,8 +29,6 @@ export default class Game {
     this.background = new Background(this);
     this.inputHandler = new InputHandler(this);
     this.userInterface = new UserInterface(this);
-
-    UserInterface.UI.classList.remove("invisible");
 
     this.keys = [];
 
@@ -44,11 +45,10 @@ export default class Game {
     this.speed = 1;
 
     this.enemyTimer = 0;
-    this.enemyInterval = 2000;
+    this.enemyInterval = this.level.mode === 4 ? 10000 : 2000;
   }
 
   update(deltaTime) {
-    this.words.pop();
     if (this.player.y > 0 - this.player.height * 2 && this.gameOver) {
       this.player.y -= 3;
       if (this.player.y <= 0 - this.player.height) {
@@ -59,6 +59,7 @@ export default class Game {
           win: this.win,
         };
         this.level = null;
+
         this.userInterface.clear();
         return state;
       }
@@ -69,7 +70,6 @@ export default class Game {
       this.win = true;
       this.enemies.forEach((enemy) => {
         enemy.die();
-        enemy.markedForDeletion = true;
       });
     }
     this.gameOver = this.lose == true || this.win === true;
@@ -104,7 +104,6 @@ export default class Game {
           this.focus = null;
         }
         enemy.die();
-        enemy.markedForDeletion = true;
         if (this.player.air > 0) {
           this.player.air--;
           if (!this.gameOver) {
@@ -120,8 +119,6 @@ export default class Game {
           projectile.explode();
           enemy.die();
           this.userInterface.displayScoreMessage(enemy);
-          projectile.markedForDeletion = true;
-          enemy.markedForDeletion = true;
         }
       });
       if (enemy.markedForDeletion === true) {
@@ -134,7 +131,10 @@ export default class Game {
     });
     this.enemies = this.enemies.filter((enemy) => !enemy.markedForDeletion);
 
-    const boardClear = this.enemies.length === 0;
+    const boardClear =
+      this.level.mode === 4
+        ? this.enemies.length === 0
+        : this.enemies.length < 2;
     const spawnTimerElapsed = this.enemyTimer > this.enemyInterval;
 
     if ((boardClear || spawnTimerElapsed) && !this.gameOver) {
@@ -166,11 +166,38 @@ export default class Game {
   }
 
   addEnemy() {
-    const indexOfLastWord = this.words.length - 1;
-    const word = Word.Next(this, indexOfLastWord);
-    if (!word) return;
-    const creature = Enemy.Next(this, word);
-    this.enemies.push(creature);
+    if (this.level.mode === 4) {
+      const performCalc = {
+        "/": (firstInput, secondInput) => firstInput / secondInput,
+        "*": (firstInput, secondInput) => firstInput * secondInput,
+        "+": (firstInput, secondInput) => firstInput + secondInput,
+        "-": (firstInput, secondInput) => firstInput - secondInput,
+      };
+
+      const operators = ["+", "-", "/", "*"];
+      const num1 = Helper.randInt(0, 9);
+      const num2 = Helper.randInt(0, 9);
+      const operator = operators[Helper.randInt(0, operators.length - 1)];
+
+      const displayText = `${num1}${operator}${num2}`;
+
+      const result = performCalc[operator](num1, num2);
+
+      if (result === Infinity || result === NaN) return;
+      console.log(result);
+      const answer = Number.isInteger(result) ? result : result.toFixed(2);
+      console.log(answer);
+
+      const creature = Enemy.NextMath(this, displayText);
+      creature.text = answer.toString();
+      this.enemies.push(creature);
+    } else {
+      const indexOfLastWord = this.words.length - 1;
+      const word = Word.Next(this, indexOfLastWord);
+      if (!word) return;
+      const creature = Enemy.Next(this, word);
+      this.enemies.push(creature);
+    }
   }
 
   findFocus(key) {
