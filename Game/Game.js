@@ -167,6 +167,7 @@ export default class Game {
 
   addEnemy() {
     if (this.level.mode === 4) {
+      const operators = ["/", "*", "+", "-"];
       const performCalc = {
         "/": (firstInput, secondInput) => firstInput / secondInput,
         "*": (firstInput, secondInput) => firstInput * secondInput,
@@ -174,19 +175,17 @@ export default class Game {
         "-": (firstInput, secondInput) => firstInput - secondInput,
       };
 
-      const operators = ["+", "-", "/", "*"];
       const num1 = Helper.randInt(0, 9);
-      const num2 = Helper.randInt(0, 9);
       const operator = operators[Helper.randInt(0, operators.length - 1)];
+      const num2 = Helper.randInt(0, 9);
 
       const displayText = `${num1}${operator}${num2}`;
 
       const result = performCalc[operator](num1, num2);
 
       if (result === Infinity || result === NaN) return;
-      console.log(result);
+
       const answer = Number.isInteger(result) ? result : result.toFixed(2);
-      console.log(answer);
 
       const creature = Enemy.NextMath(this, displayText);
       creature.text = answer.toString();

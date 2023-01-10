@@ -90,22 +90,20 @@ export default class Enemy {
       (this.width * widthPercentage) / 2 + this.x * widthPercentage + "px";
     this.element.style.color = this.focused ? "lime" : "whitesmoke";
     if (this.game.level.mode === 4) {
-
-    }
-    else{
+    } else {
       this.element.innerHTML = this.text.replace(this.completedText, "");
       this.displayText = this.text.replace(this.completedText, "");
     }
   }
   static NextMath(game, value) {
-    return new Lionfish(game, value);
+    return new Whale(game, value);
   }
 
   static Next(game, value) {
     const tier1 = [HiveWhale, Goldfish, LuckyFish, Jellyfish];
     const tier2 = [Seahorse, Turtle];
     const tier3 = [Angler1, Angler2];
-    const tier4 = [Lionfish, Shark];
+    const tier4 = [Lionfish, Shark, Whale];
 
     const bosstier = [Angela, Chtullie];
 
@@ -204,6 +202,15 @@ class Shark extends Fish {
     const image = document.getElementById("shark");
     super(game, word, new SpriteSheet(image, width, height, 7, 0, 20));
     this.speedX = -1.5;
+  }
+}
+class Whale extends Fish {
+  constructor(game, word) {
+    const width = 469;
+    const height = 234;
+    const image = document.getElementById("whale");
+    super(game, word, new SpriteSheet(image, width, height, 5, 13, 20, true));
+    this.speedX = -0.5;
   }
 }
 class Mech extends Enemy {
@@ -338,7 +345,7 @@ class Octopus extends Enemy {
     }
   }
 }
-export class Chtullie extends Octopus {
+class Chtullie extends Octopus {
   constructor(game, word) {
     const width = 500;
     const height = 500;

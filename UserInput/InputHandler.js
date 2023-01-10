@@ -12,6 +12,10 @@ export default class InputHandler {
           this.answer += e.key;
           UserInterface.Crosshair.innerHTML = this.answer;
         }
+        if (e.key === "Backspace") {
+          this.answer = this.answer.substring(0, this.answer.length - 1);
+          UserInterface.Crosshair.innerHTML = this.answer;
+        }
         if (e.key === "Enter") {
           const enemy = this.game.enemies.find(
             (enemy) => enemy.text === this.answer
@@ -23,6 +27,7 @@ export default class InputHandler {
           this.answer = "";
           UserInterface.Crosshair.innerHTML = "";
         }
+
         if (game.keys.indexOf(e.key) > -1) {
           this.game.keys.splice(game.keys.indexOf(e.key), 1);
         }
