@@ -49,6 +49,7 @@ export default class Game {
   }
 
   update(deltaTime) {
+    this.words.pop();
     if (this.player.y > 0 - this.player.height * 2 && this.gameOver) {
       this.player.y -= 3;
       if (this.player.y <= 0 - this.player.height) {
@@ -167,6 +168,49 @@ export default class Game {
 
   addEnemy() {
     if (this.level.mode === 4) {
+      const modes = {
+        0: {
+          operators: ["+"],
+          num1: Helper.randInt(0, 9),
+          num2: Helper.randInt(0, 9),
+        },
+        1: {
+          operators: ["+", "-"],
+          num1: Helper.randInt(0, 9),
+          num2: Helper.randInt(0, 9),
+        },
+        2: {
+          operators: ["*"],
+          num1: Helper.randInt(0, 9),
+          num2: Helper.randInt(0, 9),
+        },
+        3: {
+          operators: ["/"],
+          num1: Helper.randInt(0, 9),
+          num2: Helper.randInt(0, 9),
+        },
+        4: {
+          operators: ["/", "*", "+", "-"],
+          num1: Helper.randInt(0, 9),
+          num2: Helper.randInt(0, 9),
+        },
+        5: {
+          operators: ["+"],
+          num1: Helper.randInt(0, 100),
+          num2: Helper.randInt(0, 100)
+        },
+        6: {
+          operators: ["-"],
+          num1: Helper.randInt(0, 100),
+          num2: Helper.randInt(0, 100)
+        },
+        7: {
+          operators: ["+", "-"],
+          num1: Helper.randInt(0, 100),
+          num2: Helper.randInt(0, 100)
+        },
+      };
+
       const operators = ["/", "*", "+", "-"];
       const performCalc = {
         "/": (firstInput, secondInput) => firstInput / secondInput,
@@ -174,23 +218,35 @@ export default class Game {
         "+": (firstInput, secondInput) => firstInput + secondInput,
         "-": (firstInput, secondInput) => firstInput - secondInput,
       };
+      const difficulty = Math.floor(this.level.name / 5);
 
-      const num1 = Helper.randInt(0, 9);
-      const operator = operators[Helper.randInt(0, operators.length - 1)];
-      const num2 = Helper.randInt(0, 9);
+      let num1;
+      let operator;
+      let num2;
+      if (modes[difficulty]) {
+        num1 = modes[difficulty].num1;
+        operator =
+          modes[difficulty].operators[
+            Helper.randInt(0, modes[difficulty].operators.length - 1)
+          ];
+        num2 = modes[difficulty].num2;
+      } else {
+        num1 = Helper.randInt(0, 9);
+        operator = operators[Helper.randInt(0, operators.length - 1)];
+        num2 = Helper.randInt(0, 9);
+      }
 
       const displayText = `${num1}${operator}${num2}`;
 
       const result = performCalc[operator](num1, num2);
 
       if (result === Infinity || result === NaN) return;
-
       const answer = Number.isInteger(result) ? result : result.toFixed(2);
+      console.log(displayText, "=" + answer);
 
       const creature = Enemy.NextMath(this, displayText);
       creature.text = answer.toString();
       this.enemies.push(creature);
-      
     } else {
       const indexOfLastWord = this.words.length - 1;
       const word = Word.Next(this, indexOfLastWord);

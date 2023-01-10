@@ -4,7 +4,7 @@ import Game from "../Game/Game.js";
 export default class MapInputHandler {
   constructor(map) {
     this.map = map;
-    this.speed = 3;
+    this.speed = 10;
     this.keys = {
       w: { pressed: false },
       a: { pressed: false },
