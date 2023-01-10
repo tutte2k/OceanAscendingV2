@@ -4,7 +4,7 @@ import Game from "../Game/Game.js";
 export default class MapInputHandler {
   constructor(map) {
     this.map = map;
-    this.speed = 3;
+    this.speed = window.location.href.includes("5500") ? 15 : 3;
     this.keys = {
       w: { pressed: false },
       a: { pressed: false },
@@ -73,7 +73,9 @@ export default class MapInputHandler {
       let completedlevel;
       if (Collision.check(this.map.player, level, 0, 0)) {
         completedlevel =
-          this.map.dataSource.getStore().completedLevels.mode[level.mode][level.name];
+          this.map.dataSource.getStore().completedLevels.mode[level.mode][
+            level.name
+          ];
         UserInterface.displayLevelInfo(completedlevel, level);
       }
     }

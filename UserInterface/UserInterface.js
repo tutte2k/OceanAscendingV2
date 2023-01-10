@@ -1,5 +1,6 @@
 import FloatingMessage from "./FloatingMessage.js";
 import Particle from "../Environment/Particle.js";
+import Configuration from "../Utils/Configuration.js";
 
 export default class UserInterface {
   static WordContainer = document.getElementById("words");
@@ -49,7 +50,7 @@ export default class UserInterface {
     UserInterface.Mine.innerHTML = this.game.player.ammo;
     UserInterface.Level.innerHTML = this.game.level.name;
     UserInterface.WordsLeft.innerHTML = this.game.words.length;
-    if (this.game.level.mode !== 4) {
+    if (Math.floor(this.game.level.mode) !== 4) {
       UserInterface.Crosshair.innerHTML =
         this.game.focus && this.game.focus.text.length != 1
           ? this.game.focus.displayText
@@ -127,8 +128,7 @@ export default class UserInterface {
   static displayLevelInfo(completedlevel, level) {
     if (completedlevel) {
       UserInterface.Info.innerHTML =
-        "Mode: " +
-        level.mode +
+        Configuration.ModeToName[level.mode] +
         "<br>Level: " +
         completedlevel.level +
         "<br>Score: " +
@@ -137,7 +137,7 @@ export default class UserInterface {
         level.maxScore;
     } else if (!level.locked) {
       UserInterface.Info.innerHTML =
-        "Mode: " + level.mode + "<br>Level: " + level.name;
+        Configuration.ModeToName[level.mode] + "<br>Level: " + level.name;
     }
   }
 

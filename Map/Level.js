@@ -9,8 +9,8 @@ export default class Level {
     this.content = content;
     this.name = number;
     this.mode = mode;
-    if (this.mode === 4) {
-      this.maxScore=1;
+    if (Math.floor(this.mode) === 4) {
+      this.maxScore=25;
     } else {
       this.words = this.getContent();
       this.maxScore = 0;
@@ -19,7 +19,7 @@ export default class Level {
   }
   draw(ctx) {
     if (!this.locked) {
-      ctx.font = "24px serif";
+      ctx.font = "26px serif";
       ctx.fillStyle = "white";
       const icon = this.locked === false ? "⭐" : "🚫";
       ctx.fillText(icon, this.position.x, this.position.y + 30);

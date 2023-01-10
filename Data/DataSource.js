@@ -1,19 +1,31 @@
 export default class DataSource {
   constructor() {
-    this.item = "alpha1"
+    this.item = "alpha2";
   }
   getStore() {
     let storage = JSON.parse(localStorage.getItem(this.item));
     if (storage) return storage;
     return {
       cash: 0,
-      completedLevels: { mode: { 0: [], 2: [], 3: [], 4: [], 6: [] } },
+      completedLevels: {
+        mode: {
+          0: [],
+          2: [],
+          3: [],
+          4: [],
+          4.1: [],
+          4.2: [],
+          4.3: [],
+          4.4: [],
+          6: [],
+        },
+      },
       shop: { airSlot: 1, airReg: 0, mineSlot: 0, mineReg: 0 },
     };
   }
-  
+
   setStore(store) {
-    localStorage.setItem(this.item , JSON.stringify(store));
+    localStorage.setItem(this.item, JSON.stringify(store));
   }
 
   saveState(state) {

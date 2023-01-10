@@ -13,4 +13,5 @@ export default class Helper {
   static randomIndexInArr(arr){
     return Math.floor(Math.random() * arr.length)
   }
+
 }

@@ -14,7 +14,9 @@ export default class Enemy {
     this.text = word;
     this.completedText = "";
     this.displayText = this.text;
-    this.score = this.text.length;
+ 
+    this.score = Math.floor(this.game.level.mode) === 4 ? 1 : this.text.length;
+  
     this.focused = false;
     this.x = this.game.width;
 
@@ -89,7 +91,7 @@ export default class Enemy {
     this.element.style.left =
       (this.width * widthPercentage) / 2 + this.x * widthPercentage + "px";
     this.element.style.color = this.focused ? "lime" : "whitesmoke";
-    if (this.game.level.mode === 4) {
+    if (Math.floor(this.game.level.mode) === 4) {
     } else {
       this.element.innerHTML = this.text.replace(this.completedText, "");
       this.displayText = this.text.replace(this.completedText, "");
@@ -210,7 +212,7 @@ class Whale extends Fish {
     const height = 234;
     const image = document.getElementById("whale");
     super(game, word, new SpriteSheet(image, width, height, 5, 13, 20, true));
-    this.speedX = -0.5;
+    this.speedX = -1;
   }
 }
 class Mech extends Enemy {

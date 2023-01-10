@@ -3,7 +3,7 @@ import UserInterface from "../UserInterface/UserInterface.js";
 export default class InputHandler {
   constructor(game) {
     this.game = game;
-    if (this.game.level.mode === 4) {
+    if (Math.floor(this.game.level.mode) === 4) {
       this.answer = "";
       this.keys = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "-"];
       window.addEventListener("keyup", (e) => {
@@ -43,7 +43,6 @@ export default class InputHandler {
         }
         return false;
       });
-      window.addEventListener("keyup", (e) => {});
     } else {
       window.addEventListener("keydown", (e) => {
         e.preventDefault();
