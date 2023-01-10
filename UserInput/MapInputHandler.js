@@ -4,7 +4,7 @@ import Game from "../Game/Game.js";
 export default class MapInputHandler {
   constructor(map) {
     this.map = map;
-    this.speed = !window.location.href.includes("5500") ? 15 : map.dataSource.getStore().shop.mapSpeed;
+    this.speed = window.location.href.includes("5500") ? 15 : map.dataSource.getStore().shop.mapSpeed;
     this.keys = {
       w: { pressed: false },
       a: { pressed: false },
