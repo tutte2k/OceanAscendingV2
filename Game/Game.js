@@ -52,9 +52,13 @@ export default class Game {
   }
 
   update(deltaTime) {
+    if (this.player.y < this.height / 2 && this.player.maxSpeed === 0) {
+      this.player.y += 3;
+    }
     if (this.player.y > 0 - this.player.height * 2 && this.gameOver) {
       this.player.y -= 3;
       if (this.player.y <= 0 - this.player.height) {
+        UserInterface.GameContainer.hidden = true;
         const state = {
           level: this.level,
           nextLevel: this.nextLevel,
@@ -62,7 +66,6 @@ export default class Game {
           win: this.win,
         };
         this.level = null;
-
         this.userInterface.clear();
         return state;
       }

@@ -1,6 +1,6 @@
 export default class DataSource {
   constructor() {
-    this.item = "a1";
+    this.item = "a2";
   }
   getStore() {
     let storage = JSON.parse(localStorage.getItem(this.item));
@@ -20,7 +20,14 @@ export default class DataSource {
           6: [],
         },
       },
-      shop: { airSlot: 1, airReg: 0, mineSlot: 0, mineReg: 0 },
+      shop: {
+        airSlot: 1,
+        airReg: 0,
+        mineSlot: 0,
+        mineReg: 0,
+        diveSpeed: 0,
+        mapSpeed: 2,
+      },
     };
   }
 

@@ -8,7 +8,7 @@ export default class Player {
     this.x = 0 - this.width * 0.4;
     this.y = 100;
     this.speedY = 0;
-    this.maxSpeed = 3;
+    this.maxSpeed = this.game.store.shop.diveSpeed;
 
     this.air = this.game.store.shop.airSlot;
     this.maxAir = this.game.store.shop.airSlot;

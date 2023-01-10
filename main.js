@@ -2,9 +2,6 @@ import DataSource from "./Data/DataSource.js";
 import UserInterface from "./UserInterface/UserInterface.js";
 import Map from "./Map/Map.js";
 
-const spinner = document.getElementById("spinner");
-const container1 = document.getElementById("container1");
-
 const canvas = document.getElementById("canvas1");
 const ctx = canvas.getContext("2d");
 canvas.width = 2500;
@@ -14,8 +11,7 @@ const dataSource = new DataSource();
 const map = new Map(dataSource, canvas);
 
 window.addEventListener("load", function () {
-  spinner.hidden=true;
-  container1.hidden = false;
+  UserInterface.GameContainer.hidden = false;
   let game;
   let lastTime = 0;
   let state;
@@ -41,6 +37,8 @@ window.addEventListener("load", function () {
       map.draw(ctx);
       map.moving = true;
       map.player.moving = false;
+      if (UserInterface.GameContainer.hidden)
+        UserInterface.GameContainer.hidden = false;
       game = map.inputHandler.handle(dataSource);
     }
     window.requestAnimationFrame(animate);

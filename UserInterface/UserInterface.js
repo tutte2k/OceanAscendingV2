@@ -3,6 +3,7 @@ import Particle from "../Environment/Particle.js";
 import Configuration from "../Utils/Configuration.js";
 
 export default class UserInterface {
+  static GameContainer = document.getElementById("container1");
   static WordContainer = document.getElementById("words");
   static UI = document.getElementById("ui");
   static Mine = document.getElementById("mines");
@@ -16,6 +17,7 @@ export default class UserInterface {
   static Info = document.getElementById("info");
   static Score = document.getElementById("score");
   static Shop = document.getElementById("shop");
+
   static ShopContent = {
     airSlot: {
       price: 10,
@@ -37,8 +39,17 @@ export default class UserInterface {
       current: document.getElementById("currentMineReg"),
       priceElement: document.getElementById("mineRegPrice"),
     },
+    diveSpeed: {
+      price: 50,
+      current: document.getElementById("currentDiveSpeed"),
+      priceElement: document.getElementById("diveSpeedPrice"),
+    },
+    mapSpeed: {
+      price: 100,
+      current: document.getElementById("currentMapSpeed"),
+      priceElement: document.getElementById("mapSpeedPrice"),
+    },
   };
-
   constructor(game) {
     UserInterface.UI.classList.remove("invisible");
     this.game = game;
@@ -56,9 +67,7 @@ export default class UserInterface {
           ? this.game.focus.displayText
           : "";
     }
-
     UserInterface.Score.innerHTML = this.game.score;
-
     if (this.game.gameOver) {
       let message1;
       let message2;
@@ -144,12 +153,21 @@ export default class UserInterface {
   static setUpShop(dataSource) {
     const store = dataSource.getStore();
     UserInterface.setCash(store["cash"]);
+
     UserInterface.ShopContent.airSlot.current.innerHTML = store.shop.airSlot;
     UserInterface.ShopContent.airReg.current.innerHTML =
       30 - store.shop.airReg * 2 + " seconds";
     UserInterface.ShopContent.mineReg.current.innerHTML =
       30 - store.shop.mineReg * 2 + " seconds";
     UserInterface.ShopContent.mineSlot.current.innerHTML = store.shop.mineSlot;
+
+    UserInterface.ShopContent.diveSpeed.current.innerHTML = store.shop.diveSpeed;
+    UserInterface.ShopContent.diveSpeed.priceElement.innerHTML =
+      UserInterface.ShopContent.diveSpeed.price;
+    UserInterface.ShopContent.mapSpeed.current.innerHTML = store.shop.mapSpeed;
+        UserInterface.ShopContent.mapSpeed.priceElement.innerHTML =
+      UserInterface.ShopContent.mapSpeed.price;
+
     UserInterface.ShopContent.airSlot.priceElement.innerHTML =
       UserInterface.ShopContent.airSlot.price;
     UserInterface.ShopContent.airReg.priceElement.innerHTML =
