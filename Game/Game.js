@@ -184,7 +184,7 @@ export default class Game {
       let num2;
 
       if (this.level.mode === 4.4) {
-        const level = this.level.name === 0 ? 1 : this.level.name;
+        const level = this.level.name < 3 ? 2 : this.level.name;
         difficulty = Math.floor(level / 2) * 10;
         let numerator = Math.floor(Math.random() * difficulty) + 1;
         let denominator = Math.floor(Math.random() * difficulty) + 1;
