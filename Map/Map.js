@@ -84,6 +84,8 @@ export default class Map {
       this.divLevelsArray[this.divLevelsArray.length - 1].locked === false
     ) {
       this.mathLevelsArray[0].locked = false;
+    } else {
+      this.mathLevelsArray[0].locked = true;
     }
 
     this.levelsArray = [
