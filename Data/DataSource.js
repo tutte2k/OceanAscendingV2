@@ -1,7 +1,9 @@
 export default class DataSource {
-  constructor() {}
+  constructor() {
+    this.item = "alpha1"
+  }
   getStore() {
-    let storage = JSON.parse(localStorage.getItem("datastore"));
+    let storage = JSON.parse(localStorage.getItem(this.item));
     if (storage) return storage;
     return {
       cash: 0,
@@ -9,9 +11,11 @@ export default class DataSource {
       shop: { airSlot: 1, airReg: 0, mineSlot: 0, mineReg: 0 },
     };
   }
+  
   setStore(store) {
-    localStorage.setItem("datastore", JSON.stringify(store));
+    localStorage.setItem(this.item , JSON.stringify(store));
   }
+
   saveState(state) {
     const store = this.getStore();
     let earnedCash;

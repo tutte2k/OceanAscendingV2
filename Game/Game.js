@@ -190,6 +190,7 @@ export default class Game {
       const creature = Enemy.NextMath(this, displayText);
       creature.text = answer.toString();
       this.enemies.push(creature);
+      
     } else {
       const indexOfLastWord = this.words.length - 1;
       const word = Word.Next(this, indexOfLastWord);
