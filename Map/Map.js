@@ -43,11 +43,14 @@ export default class Map {
         down: document.getElementById("playerDown"),
         left: document.getElementById("playerLeft"),
         right: document.getElementById("playerRight"),
+
+        swimIdle: document.getElementById("playerSwimIdle"),
         swimUp: document.getElementById("playerSwimUp"),
         swimDown: document.getElementById("playerSwimDown"),
         swimLeft: document.getElementById("playerSwimLeft"),
         swimRight: document.getElementById("playerSwimRight"),
       },
+      swimFrames: { max: 12 },
       swimming: false,
     });
 

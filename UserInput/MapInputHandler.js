@@ -4,7 +4,9 @@ import Game from "../Game/Game.js";
 export default class MapInputHandler {
   constructor(map) {
     this.map = map;
-    this.speed = window.location.href.includes("5500") ? 15 : map.dataSource.getStore().shop.mapSpeed;
+    this.speed = !window.location.href.includes("5500")
+      ? 15
+      : map.dataSource.getStore().shop.mapSpeed;
     this.keys = {
       w: { pressed: false },
       a: { pressed: false },
@@ -109,6 +111,10 @@ export default class MapInputHandler {
       this.map.player.image = this.map.player.swimming
         ? this.map.player.sprites.swimUp
         : this.map.player.sprites.up;
+      this.map.player.width = this.map.player.swimming
+        ? this.map.player.image.width / 12
+        : this.map.player.image.width / 4;
+      this.map.player.frames.max = this.map.player.swimming ? 12 : 4;
 
       for (let i = 0; i < this.map.landTiles.length; i++) {
         const landtile = this.map.landTiles[i];
@@ -137,6 +143,10 @@ export default class MapInputHandler {
       this.map.player.image = this.map.player.swimming
         ? this.map.player.sprites.swimDown
         : this.map.player.sprites.down;
+              this.map.player.width = this.map.player.swimming
+        ? this.map.player.image.width / 12
+        : this.map.player.image.width / 4;
+      this.map.player.frames.max = this.map.player.swimming ? 12 : 4;
       for (let i = 0; i < this.map.landTiles.length; i++) {
         const landtile = this.map.landTiles[i];
         if (Collision.check(this.map.player, landtile, 0, -this.speed)) {
@@ -160,10 +170,16 @@ export default class MapInputHandler {
       }
     } else if (this.keys.a.pressed && this.lastKey === "a") {
       UserInterface.Info.innerHTML = "";
+      
       this.map.player.moving = true;
       this.map.player.image = this.map.player.swimming
         ? this.map.player.sprites.swimLeft
         : this.map.player.sprites.left;
+              this.map.player.width = this.map.player.swimming
+        ? this.map.player.image.width / 12
+        : this.map.player.image.width / 4;
+      this.map.player.frames.max = this.map.player.swimming ? 12 : 4;
+
       for (let i = 0; i < this.map.boundaries.length; i++) {
         const boundary = this.map.boundaries[i];
         if (Collision.check(this.map.player, boundary, this.speed, 0)) {
@@ -178,10 +194,16 @@ export default class MapInputHandler {
       }
     } else if (this.keys.d.pressed && this.lastKey === "d") {
       UserInterface.Info.innerHTML = "";
+
       this.map.player.moving = true;
       this.map.player.image = this.map.player.swimming
         ? this.map.player.sprites.swimRight
         : this.map.player.sprites.right;
+        this.map.player.width = this.map.player.swimming
+        ? this.map.player.image.width / 12
+        : this.map.player.image.width / 4;
+      this.map.player.frames.max = this.map.player.swimming ? 12 : 4;
+
       for (let i = 0; i < this.map.boundaries.length; i++) {
         const boundary = this.map.boundaries[i];
         if (Collision.check(this.map.player, boundary, -this.speed, 0)) {

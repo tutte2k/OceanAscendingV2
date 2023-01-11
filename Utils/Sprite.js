@@ -20,7 +20,14 @@ export default class Sprite {
       this.image.width / this.frames.max,
       this.image.height
     );
-    if (!this.moving) return;
+
+    if (this.moving && this.swimming === false) {
+      this.image = this.sprites.down
+    } else if (this.swimming === true) {
+      this.image = this.sprites.swimIdle;
+    }else if(!this.moving){
+      return
+    }
     if (this.frames.max > 1) {
       this.frames.elapsed++;
     }
