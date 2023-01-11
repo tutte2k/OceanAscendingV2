@@ -7,7 +7,7 @@ export default class Boundary {
     this.height = 5;
   }
   draw(ctx) {
-    ctx.fillStyle = "rgba(255,0,0)";
+    ctx.fillStyle = "rgba(255,0,0,0)";
     ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
   }
 }

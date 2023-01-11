@@ -7,7 +7,7 @@ export default class LandTile {
       this.height = 5;
     }
     draw(ctx) {
-        ctx.fillStyle = "rgba(0,255,0)";
+        ctx.fillStyle = "rgba(0,255,0,0)";
         ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
     }
   }
