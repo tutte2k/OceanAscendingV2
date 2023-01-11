@@ -199,7 +199,7 @@ export default class Game {
         operator = "/";
         num2 = denominator;
       } else if (Configuration.MathModes[this.level.mode]) {
-        num1 = Configuration.MathModes[this.level.mode][difficulty].num1;
+        num1 = Configuration.MathModes[this.level.mode][difficulty].num1();
         operator =
           Configuration.MathModes[this.level.mode][difficulty].operators[
             Helper.randInt(
@@ -208,7 +208,7 @@ export default class Game {
                 .length - 1
             )
           ];
-        num2 = Configuration.MathModes[this.level.mode][difficulty].num2;
+        num2 = Configuration.MathModes[this.level.mode][difficulty].num2();
       } else {
         num1 = Helper.randInt(0, 99);
         operator = operators[Helper.randInt(0, operators.length - 1)];
