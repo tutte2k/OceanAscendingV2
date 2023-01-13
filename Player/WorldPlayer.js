@@ -5,7 +5,14 @@ export default class WorldPlayer {
     const Swim = [80, 80, 11, 0, 25];
     this.sprites = {
       walk: {
-        idle: new SpriteSheet(document.getElementById("playerIdle"), 80,80,1,0,0),
+        idle: new SpriteSheet(
+          document.getElementById("playerIdle"),
+          80,
+          80,
+          1,
+          0,
+          0
+        ),
         up: new SpriteSheet(document.getElementById("playerUp"), ...Walk),
         down: new SpriteSheet(document.getElementById("playerDown"), ...Walk),
         left: new SpriteSheet(document.getElementById("playerLeft"), ...Walk),
