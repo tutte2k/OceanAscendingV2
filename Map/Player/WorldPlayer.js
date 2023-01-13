@@ -1,4 +1,4 @@
-import SpriteSheet from "../Utils/SpriteSheet.js";
+import SpriteSheet from "../../Utils/SpriteSheet.js";
 export default class WorldPlayer {
   constructor(canvas, dataSource) {
     const Walk = [80, 80, 13, 0, 25];

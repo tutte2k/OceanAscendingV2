@@ -1,5 +1,5 @@
 import InputHandler from "./InputHandler.js";
-import UserInterface from "../UserInterface/UserInterface.js";
+import UserInterface from "../../UserInterface/UserInterface.js";
 
 export default class MathHandler extends InputHandler {
   constructor(game) {
@@ -7,7 +7,6 @@ export default class MathHandler extends InputHandler {
     this.answer = "";
     this.keys = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "-"];
     window.addEventListener("keyup", (e) => {
-      console.log(this.answer)
       e.preventDefault();
       if (this.keys.includes(e.key)) {
         this.answer += e.key;

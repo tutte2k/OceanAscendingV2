@@ -1,7 +1,7 @@
-import LettersHandler from "../UserInput/LettersHandler.js";
-import MathHandler from "../UserInput/MathHandler.js";
+import LettersHandler from "../Game/Input/LettersHandler.js"
+import MathHandler from "../Game/Input/MathHandler.js";
 import Helper from "../Utils/Helper.js";
-import Enemy from "../Enemy/Enemy.js";
+import Enemy from "../Game/Enemy/Enemy.js";
 import Word from "../Utils/Word.js";
 
 export default class Mode {

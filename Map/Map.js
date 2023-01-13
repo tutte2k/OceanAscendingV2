@@ -3,13 +3,13 @@ import { Words10K } from "../Data/Words.js";
 import { TibiaWords } from "../Data/Tibia.js";
 import { SpecialMode } from "../Data/Special.js";
 import { SvenskaMode } from "../Data/Svenska.js";
-import Boundary from "./Boundary.js";
-import LandTile from "./LandTile.js";
-import Level from "./Level.js";
+import Boundary from "./Environment/Boundary.js";
+import LandTile from "./Environment/LandTile.js";
+import Level from "../Levels/Level.js";
 import Sprite from "../Utils/Sprite.js";
-import MapInputHandler from "../UserInput/MapInputHandler.js";
+import MapHandler from "./Input/MapHandler.js";
 import UserInterface from "../UserInterface/UserInterface.js";
-import WorldPlayer from "../Player/WorldPlayer.js";
+import WorldPlayer from "./Player/WorldPlayer.js";
 import {
   AddMode,
   BeyondMode,
@@ -20,7 +20,8 @@ import {
   SubtractMode,
   SwedishMode,
   TibiaMode,
-} from "./Mode.js";
+} from "../Levels/Mode.js";
+
 
 export default class Map {
   constructor(dataSource, canvas) {
@@ -102,7 +103,7 @@ export default class Map {
       ...this.landTiles,
     ];
     this.moving = true;
-    this.inputHandler = new MapInputHandler(this);
+    this.inputHandler = new MapHandler(this);
   }
   init() {
     const tibiaContent = Level.setContent(TibiaWords, 50);
@@ -110,7 +111,7 @@ export default class Map {
     const specialContent = Level.setContent(SpecialMode, 50);
     const svenskaContent = Level.setContent(SvenskaMode, 275);
     const MathContent = Array.from(Array(100).keys());
-    
+
     mapData.forEach((row, i) => {
       row.forEach((symbol, j) => {
         if (symbol === 1025) {

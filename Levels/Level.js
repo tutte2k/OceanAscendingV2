@@ -22,6 +22,7 @@ export default class Level {
       this.words.forEach((word) => (this.maxScore += word.length));
     }
   }
+  
   draw(ctx) {
     if (!this.locked) {
       ctx.font = "26px serif";
@@ -30,9 +31,11 @@ export default class Level {
       ctx.fillText(icon, this.position.x, this.position.y + 30);
     }
   }
+
   getContent() {
     return this.content.slice();
   }
+
   static setContent(contentArr, levelSize, numberOfLevels = 1000) {
     const levelContents = [];
     for (let i = 0; i < numberOfLevels; i++) {

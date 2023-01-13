@@ -1,6 +1,5 @@
 import FloatingMessage from "./FloatingMessage.js";
-import Particle from "../Environment/Particle.js";
-import Mode from "../Map/Mode.js";
+import Particle from "../Game/Environment/Particle.js";
 
 export default class UserInterface {
   static GameContainer = document.getElementById("container1");

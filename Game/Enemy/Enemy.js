@@ -1,7 +1,7 @@
-import SpriteSheet from "../Utils/SpriteSheet.js";
-import Helper from "../Utils/Helper.js";
+import SpriteSheet from "../../Utils/SpriteSheet.js";
+import Helper from "../../Utils/Helper.js";
 import Particle from "../Environment/Particle.js";
-import Word from "../Utils/Word.js";
+import Word from "../../Utils/Word.js";
 import {
   SmokeExplosion,
   FireExplosion,

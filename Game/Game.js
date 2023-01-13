@@ -1,6 +1,6 @@
-import Background from "../Environment/Background.js";
+import Background from "./Environment/Background.js";
 import UserInterface from "../UserInterface/UserInterface.js";
-import Player from "../Player/Player.js";
+import Player from "./Player/Player.js";
 
 export default class Game {
   constructor(width, height, level, nextLevel, dataSource) {
@@ -39,7 +39,6 @@ export default class Game {
     this.enemies = [];
     this.particles = [];
     this.explosions = [];
-
     this.floatingMessages = [];
 
     this.speed = 1;

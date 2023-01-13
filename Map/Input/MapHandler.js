@@ -1,7 +1,7 @@
-import Collision from "../Utils/Collision.js";
-import UserInterface from "../UserInterface/UserInterface.js";
-import Game from "../Game/Game.js";
-export default class MapInputHandler {
+import Collision from "../../Utils/Collision.js";
+import UserInterface from "../../UserInterface/UserInterface.js";
+import Game from "../../Game/Game.js";
+export default class MapHandler {
   constructor(map) {
     this.map = map;
     this.keys = {
@@ -13,7 +13,6 @@ export default class MapInputHandler {
       q: { pressed: false },
     };
     this.lastKey = "";
-
     window.addEventListener("keydown", (e) => {
       e.preventDefault();
       switch (e.key) {
@@ -117,6 +116,7 @@ export default class MapInputHandler {
         0,
         this.map.player.speed
       );
+
       this.map.moving = Collision.checkAll(
         this.map.boundaries,
         this.map.player,
@@ -128,6 +128,12 @@ export default class MapInputHandler {
         this.map.movables.forEach(
           (movable) => (movable.position.y += this.map.player.speed)
         );
+      } else if (!this.map.player.swimming) {
+        this.map.player.sprite = this.map.player.sprites.idle.up;
+        this.map.player.moving = false;
+      } else if (this.map.player.swimming) {
+        this.map.player.sprite = this.map.player.sprites.idle.swim;
+        this.map.player.moving = false;
       }
     } else if (this.keys.s.pressed && this.lastKey === "s") {
       UserInterface.Info.innerHTML = "";
@@ -151,11 +157,17 @@ export default class MapInputHandler {
         this.map.movables.forEach(
           (movable) => (movable.position.y -= this.map.player.speed)
         );
+      } else if (!this.map.player.swimming) {
+        this.map.player.sprite = this.map.player.sprites.idle.down;
+        this.map.player.moving = false;
+      } else if (this.map.player.swimming) {
+        this.map.player.sprite = this.map.player.sprites.idle.swim;
+        this.map.player.moving = false;
       }
     } else if (this.keys.a.pressed && this.lastKey === "a") {
       UserInterface.Info.innerHTML = "";
-      this.map.player.moving = true;
 
+      this.map.player.moving = true;
       this.map.player.sprite = this.map.player.state.left;
 
       this.map.moving = Collision.checkAll(
@@ -169,6 +181,12 @@ export default class MapInputHandler {
         this.map.movables.forEach(
           (movable) => (movable.position.x += this.map.player.speed)
         );
+      } else if (!this.map.player.swimming) {
+        this.map.player.sprite = this.map.player.sprites.idle.left;
+        this.map.player.moving = false;
+      } else if (this.map.player.swimming) {
+        this.map.player.sprite = this.map.player.sprites.idle.swim;
+        this.map.player.moving = false;
       }
     } else if (this.keys.d.pressed && this.lastKey === "d") {
       UserInterface.Info.innerHTML = "";
@@ -186,6 +204,12 @@ export default class MapInputHandler {
         this.map.movables.forEach(
           (movable) => (movable.position.x -= this.map.player.speed)
         );
+      } else if (!this.map.player.swimming) {
+        this.map.player.sprite = this.map.player.sprites.idle.right;
+        this.map.player.moving = false;
+      } else if (this.map.player.swimming) {
+        this.map.player.sprite = this.map.player.sprites.idle.swim;
+        this.map.player.moving = false;
       }
     }
   }
