@@ -1,11 +1,11 @@
 import SpriteSheet from "../Utils/SpriteSheet.js";
 export default class WorldPlayer {
   constructor(canvas, dataSource) {
-    const Walk = [80, 80, 13, 0, 20];
+    const Walk = [80, 80, 13, 0, 25];
     const Swim = [80, 80, 11, 0, 25];
     this.sprites = {
       walk: {
-        idle: new SpriteSheet(document.getElementById("playerDown"), ...Walk),
+        idle: new SpriteSheet(document.getElementById("playerIdle"), 80,80,1,0,0),
         up: new SpriteSheet(document.getElementById("playerUp"), ...Walk),
         down: new SpriteSheet(document.getElementById("playerDown"), ...Walk),
         left: new SpriteSheet(document.getElementById("playerLeft"), ...Walk),
@@ -47,7 +47,7 @@ export default class WorldPlayer {
       this.state = this.sprites.walk;
       this.sprite = this.state.idle;
     }
-    if (!this.moving && this.swimming) {
+    if (!this.moving) {
       this.sprite = this.state.idle;
     }
     this.sprite.draw(ctx, this.position.x, this.position.y);
