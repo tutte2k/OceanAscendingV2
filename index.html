@@ -69,28 +69,28 @@
             ></button>
           </div>
           <div class="modal-body">
-            <a
-              href="mailto:tom.johansson@live.se?subject=Feedback&body=Message"
-            >
-              Send Feedback/Contact
-            </a>
-            <br />
-            <br />
-            Move around with wasd!<br />
-            <br />
-            Hold 'q' to open up shop!<br />
-            <br />
-            Enter levels with 'return'!<br />
-            <br />
-            Arrow up and down for movement below surface!<br />
-            <br />
-            Complete levels to get cash!<br />
-            <br />
-            North: Math (submit your answers with 'return'!)<br />
-            East: Tibia Mode, Special Mode<br />
-            South-East: English 10k <br />
-            West: Swedish 120k<br />
-            <br />
+            <ul>
+              <li>
+                <a
+                  href="mailto:tom.johansson@live.se?subject=Feedback&body=Message"
+                >
+                  Send Feedback/Contact
+                </a>
+              </li>
+              <li>Move around with wasd!</li>
+              <li>Hold 'q' to open up shop!</li>
+              <li>Enter levels with 'return'!</li>
+              <li>Arrow up and down for movement below surface!</li>
+              <li>Complete levels to get cash!</li>
+              <li>Modes:</li>
+              <ul>
+                <li>North: Math (Submit your answers with 'return')</li>
+                <li>East: Tibia Mode, Expert Mode</li>
+                <li>South-East: English 10k</li>
+                <li>West: Swedish 120k</li>
+              </ul>
+            </ul>
+
             <a href="https://tutte2k.github.io/TypingGame-OceanAscending/">
               Like it? Try highscore mode
             </a>
@@ -160,13 +160,17 @@
               <td><span id="currentDiveSpeed"></span></td>
               <td>Diving Movement</td>
               <td>$<span id="diveSpeedPrice"></span></td>
-              <td><div id="diveSpeed" class="btn btn-sm btn-danger">Buy</div></td>
+              <td>
+                <div id="diveSpeed" class="btn btn-sm btn-danger">Buy</div>
+              </td>
             </tr>
             <tr>
               <td><span id="currentMapSpeed"></span></td>
               <td>Map Movement</td>
               <td>$<span id="mapSpeedPrice"></span></td>
-              <td><div id="mapSpeed" class="btn btn-sm btn-danger">Buy</div></td>
+              <td>
+                <div id="mapSpeed" class="btn btn-sm btn-danger">Buy</div>
+              </td>
             </tr>
           </table>
         </div>

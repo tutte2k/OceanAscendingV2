@@ -181,7 +181,6 @@ export class BeyondMode extends MathMode {
     const operator =
       MathMode.Operators[Helper.randInt(0, MathMode.Operators.length - 1)];
     const num2 = Helper.randInt(0, 99);
-
     const displayText = `${num1}${operator}${num2}`;
     const result = performCalc[operator](num1, num2);
     if (result === Infinity || result === NaN) return;

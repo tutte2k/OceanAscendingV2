@@ -27,7 +27,7 @@ export default class WorldPlayer {
     };
     this.state = this.sprites.idle;
     this.lastDirection = "down";
-    this.sprite = this.state[this.lastDirection]
+    this.sprite = this.state[this.lastDirection];
     this.width = this.sprite.width;
     this.height = this.sprite.height;
     this.position = {
@@ -36,9 +36,7 @@ export default class WorldPlayer {
     };
     this.moving = false;
     this.swimming = false;
-    this.speed = window.location.href.includes("5500")
-      ? 15
-      : dataSource.getStore().shop.mapSpeed;
+    this.speed = dataSource.getStore().shop.mapSpeed;
   }
   update(deltaTime) {
     this.sprite.update(deltaTime);
@@ -58,7 +56,7 @@ export default class WorldPlayer {
       if (this.swimming) {
         this.sprite = this.state.swim;
       } else {
-        this.sprite = this.state[this.lastDirection]
+        this.sprite = this.state[this.lastDirection];
       }
     }
     this.sprite.draw(ctx, this.position.x, this.position.y);
