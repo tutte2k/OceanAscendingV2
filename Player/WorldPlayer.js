@@ -1,8 +1,8 @@
 import SpriteSheet from "../Utils/SpriteSheet.js";
 export default class WorldPlayer {
   constructor(canvas, dataSource) {
-    const Walk = [80, 80, 3, 0, 8];
-    const Swim = [80, 80, 11, 0, 8];
+    const Walk = [80, 80, 13, 0, 20];
+    const Swim = [80, 80, 11, 0, 25];
     this.sprites = {
       walk: {
         idle: new SpriteSheet(document.getElementById("playerDown"), ...Walk),
@@ -29,7 +29,7 @@ export default class WorldPlayer {
     };
     this.moving = false;
     this.swimming = false;
-    this.speed = window.location.href.includes("5500")
+    this.speed = !window.location.href.includes("5500")
       ? 15
       : dataSource.getStore().shop.mapSpeed;
   }
@@ -47,7 +47,7 @@ export default class WorldPlayer {
       this.state = this.sprites.walk;
       this.sprite = this.state.idle;
     }
-    if (!this.moving) {
+    if (!this.moving && this.swimming) {
       this.sprite = this.state.idle;
     }
     this.sprite.draw(ctx, this.position.x, this.position.y);
