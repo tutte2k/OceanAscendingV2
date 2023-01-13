@@ -22,11 +22,15 @@ export default class Sprite {
     );
 
     if (this.moving && this.swimming === false) {
-      this.image = this.sprites.down
+      this.image = this.sprites.down;
     } else if (this.swimming === true) {
       this.image = this.sprites.swimIdle;
-    }else if(!this.moving){
-      return
+    } else if (this.swimming == false) {
+      this.image = this.sprites.down;
+      this.frames.max = 4;
+    }
+    if (!this.moving) {
+      return;
     }
     if (this.frames.max > 1) {
       this.frames.elapsed++;

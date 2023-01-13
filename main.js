@@ -34,12 +34,12 @@ window.addEventListener("load", function () {
       state = null;
       game = null;
     } else {
-      map.draw(ctx);
+      map.draw(ctx, deltaTime);
       map.moving = true;
       map.player.moving = false;
+      game = map.inputHandler.handle(deltaTime, ctx);
       if (UserInterface.GameContainer.hidden)
         UserInterface.GameContainer.hidden = false;
-      game = map.inputHandler.handle(dataSource);
     }
     window.requestAnimationFrame(animate);
   }

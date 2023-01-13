@@ -2,12 +2,14 @@ import SpriteSheet from "../Utils/SpriteSheet.js";
 import Projectile from "./Projectile.js";
 export default class Player {
   constructor(game) {
+
     this.game = game;
     this.width = 180;
     this.height = 187;
     this.x = 0 - this.width * 0.4;
     this.y = 100;
     this.speedY = 0;
+
     this.maxSpeed = this.game.store.shop.diveSpeed;
 
     this.air = this.game.store.shop.airSlot;
@@ -82,7 +84,6 @@ export default class Player {
     this.projectiles = this.projectiles.filter(
       (projectile) => !projectile.markedForDeletion
     );
-
     this.sprite.update(deltaTime);
   }
   draw(context) {
@@ -104,9 +105,9 @@ export default class Player {
     context.lineTo(50, 0);
     context.lineWidth = 3;
     context.stroke();
+
     this.projectiles.forEach((projectile) => projectile.draw(context));
     this.sprite.draw(context, this.x, this.y);
-
     if (this.game.focus) {
       context.beginPath();
       context.strokeStyle = "white";

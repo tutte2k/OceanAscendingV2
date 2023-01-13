@@ -4,9 +4,6 @@ import Game from "../Game/Game.js";
 export default class MapInputHandler {
   constructor(map) {
     this.map = map;
-    this.speed = !window.location.href.includes("5500")
-      ? 15
-      : map.dataSource.getStore().shop.mapSpeed;
     this.keys = {
       w: { pressed: false },
       a: { pressed: false },
@@ -16,9 +13,7 @@ export default class MapInputHandler {
       q: { pressed: false },
     };
     this.lastKey = "";
-    this.addEventListeners();
-  }
-  addEventListeners() {
+
     window.addEventListener("keydown", (e) => {
       e.preventDefault();
       switch (e.key) {
@@ -69,24 +64,25 @@ export default class MapInputHandler {
       }
     });
   }
+
   handle() {
     for (let i = 0; i < this.map.levelsArray.length; i++) {
       const level = this.map.levelsArray[i];
       let completedlevel;
       if (Collision.check(this.map.player, level, 0, 0)) {
         completedlevel =
-          this.map.dataSource.getStore().completedLevels.mode[level.mode][
+          this.map.dataSource.getStore().completedLevels.mode[level.mode.id][
             level.name
           ];
         UserInterface.displayLevelInfo(completedlevel, level);
       }
     }
-
     if (this.keys.q.pressed) {
       UserInterface.Shop.hidden = false;
     } else {
       UserInterface.Shop.hidden = true;
     }
+
     if (this.keys.enter.pressed) {
       UserInterface.Info.innerHTML = "";
       for (let i = 0; i < this.map.levelsArray.length; i++) {
@@ -107,113 +103,84 @@ export default class MapInputHandler {
 
     if (this.keys.w.pressed && this.lastKey === "w") {
       UserInterface.Info.innerHTML = "";
-      this.map.player.moving = true;
-      this.map.player.image = this.map.player.swimming
-        ? this.map.player.sprites.swimUp
-        : this.map.player.sprites.up;
-      this.map.player.width = this.map.player.swimming
-        ? this.map.player.image.width / 12
-        : this.map.player.image.width / 4;
-      this.map.player.frames.max = this.map.player.swimming ? 12 : 4;
 
-      for (let i = 0; i < this.map.landTiles.length; i++) {
-        const landtile = this.map.landTiles[i];
-        if (Collision.check(this.map.player, landtile, 0, this.speed)) {
-          this.map.player.swimming = false;
-          break;
-        } else {
-          this.map.player.swimming = true;
-        }
-      }
-      for (let i = 0; i < this.map.boundaries.length; i++) {
-        const boundary = this.map.boundaries[i];
-        if (Collision.check(this.map.player, boundary, 0, this.speed)) {
-          this.map.moving = false;
-          break;
-        }
-      }
+      this.map.player.moving = true;
+      this.map.player.sprite = this.map.player.state.up;
+
+      this.map.player.swimming = Collision.checkAll(
+        this.map.landTiles,
+        this.map.player,
+        0,
+        this.map.player.speed
+      );
+      this.map.moving = Collision.checkAll(
+        this.map.boundaries,
+        this.map.player,
+        0,
+        this.map.player.speed
+      );
+
       if (this.map.moving) {
         this.map.movables.forEach(
-          (movable) => (movable.position.y += this.speed)
+          (movable) => (movable.position.y += this.map.player.speed)
         );
       }
     } else if (this.keys.s.pressed && this.lastKey === "s") {
       UserInterface.Info.innerHTML = "";
       this.map.player.moving = true;
-      this.map.player.image = this.map.player.swimming
-        ? this.map.player.sprites.swimDown
-        : this.map.player.sprites.down;
-              this.map.player.width = this.map.player.swimming
-        ? this.map.player.image.width / 12
-        : this.map.player.image.width / 4;
-      this.map.player.frames.max = this.map.player.swimming ? 12 : 4;
-      for (let i = 0; i < this.map.landTiles.length; i++) {
-        const landtile = this.map.landTiles[i];
-        if (Collision.check(this.map.player, landtile, 0, -this.speed)) {
-          this.map.player.swimming = false;
-          break;
-        } else {
-          this.map.player.swimming = true;
-        }
-      }
-      for (let i = 0; i < this.map.boundaries.length; i++) {
-        const boundary = this.map.boundaries[i];
-        if (Collision.check(this.map.player, boundary, 0, -this.speed)) {
-          this.map.moving = false;
-          break;
-        }
-      }
+      this.map.player.sprite = this.map.player.state.down;
+
+      this.map.player.swimming = Collision.checkAll(
+        this.map.landTiles,
+        this.map.player,
+        0,
+        -this.map.player.speed
+      );
+      this.map.moving = Collision.checkAll(
+        this.map.boundaries,
+        this.map.player,
+        0,
+        -this.map.player.speed
+      );
+
       if (this.map.moving) {
         this.map.movables.forEach(
-          (movable) => (movable.position.y -= this.speed)
+          (movable) => (movable.position.y -= this.map.player.speed)
         );
       }
     } else if (this.keys.a.pressed && this.lastKey === "a") {
       UserInterface.Info.innerHTML = "";
-      
       this.map.player.moving = true;
-      this.map.player.image = this.map.player.swimming
-        ? this.map.player.sprites.swimLeft
-        : this.map.player.sprites.left;
-              this.map.player.width = this.map.player.swimming
-        ? this.map.player.image.width / 12
-        : this.map.player.image.width / 4;
-      this.map.player.frames.max = this.map.player.swimming ? 12 : 4;
 
-      for (let i = 0; i < this.map.boundaries.length; i++) {
-        const boundary = this.map.boundaries[i];
-        if (Collision.check(this.map.player, boundary, this.speed, 0)) {
-          this.map.moving = false;
-          break;
-        }
-      }
+      this.map.player.sprite = this.map.player.state.left;
+
+      this.map.moving = Collision.checkAll(
+        this.map.boundaries,
+        this.map.player,
+        this.map.player.speed,
+        0
+      );
+
       if (this.map.moving) {
         this.map.movables.forEach(
-          (movable) => (movable.position.x += this.speed)
+          (movable) => (movable.position.x += this.map.player.speed)
         );
       }
     } else if (this.keys.d.pressed && this.lastKey === "d") {
       UserInterface.Info.innerHTML = "";
-
       this.map.player.moving = true;
-      this.map.player.image = this.map.player.swimming
-        ? this.map.player.sprites.swimRight
-        : this.map.player.sprites.right;
-        this.map.player.width = this.map.player.swimming
-        ? this.map.player.image.width / 12
-        : this.map.player.image.width / 4;
-      this.map.player.frames.max = this.map.player.swimming ? 12 : 4;
+      this.map.player.sprite = this.map.player.state.right;
 
-      for (let i = 0; i < this.map.boundaries.length; i++) {
-        const boundary = this.map.boundaries[i];
-        if (Collision.check(this.map.player, boundary, -this.speed, 0)) {
-          this.map.moving = false;
-          break;
-        }
-      }
+      this.map.moving = Collision.checkAll(
+        this.map.boundaries,
+        this.map.player,
+        -this.map.player.speed,
+        0
+      );
+
       if (this.map.moving) {
         this.map.movables.forEach(
-          (movable) => (movable.position.x -= this.speed)
+          (movable) => (movable.position.x -= this.map.player.speed)
         );
       }
     }

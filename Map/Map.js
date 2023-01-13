@@ -9,6 +9,18 @@ import Level from "./Level.js";
 import Sprite from "../Utils/Sprite.js";
 import MapInputHandler from "../UserInput/MapInputHandler.js";
 import UserInterface from "../UserInterface/UserInterface.js";
+import WorldPlayer from "../Player/WorldPlayer.js";
+import {
+  AddMode,
+  BeyondMode,
+  DivideMode,
+  EnglishMode,
+  ExpertMode,
+  MultiplyMode,
+  SubtractMode,
+  SwedishMode,
+  TibiaMode,
+} from "./Mode.js";
 
 export default class Map {
   constructor(dataSource, canvas) {
@@ -31,28 +43,7 @@ export default class Map {
       image: document.getElementById("foreground"),
     });
 
-    this.player = new Sprite({
-      position: {
-        x: canvas.width / 2 - 192 / 4 / 2,
-        y: canvas.height / 2 - 68 / 4,
-      },
-      image: document.getElementById("playerDown"),
-      frames: { max: 4 },
-      sprites: {
-        up: document.getElementById("playerUp"),
-        down: document.getElementById("playerDown"),
-        left: document.getElementById("playerLeft"),
-        right: document.getElementById("playerRight"),
-
-        swimIdle: document.getElementById("playerSwimIdle"),
-        swimUp: document.getElementById("playerSwimUp"),
-        swimDown: document.getElementById("playerSwimDown"),
-        swimLeft: document.getElementById("playerSwimLeft"),
-        swimRight: document.getElementById("playerSwimRight"),
-      },
-      swimFrames: { max: 12 },
-      swimming: false,
-    });
+    this.player = new WorldPlayer(canvas, dataSource);
 
     this.landTiles = [];
     this.boundaries = [];
@@ -119,7 +110,7 @@ export default class Map {
     const specialContent = Level.setContent(SpecialMode, 50);
     const svenskaContent = Level.setContent(SvenskaMode, 275);
     const MathContent = Array.from(Array(100).keys());
-
+    
     mapData.forEach((row, i) => {
       row.forEach((symbol, j) => {
         if (symbol === 1025) {
@@ -144,7 +135,7 @@ export default class Map {
         }
         if (symbol === 1) {
           this.mapLevel(
-            0,
+            new EnglishMode(),
             wordsContent,
             this.wordsLevelsArray,
             this.wordsCounter,
@@ -155,7 +146,7 @@ export default class Map {
         }
         if (symbol === 6) {
           this.mapLevel(
-            6,
+            new TibiaMode(),
             tibiaContent,
             this.tibiaLevelsArray,
             this.tibiaCounter,
@@ -166,7 +157,7 @@ export default class Map {
         }
         if (symbol === 2) {
           this.mapLevel(
-            2,
+            new ExpertMode(),
             specialContent,
             this.specialLevelsArray,
             this.specialCounter,
@@ -177,7 +168,7 @@ export default class Map {
         }
         if (symbol === 3) {
           this.mapLevel(
-            3,
+            new SwedishMode(),
             svenskaContent,
             this.svenskaLevelsArray,
             this.svenskaCounter,
@@ -188,7 +179,7 @@ export default class Map {
         }
         if (symbol === 4) {
           this.mapLevel(
-            4,
+            new BeyondMode(),
             MathContent,
             this.mathLevelsArray,
             this.mathCounter,
@@ -200,7 +191,7 @@ export default class Map {
 
         if (symbol === 4.1) {
           this.mapLevel(
-            4.1,
+            new AddMode(),
             MathContent,
             this.addLevelsArray,
             this.addCounter,
@@ -211,7 +202,7 @@ export default class Map {
         }
         if (symbol === 4.2) {
           this.mapLevel(
-            4.2,
+            new SubtractMode(),
             MathContent,
             this.subLevelsArray,
             this.subCounter,
@@ -222,7 +213,7 @@ export default class Map {
         }
         if (symbol === 4.3) {
           this.mapLevel(
-            4.3,
+            new MultiplyMode(),
             MathContent,
             this.mulLevelsArray,
             this.mulCounter,
@@ -233,7 +224,7 @@ export default class Map {
         }
         if (symbol === 4.4) {
           this.mapLevel(
-            4.4,
+            new DivideMode(),
             MathContent,
             this.divLevelsArray,
             this.divCounter,
@@ -245,10 +236,11 @@ export default class Map {
       });
     });
   }
+
   mapLevel(mode, contentArr, levelArr, counter, j, i) {
-    const storedLevel = this.levelData["mode"][mode][counter];
+    const storedLevel = this.levelData["mode"][mode.id][counter];
     let initNextLevel;
-    if (this.levelData["mode"][mode][counter - 1]) {
+    if (this.levelData["mode"][mode.id][counter - 1]) {
       initNextLevel = counter;
     }
     let locked = !(storedLevel || initNextLevel <= counter || counter === 0);
@@ -263,16 +255,21 @@ export default class Map {
       content: contentArr[counter],
     });
   }
-  draw(ctx) {
+  draw(ctx, deltaTime) {
     this.background.draw(ctx);
+
     this.levelsArray.forEach((level) => {
       level.draw(ctx);
     });
-    this.player.draw(ctx);
+
+    this.player.draw(ctx, deltaTime);
+
     this.foreground.draw(ctx);
+
     this.boundaries.forEach((boundary) => {
       boundary.draw(ctx);
     });
+
     this.landTiles.forEach((landtile) => {
       landtile.draw(ctx);
     });

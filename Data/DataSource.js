@@ -38,12 +38,16 @@ export default class DataSource {
   saveState(state) {
     const store = this.getStore();
     let earnedCash;
-    let levelObject = store.completedLevels.mode[state.level.mode].find(
+    let levelObject = store.completedLevels.mode[state.level.mode.id].find(
       (obj) => obj.level === state.level.name
     );
     if (!levelObject) {
-      levelObject = { level: state.level.name, score: state.score };
-      store.completedLevels.mode[state.level.mode].push(levelObject);
+      levelObject = {
+        level: state.level.name,
+        mode: state.level.mode.name,
+        score: state.score,
+      };
+      store.completedLevels.mode[state.level.mode.id].push(levelObject);
       const availableScore = state.level.maxScore;
       earnedCash =
         state.level.name + Math.round((state.score / availableScore) * 10);

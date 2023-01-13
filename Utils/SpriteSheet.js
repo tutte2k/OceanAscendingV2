@@ -39,8 +39,11 @@ export default class SpriteSheet {
       } else {
         this.timer += deltaTime;
       }
-    } else {
+    } else if (this.timer > this.interval) {
       this.frameX = 0;
+      this.timer = 0;
+    } else {
+      this.timer += deltaTime;
     }
   }
   draw(context, x, y) {

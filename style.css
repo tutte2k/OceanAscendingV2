@@ -140,11 +140,11 @@ html {
 #playerDown,
 #playerLeft,
 #playerRight,
-#playerSwimUp,
-#playerSwimDown,
-#playerSwimLeft,
-#playerSwimIdle,
-#playerSwimRight,#map,#foreground {
+#swimUp,
+#swimDown,
+#swimLeft,
+#swimIdle,
+#swimRight,#map,#foreground {
   display: none;
 }
 

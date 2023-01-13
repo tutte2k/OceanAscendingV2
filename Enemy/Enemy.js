@@ -14,9 +14,10 @@ export default class Enemy {
     this.text = word;
     this.completedText = "";
     this.displayText = this.text;
- 
-    this.score = Math.floor(this.game.level.mode) === 4 ? 1 : this.text.length;
-  
+
+    this.score =
+      Math.floor(this.game.level.mode.id) === 4 ? 1 : this.text.length;
+
     this.focused = false;
     this.x = this.game.width;
 
@@ -91,7 +92,7 @@ export default class Enemy {
     this.element.style.left =
       (this.width * widthPercentage) / 2 + this.x * widthPercentage + "px";
     this.element.style.color = this.focused ? "lime" : "whitesmoke";
-    if (Math.floor(this.game.level.mode) === 4) {
+    if (Math.floor(this.game.level.mode.id) === 4) {
     } else {
       this.element.innerHTML = this.text.replace(this.completedText, "");
       this.displayText = this.text.replace(this.completedText, "");
