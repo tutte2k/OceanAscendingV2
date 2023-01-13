@@ -20,18 +20,22 @@ export default class MapInputHandler {
         case "w":
           this.keys.w.pressed = true;
           this.lastKey = "w";
+          this.map.player.lastDirection = "up"
           break;
         case "a":
           this.keys.a.pressed = true;
           this.lastKey = "a";
+          this.map.player.lastDirection = "left"
           break;
         case "s":
           this.keys.s.pressed = true;
           this.lastKey = "s";
+          this.map.player.lastDirection = "down"
           break;
         case "d":
           this.keys.d.pressed = true;
           this.lastKey = "d";
+          this.map.player.lastDirection = "right"
           break;
         case "Enter":
           this.keys.enter.pressed = true;
