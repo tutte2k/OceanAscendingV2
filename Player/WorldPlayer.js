@@ -36,7 +36,7 @@ export default class WorldPlayer {
     };
     this.moving = false;
     this.swimming = false;
-    this.speed = !window.location.href.includes("5500")
+    this.speed = window.location.href.includes("5500")
       ? 15
       : dataSource.getStore().shop.mapSpeed;
   }
@@ -47,7 +47,6 @@ export default class WorldPlayer {
     if (this.moving || this.swimming) {
       this.update(deltaTime);
     }
-
     if (this.swimming === true && this.state !== this.sprites.swim) {
       this.state = this.sprites.swim;
     } else if (this.swimming === false && this.state !== this.sprites.walk) {
