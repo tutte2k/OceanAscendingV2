@@ -1,4 +1,4 @@
-export default class InputHandler {
+export default class GameHandler {
   constructor(game) {
     this.game = game;
     window.addEventListener("keydown", (e) => {

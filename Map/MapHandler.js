@@ -1,6 +1,6 @@
-import Collision from "../../Utils/Collision.js";
-import UserInterface from "../../UserInterface/UserInterface.js";
-import Game from "../../Game/Game.js";
+import Collision from "../Utils/Collision.js";
+import UserInterface from "../UserInterface/UserInterface.js";
+import Game from "../Game/Game.js";
 export default class MapHandler {
   constructor(map) {
     this.map = map;

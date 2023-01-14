@@ -1,6 +1,7 @@
 import Background from "./Environment/Background.js";
 import UserInterface from "../UserInterface/UserInterface.js";
 import Player from "./Player/Player.js";
+import Collision from "../Utils/Collision.js";
 
 export default class Game {
   constructor(width, height, level, nextLevel, dataSource) {
@@ -105,7 +106,7 @@ export default class Game {
         this.focus = enemy;
       }
       enemy.update(deltaTime);
-      if (this.checkCollision(this.player, enemy)) {
+      if (Collision.checkCollision(this.player, enemy)) {
         if (enemy.focused && this.focus === enemy) {
           this.focus = null;
         }
@@ -118,7 +119,7 @@ export default class Game {
         }
       }
       this.player.projectiles.forEach((projectile) => {
-        if (this.checkCollision(projectile, enemy)) {
+        if (Collision.checkCollision(projectile, enemy)) {
           if (enemy.focused && this.focus === enemy) {
             this.focus = null;
           }
@@ -151,14 +152,7 @@ export default class Game {
       this.enemyTimer += deltaTime;
     }
   }
-  checkCollision(rect1, rect2) {
-    return (
-      rect1.x < rect2.x + rect2.width &&
-      rect1.x + rect1.width > rect2.x &&
-      rect1.y < rect2.y + rect2.height &&
-      rect1.height + rect1.y > rect2.y
-    );
-  }
+
   draw(context) {
     this.background.draw(context);
     this.userInterface.draw(context);

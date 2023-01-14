@@ -1,7 +1,7 @@
 import SpriteSheet from "../../Utils/SpriteSheet.js";
-import Helper from "../../Utils/Helper.js";
+import Random from "../../Utils/Random.js";
 import Particle from "../Environment/Particle.js";
-import Word from "../../Utils/Word.js";
+import { LetterMode } from "../Mode/Modes.js";
 import {
   SmokeExplosion,
   FireExplosion,
@@ -117,9 +117,9 @@ export default class Enemy {
       4: [...tier1, ...tier2, ...tier3, ...tier4, ...bosstier],
     };
     if (!enemies[value.length]) {
-      return new enemies[4][Helper.randomIndexInArr(enemies[4])](game, value);
+      return new enemies[4][Random.index(enemies[4])](game, value);
     }
-    const randomIndex = Helper.randomIndexInArr(enemies[value.length]);
+    const randomIndex = Random.index(enemies[value.length]);
     let enemy = new enemies[value.length][randomIndex](game, value);
     return enemy;
   }
@@ -145,7 +145,7 @@ class Jellyfish extends Fish {
       game,
       word,
       new SpriteSheet(
-        document.getElementById(`jellyfish${Helper.randInt(1, 5)}`),
+        document.getElementById(`jellyfish${Random.int(1, 5)}`),
         120,
         258,
         59,
@@ -153,7 +153,7 @@ class Jellyfish extends Fish {
         30
       )
     );
-    this.x = Helper.randInt(
+    this.x = Random.int(
       this.game.width * 0.1,
       this.game.width - this.game.width * 0.1
     );
@@ -175,7 +175,7 @@ class Turtle extends Fish {
   constructor(game, word) {
     const width = 225;
     const height = 221;
-    const image = document.getElementById(`turtle${Helper.randInt(1, 5)}`);
+    const image = document.getElementById(`turtle${Random.int(1, 5)}`);
     super(game, word, new SpriteSheet(image, width, height, 59, 0, 30));
     this.speedX = -0.2;
   }
@@ -193,7 +193,7 @@ class Angela extends Fish {
   constructor(game, word) {
     const width = 483;
     const height = 500;
-    const image = document.getElementById(`angela${Helper.randInt(1, 2)}`);
+    const image = document.getElementById(`angela${Random.int(1, 2)}`);
     super(game, word, new SpriteSheet(image, width, height, 29, 0, 20));
     this.speedX = -1;
   }
@@ -309,7 +309,7 @@ class HiveWhale extends Mech {
       const y = this.y + Math.random() * (this.height * 2);
       this.game.explosions.push(new SmokeExplosion(this.game, x, y));
       const indexOfLastWord = this.game.words.length - 1;
-      const word = Word.Next(this.game, indexOfLastWord);
+      const word = LetterMode.Next(this.game, indexOfLastWord);
       if (!word) return;
       this.game.enemies.push(new Drone(this.game, x, y, word));
     }

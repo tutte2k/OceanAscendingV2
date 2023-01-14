@@ -1,4 +1,4 @@
-import DataSource from "./Data/DataSource.js";
+import DataSource from "./Storage/DataSource.js"
 import UserInterface from "./UserInterface/UserInterface.js";
 import Map from "./Map/Map.js";
 

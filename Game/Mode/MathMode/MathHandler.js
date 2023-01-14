@@ -1,7 +1,7 @@
-import InputHandler from "./InputHandler.js";
-import UserInterface from "../../UserInterface/UserInterface.js";
+import GameHandler from "../../GameHandler.js";
+import UserInterface from "../../../UserInterface/UserInterface.js";
 
-export default class MathHandler extends InputHandler {
+export default class MathHandler extends GameHandler {
   constructor(game) {
     super(game);
     this.answer = "";

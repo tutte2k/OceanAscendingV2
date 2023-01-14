@@ -1,5 +1,5 @@
-import InputHandler from "./InputHandler.js";
-export default class LettersHandler extends InputHandler {
+import GameHandler from "../../GameHandler.js";
+export default class LettersHandler extends GameHandler {
   constructor(game) {
     super(game);
     window.addEventListener("keydown", (e) => {

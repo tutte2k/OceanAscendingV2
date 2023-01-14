@@ -1,27 +1,22 @@
-import { mapData } from "../Data/mapData.js";
-import { Words10K } from "../Data/Words.js";
-import { TibiaWords } from "../Data/Tibia.js";
-import { SpecialMode } from "../Data/Special.js";
-import { SvenskaMode } from "../Data/Svenska.js";
-import Boundary from "./Environment/Boundary.js";
-import LandTile from "./Environment/LandTile.js";
-import Level from "../Levels/Level.js";
-import Sprite from "../Utils/Sprite.js";
-import MapHandler from "./Input/MapHandler.js";
-import UserInterface from "../UserInterface/UserInterface.js";
-import WorldPlayer from "./Player/WorldPlayer.js";
 import {
-  AddMode,
-  BeyondMode,
-  DivideMode,
+  TibiaMode,
   EnglishMode,
   ExpertMode,
+  SwedishMode,
   MultiplyMode,
   SubtractMode,
-  SwedishMode,
-  TibiaMode,
-} from "../Levels/Mode.js";
-
+  AddMode,
+  DivideMode,
+  BeyondMode,
+} from "../Game/Mode/Modes.js";
+import Boundary from "./Environment/Boundary.js";
+import LandTile from "./Environment/LandTile.js";
+import Level from "./Environment/Level.js";
+import MapHandler from "./MapHandler.js";
+import UserInterface from "../UserInterface/UserInterface.js";
+import WorldPlayer from "./Player/WorldPlayer.js";
+import StaticImage from "../Utils/StaticImage.js";
+import { Matrix } from "./Environment/Matrix.js";
 
 export default class Map {
   constructor(dataSource, canvas) {
@@ -33,13 +28,12 @@ export default class Map {
       x: -1140,
       y: -1725,
     };
-
-    this.background = new Sprite({
+    this.background = new StaticImage({
       position: { x: this.offset.x, y: this.offset.y },
       image: document.getElementById("map"),
     });
 
-    this.foreground = new Sprite({
+    this.foreground = new StaticImage({
       position: { x: this.offset.x, y: this.offset.y },
       image: document.getElementById("foreground"),
     });
@@ -102,17 +96,34 @@ export default class Map {
       ...this.levelsArray,
       ...this.landTiles,
     ];
+
     this.moving = true;
     this.inputHandler = new MapHandler(this);
+
   }
   init() {
-    const tibiaContent = Level.setContent(TibiaWords, 50);
-    const wordsContent = Level.setContent(Words10K, 100);
-    const specialContent = Level.setContent(SpecialMode, 50);
-    const svenskaContent = Level.setContent(SvenskaMode, 275);
-    const MathContent = Array.from(Array(100).keys());
 
-    mapData.forEach((row, i) => {
+    function createLevels(contentArr, levelSize, numberOfLevels = 1000) {
+      const levelContents = [];
+      for (let i = 0; i < numberOfLevels; i++) {
+        const levelContent = contentArr.slice(-levelSize);
+        contentArr.splice(-levelSize);
+        if (levelContent.length !== levelSize) {
+          break;
+        }
+        levelContents.push(levelContent);
+      }
+      return levelContents;
+    }
+    
+    const tibiaContent = createLevels(TibiaMode.Data, 50);
+    const wordsContent = createLevels(EnglishMode.Data, 100);
+    const specialContent = createLevels(ExpertMode.Data, 50);
+    const svenskaContent = createLevels(SwedishMode.Data, 275);
+
+    const MathContent = Array.from(Array(100).keys());
+    
+    Matrix.forEach((row, i) => {
       row.forEach((symbol, j) => {
         if (symbol === 1025) {
           this.boundaries.push(

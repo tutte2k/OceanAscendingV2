@@ -1,9 +1,9 @@
 import FloatingMessage from "./FloatingMessage.js";
-import Particle from "../Game/Environment/Particle.js";
 
 export default class UserInterface {
   static GameContainer = document.getElementById("container1");
   static WordContainer = document.getElementById("words");
+
   static UI = document.getElementById("ui");
   static Mine = document.getElementById("mines");
   static Air = document.getElementById("air");
@@ -81,15 +81,6 @@ export default class UserInterface {
     }
   }
   displayPlayerDamage() {
-    for (let i = 0; i < 5; i++) {
-      this.game.particles.push(
-        new Particle(
-          this,
-          this.game.player.x + this.game.player.width * 0.8,
-          this.game.player.y + this.game.player.height * 0.2
-        )
-      );
-    }
     this.game.floatingMessages.push(
       new FloatingMessage(
         "-" + 1,

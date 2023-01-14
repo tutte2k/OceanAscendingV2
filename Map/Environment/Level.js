@@ -36,16 +36,5 @@ export default class Level {
     return this.content.slice();
   }
 
-  static setContent(contentArr, levelSize, numberOfLevels = 1000) {
-    const levelContents = [];
-    for (let i = 0; i < numberOfLevels; i++) {
-      const levelContent = contentArr.slice(-levelSize);
-      contentArr.splice(-levelSize);
-      if (levelContent.length !== levelSize) {
-        break;
-      }
-      levelContents.push(levelContent);
-    }
-    return levelContents;
-  }
+
 }

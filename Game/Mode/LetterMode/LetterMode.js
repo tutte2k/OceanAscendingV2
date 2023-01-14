@@ -1,4 +1,20 @@
-export default class Word {
+import LettersHandler from "./LettersHandler.js";
+
+import Enemy from "../../Enemy/Enemy.js";
+import Mode from "../Mode.js";
+
+export default class LetterMode extends Mode {
+  static EnemyInterval = 2000;
+  constructor(id, name) {
+    super(id, LettersHandler, LetterMode.EnemyInterval, name);
+  }
+  addEnemy(game) {
+    const indexOfLastWord = game.words.length - 1;
+    const word = LetterMode.Next(game, indexOfLastWord);
+    if (!word) return;
+    const creature = Enemy.Next(game, word);
+    game.enemies.push(creature);
+  }
   static Next(game, startIndex) {
     const notAvailableChars = [];
     for (let i = 0; i < game.enemies.length; i++) {
