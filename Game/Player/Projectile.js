@@ -13,7 +13,6 @@ export default class Projectile {
   update() {
     this.x += this.game.speed / (this.x * 0.005);
     this.y += -this.game.speed * (this.x * 0.001);
-
     if (this.y < 0) {
       this.markedForDeletion = true;
     }

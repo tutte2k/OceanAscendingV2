@@ -9,15 +9,11 @@ export default class Level {
     this.content = content;
     this.name = number;
     this.mode = mode;
-    if (Math.floor(this.mode.id) === 4) {
-      this.maxScore = 25;
-    } else {
-      this.words = this.getContent();
-      this.maxScore = 0;
-      this.words.forEach((word) => (this.maxScore += word.length));
-    }
+    this.maxScore = 0;
+    this.content.forEach(
+      (obj) => (this.maxScore += Number.isInteger(obj) ? obj : obj.length)
+    );
   }
-
   draw(ctx) {
     if (!this.locked) {
       ctx.font = "26px serif";
@@ -26,7 +22,6 @@ export default class Level {
       ctx.fillText(icon, this.position.x, this.position.y + 30);
     }
   }
-
   getContent() {
     return this.content.slice();
   }

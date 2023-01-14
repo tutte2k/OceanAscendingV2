@@ -2,7 +2,6 @@ import SpriteSheet from "../../Utils/SpriteSheet.js";
 import Projectile from "./Projectile.js";
 export default class Player {
   constructor(game) {
-
     this.game = game;
     this.width = 180;
     this.height = 187;
@@ -11,10 +10,9 @@ export default class Player {
     this.speedY = 0;
 
     this.maxSpeed = this.game.store.shop.diveSpeed;
-
     this.air = this.game.store.shop.airSlot;
     this.maxAir = this.game.store.shop.airSlot;
-  
+
     this.airTimer = 0;
     this.airInterval = 30000 - this.game.store.shop.airReg * 2000;
 
@@ -23,7 +21,6 @@ export default class Player {
 
     this.ammoTimer = 0;
     this.ammoInterval = 30000 - this.game.store.shop.mineReg * 2000;
-
     this.projectiles = [];
 
     this.sprite = new SpriteSheet(

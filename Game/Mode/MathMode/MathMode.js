@@ -21,4 +21,3 @@ export default class MathMode extends Mode {
     game.enemies.push(creature);
   }
 }
-

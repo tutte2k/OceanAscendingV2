@@ -39,4 +39,23 @@ export default class LetterMode extends Mode {
     if (fallback) return;
     else return "x";
   }
+  findFocus(key, game) {
+    const enemy = game.enemies.find((enemy) => {
+      return enemy.text.startsWith(key);
+    });
+    if (enemy && !this.lose) {
+      enemy.focused = true;
+      return enemy;
+    } else {
+      const controls = [
+        "ArrowLeft",
+        "ArrowDown",
+        "ArrowUp",
+        "ArrowRight",
+        "Shift",
+      ];
+      if (!controls.includes(key)) game.userInterface.displayMissedKey(key);
+      return null;
+    }
+  }
 }

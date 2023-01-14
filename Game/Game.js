@@ -4,7 +4,15 @@ import Player from "./Player/Player.js";
 import Collision from "../Utils/Collision.js";
 
 export default class Game {
-  constructor(width, height, level, nextLevel, dataSource,canvasRectWidth,canvasRectHeight ) {
+  constructor(
+    width,
+    height,
+    level,
+    nextLevel,
+    dataSource,
+    canvasRectWidth,
+    canvasRectHeight
+  ) {
     this.store = dataSource.getStore();
     this.wordContainer = UserInterface.WordContainer;
     this.level = level;
@@ -23,23 +31,15 @@ export default class Game {
     this.width = width;
     this.height = height;
     this.widthPercentage = canvasRectWidth / this.width;
-    this.heightPercentage = canvasRectHeight /this.height;
-
-
-
+    this.heightPercentage = canvasRectHeight / this.height;
 
     this.gameTime = 0;
-
     this.background = new Background(this);
-
     this.inputHandler = new this.level.mode.inputHandler(this);
-
     this.userInterface = new UserInterface(this);
 
     this.keys = [];
-
     this.player = new Player(this);
-
     this.focus = null;
 
     this.enemies = [];
@@ -174,25 +174,5 @@ export default class Game {
 
   addEnemy() {
     this.level.mode.addEnemy(this);
-  }
-
-  findFocus(key) {
-    const enemy = this.enemies.find((enemy) => {
-      return enemy.text.startsWith(key);
-    });
-    if (enemy && !this.lose) {
-      enemy.focused = true;
-      return enemy;
-    } else {
-      const controls = [
-        "ArrowLeft",
-        "ArrowDown",
-        "ArrowUp",
-        "ArrowRight",
-        "Shift",
-      ];
-      if (!controls.includes(key)) this.userInterface.displayMissedKey(key);
-      return null;
-    }
   }
 }

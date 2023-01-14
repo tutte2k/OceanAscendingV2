@@ -1,6 +1,5 @@
 import Random from "../../../../Utils/Random.js";
 import MathMode from "../MathMode.js";
-
 export default class AddMode extends MathMode {
   static Name = "Add";
   static Id = 4.1;
