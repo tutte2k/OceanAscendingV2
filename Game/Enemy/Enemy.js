@@ -84,13 +84,12 @@ export default class Enemy {
     this.element.remove();
   }
   draw(context) {
-    const widthPercentage = context.canvas.getBoundingClientRect().width / 2500;
-    const heightPercentage =
-      context.canvas.getBoundingClientRect().height / 1768;
     this.sprite.draw(context, this.x, this.y);
-    this.element.style.top = this.y * heightPercentage + "px";
+    this.element.style.top = this.y * this.game.heightPercentage + "px";
     this.element.style.left =
-      (this.width * widthPercentage) / 2 + this.x * widthPercentage + "px";
+      (this.width * this.game.widthPercentage) / 2 +
+      (this.x - this.width * 0.5) * this.game.widthPercentage +
+      "px";
     this.element.style.color = this.focused ? "lime" : "whitesmoke";
     if (Math.floor(this.game.level.mode.id) === 4) {
     } else {
@@ -99,16 +98,16 @@ export default class Enemy {
     }
   }
   static NextMath(game, value) {
-    return new Whale(game, value);
+    const enemies = [Lionfish, Shark, Whale, Angela, Chtullie];
+    return new enemies[Random.index(enemies)](game, value);
   }
-
   static Next(game, value) {
-    const tier1 = [HiveWhale, Goldfish, LuckyFish, Jellyfish];
+    const tier1 = [Goldfish, LuckyFish, Jellyfish];
     const tier2 = [Seahorse, Turtle];
     const tier3 = [Angler1, Angler2];
     const tier4 = [Lionfish, Shark, Whale];
 
-    const bosstier = [Angela, Chtullie];
+    const bosstier = [Angela, Chtullie, HiveWhale];
 
     const enemies = {
       1: [...tier1],

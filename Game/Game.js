@@ -4,7 +4,7 @@ import Player from "./Player/Player.js";
 import Collision from "../Utils/Collision.js";
 
 export default class Game {
-  constructor(width, height, level, nextLevel, dataSource) {
+  constructor(width, height, level, nextLevel, dataSource,canvasRectWidth,canvasRectHeight ) {
     this.store = dataSource.getStore();
     this.wordContainer = UserInterface.WordContainer;
     this.level = level;
@@ -22,6 +22,11 @@ export default class Game {
 
     this.width = width;
     this.height = height;
+    this.widthPercentage = canvasRectWidth / this.width;
+    this.heightPercentage = canvasRectHeight /this.height;
+
+
+
 
     this.gameTime = 0;
 
@@ -138,14 +143,15 @@ export default class Game {
     });
     this.enemies = this.enemies.filter((enemy) => !enemy.markedForDeletion);
 
-    const boardClear =
+    const holdingTheDoor =
       Math.floor(this.level.mode.id) === 4
-        ? this.enemies.length === 0
-        : this.enemies.length < 3;
-        
-    const spawnTimerElapsed = this.enemyTimer > this.enemyInterval;
+        ? this.enemies.length < 2
+        : this.enemies.length < 5;
+    holdingTheDoor ? (this.enemyInterval -= 15) : (this.enemyInterval += 5);
 
-    if ((boardClear || spawnTimerElapsed) && !this.gameOver) {
+    const noEnemies = this.enemies.length === 0;
+    const spawnTimerElapsed = this.enemyTimer > this.enemyInterval;
+    if ((noEnemies || spawnTimerElapsed) && !this.gameOver) {
       this.addEnemy();
       this.enemyTimer = 0;
     } else {

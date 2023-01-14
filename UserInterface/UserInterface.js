@@ -180,7 +180,7 @@ export default class UserInterface {
     let store = dataSource.getStore();
     store.shop[id]++;
     store.cash = cash - UserInterface.ShopContent[id].price;
-    UserInterface.setUi(store);
+    UserInterface.setCash(store.cash);
     dataSource.setStore(store);
   }
   clear() {

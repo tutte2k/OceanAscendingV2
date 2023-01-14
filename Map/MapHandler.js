@@ -100,7 +100,9 @@ export default class MapHandler {
             this.map.canvas.height,
             level,
             nextLevel,
-            this.map.dataSource
+            this.map.dataSource,
+            this.map.canvas.getBoundingClientRect().width,
+            this.map.canvas.getBoundingClientRect().height
           );
         }
       }

@@ -4,7 +4,7 @@ import Enemy from "../../Enemy/Enemy.js";
 import Mode from "../Mode.js";
 
 export default class LetterMode extends Mode {
-  static EnemyInterval = 2000;
+  static EnemyInterval = 5000;
   constructor(id, name) {
     super(id, LettersHandler, LetterMode.EnemyInterval, name);
   }

@@ -1,5 +1,6 @@
 import MathHandler from "./MathHandler.js";
 import Mode from "../Mode.js";
+import Calculator from "../../../Utils/Calculator.js";
 export default class MathMode extends Mode {
   static EnemyInterval = 10000;
   constructor(id, content, name) {
