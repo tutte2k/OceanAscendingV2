@@ -1,6 +1,6 @@
 import SpriteSheet from "../../Utils/SpriteSheet.js";
 export default class WorldPlayer {
-  constructor(canvas, dataSource) {
+  constructor(canvasWidth, canvasHeight, dataSource) {
     const Walk = [80, 80, 13, 0, 25];
     const Swim = [80, 80, 11, 0, 25];
     const Idle = [80, 80, 1, 0, 1];
@@ -31,8 +31,8 @@ export default class WorldPlayer {
     this.width = this.sprite.width;
     this.height = this.sprite.height;
     this.position = {
-      x: canvas.width / 2 - (this.sprite.width * 4) / 4 / 2,
-      y: canvas.height / 2 - this.sprite.height / 4,
+      x: canvasWidth / 2 - (this.sprite.width * 4) / 4 / 2,
+      y: canvasHeight / 2 - this.sprite.height / 4,
     };
     this.moving = false;
     this.swimming = false;

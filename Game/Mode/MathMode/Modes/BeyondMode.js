@@ -1,3 +1,4 @@
+import Calculator from "../../../../Utils/Calculator.js";
 import Enemy from "../../../Enemy/Enemy.js";
 import MathMode from "../MathMode.js";
 export default class BeyondMode extends MathMode {

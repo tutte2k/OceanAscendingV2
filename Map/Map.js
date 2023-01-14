@@ -38,7 +38,7 @@ export default class Map {
       image: document.getElementById("foreground"),
     });
 
-    this.player = new WorldPlayer(canvas, dataSource);
+    this.player = new WorldPlayer(canvas.width, canvas.height, dataSource);
 
     this.landTiles = [];
     this.boundaries = [];
@@ -99,11 +99,9 @@ export default class Map {
 
     this.moving = true;
     this.inputHandler = new MapHandler(this);
-
   }
   init() {
-
-    function createLevels(contentArr, levelSize, numberOfLevels = 1000) {
+    function splitLevelData(contentArr, levelSize, numberOfLevels = 1000) {
       const levelContents = [];
       for (let i = 0; i < numberOfLevels; i++) {
         const levelContent = contentArr.slice(-levelSize);
@@ -115,14 +113,13 @@ export default class Map {
       }
       return levelContents;
     }
-    
-    const tibiaContent = createLevels(TibiaMode.Data, 50);
-    const wordsContent = createLevels(EnglishMode.Data, 100);
-    const specialContent = createLevels(ExpertMode.Data, 50);
-    const svenskaContent = createLevels(SwedishMode.Data, 275);
 
+    const tibiaContent = splitLevelData(TibiaMode.Data, 50);
+    const wordsContent = splitLevelData(EnglishMode.Data, 100);
+    const specialContent = splitLevelData(ExpertMode.Data, 50);
+    const svenskaContent = splitLevelData(SwedishMode.Data, 275);
     const MathContent = Array.from(Array(100).keys());
-    
+
     Matrix.forEach((row, i) => {
       row.forEach((symbol, j) => {
         if (symbol === 1025) {
@@ -146,7 +143,7 @@ export default class Map {
           );
         }
         if (symbol === 1) {
-          this.mapLevel(
+          this.constructLevel(
             new EnglishMode(),
             wordsContent,
             this.wordsLevelsArray,
@@ -157,7 +154,7 @@ export default class Map {
           this.wordsCounter++;
         }
         if (symbol === 6) {
-          this.mapLevel(
+          this.constructLevel(
             new TibiaMode(),
             tibiaContent,
             this.tibiaLevelsArray,
@@ -168,7 +165,7 @@ export default class Map {
           this.tibiaCounter++;
         }
         if (symbol === 2) {
-          this.mapLevel(
+          this.constructLevel(
             new ExpertMode(),
             specialContent,
             this.specialLevelsArray,
@@ -179,7 +176,7 @@ export default class Map {
           this.specialCounter++;
         }
         if (symbol === 3) {
-          this.mapLevel(
+          this.constructLevel(
             new SwedishMode(),
             svenskaContent,
             this.svenskaLevelsArray,
@@ -190,7 +187,7 @@ export default class Map {
           this.svenskaCounter++;
         }
         if (symbol === 4) {
-          this.mapLevel(
+          this.constructLevel(
             new BeyondMode(),
             MathContent,
             this.mathLevelsArray,
@@ -202,7 +199,7 @@ export default class Map {
         }
 
         if (symbol === 4.1) {
-          this.mapLevel(
+          this.constructLevel(
             new AddMode(),
             MathContent,
             this.addLevelsArray,
@@ -213,7 +210,7 @@ export default class Map {
           this.addCounter++;
         }
         if (symbol === 4.2) {
-          this.mapLevel(
+          this.constructLevel(
             new SubtractMode(),
             MathContent,
             this.subLevelsArray,
@@ -224,7 +221,7 @@ export default class Map {
           this.subCounter++;
         }
         if (symbol === 4.3) {
-          this.mapLevel(
+          this.constructLevel(
             new MultiplyMode(),
             MathContent,
             this.mulLevelsArray,
@@ -235,7 +232,7 @@ export default class Map {
           this.mulCounter++;
         }
         if (symbol === 4.4) {
-          this.mapLevel(
+          this.constructLevel(
             new DivideMode(),
             MathContent,
             this.divLevelsArray,
@@ -248,8 +245,7 @@ export default class Map {
       });
     });
   }
-
-  mapLevel(mode, contentArr, levelArr, counter, j, i) {
+  constructLevel(mode, contentArr, levelArr, counter, j, i) {
     const storedLevel = this.levelData["mode"][mode.id][counter];
     let initNextLevel;
     if (this.levelData["mode"][mode.id][counter - 1]) {
@@ -267,6 +263,7 @@ export default class Map {
       content: contentArr[counter],
     });
   }
+
   draw(ctx, deltaTime) {
     this.background.draw(ctx);
 

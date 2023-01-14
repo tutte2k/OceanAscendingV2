@@ -69,6 +69,7 @@ export default class MapHandler {
   }
 
   handle() {
+
     for (let i = 0; i < this.map.levelsArray.length; i++) {
       const level = this.map.levelsArray[i];
       let completedlevel;
@@ -80,6 +81,7 @@ export default class MapHandler {
         UserInterface.displayLevelInfo(completedlevel, level);
       }
     }
+
     if (this.keys.q.pressed) {
       UserInterface.Shop.hidden = false;
     } else {
@@ -103,7 +105,7 @@ export default class MapHandler {
         }
       }
     }
-
+ 
     if (this.keys.w.pressed && this.lastKey === "w") {
       UserInterface.Info.innerHTML = "";
 
