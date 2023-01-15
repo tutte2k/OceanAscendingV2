@@ -32,12 +32,27 @@ export default class MapHandler {
           this.lastKey = "s";
           this.map.player.lastDirection = "down";
           break;
-        case "r":
+        case "d":
+          this.keys.d.pressed = true;
+          this.lastKey = "d";
+          this.map.player.lastDirection = "right";
+          break;
+        case "W":
+          this.keys.w.pressed = true;
+          this.lastKey = "w";
+          this.map.player.lastDirection = "up";
+          break;
+        case "A":
+          this.keys.a.pressed = true;
+          this.lastKey = "a";
+          this.map.player.lastDirection = "left";
+          break;
+        case "R":
           this.keys.s.pressed = true;
           this.lastKey = "s";
           this.map.player.lastDirection = "down";
           break;
-        case "d":
+        case "S":
           this.keys.d.pressed = true;
           this.lastKey = "d";
           this.map.player.lastDirection = "right";
@@ -61,10 +76,19 @@ export default class MapHandler {
         case "s":
           this.keys.s.pressed = false;
           break;
-        case "r":
+        case "d":
+          this.keys.d.pressed = false;
+          break;
+        case "W":
+          this.keys.w.pressed = false;
+          break;
+        case "A":
+          this.keys.a.pressed = false;
+          break;
+        case "R":
           this.keys.s.pressed = false;
           break;
-        case "d":
+        case "S":
           this.keys.d.pressed = false;
           break;
         case "Enter":
