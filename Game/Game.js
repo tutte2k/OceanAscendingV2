@@ -20,10 +20,7 @@ export default class Game {
     this.level = level;
 
     this.nextLevel = nextLevel;
-    this.words =
-      Math.floor(this.level.mode.id) === 4
-        ? Array.from(Array(25).keys())
-        : level.getContent();
+    this.words = level.getContent();
 
     this.gameOver = false;
     this.lose = false;
@@ -147,7 +144,7 @@ export default class Game {
     const holdingTheDoor =
       Math.floor(this.level.mode.id) === 4
         ? this.enemies.length < 2
-        : this.enemies.length < 5;
+        : this.enemies.length < 3 ;
     holdingTheDoor ? (this.enemyInterval -= 15) : (this.enemyInterval += 5);
 
     const noEnemies = this.enemies.length === 0;

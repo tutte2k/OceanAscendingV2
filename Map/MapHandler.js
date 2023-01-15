@@ -75,7 +75,7 @@ export default class MapHandler {
       const game = this.enterLevel();
       if (game) return game;
     }
-    if (this.keys.q.pressed) {
+    if (this.keys.q.pressed && this.map.player.swimming === false) {
       Shop.Element.hidden = false;
     } else {
       Shop.Element.hidden = true;
