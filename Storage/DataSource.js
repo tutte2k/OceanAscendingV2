@@ -1,10 +1,9 @@
 export default class DataSource {
   constructor() {
-    this.item = "a4";
+    this.item = "a5";
   }
   getStore() {
     let storage = JSON.parse(localStorage.getItem(this.item));
-    if (storage.shop.mapSpeed < 3) storage.shop.mapSpeed = 3;
     if (storage) return storage;
     return {
       cash: 0,
