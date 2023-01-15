@@ -336,15 +336,13 @@ class Octopus extends Enemy {
   }
   die() {
     super.die();
-    for (let i = 0; i < 5; i++) {
-      this.game.explosions.push(
-        new InkExplosion(
-          this.game,
-          this.x + this.width * 0.5 * Math.random(),
-          this.y + this.height * 0.8 + this.height * 0.1 * i * Math.random()
-        )
-      );
-    }
+    this.game.explosions.push(
+      new InkExplosion(
+        this.game,
+        this.x + this.width * 0.5,
+        this.y + this.height * 0.8
+      )
+    );
   }
 }
 class Chtullie extends Octopus {
