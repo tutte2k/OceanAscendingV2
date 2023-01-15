@@ -32,6 +32,11 @@ export default class MapHandler {
           this.lastKey = "s";
           this.map.player.lastDirection = "down";
           break;
+        case "r":
+          this.keys.s.pressed = true;
+          this.lastKey = "s";
+          this.map.player.lastDirection = "down";
+          break;
         case "d":
           this.keys.d.pressed = true;
           this.lastKey = "d";
@@ -54,6 +59,9 @@ export default class MapHandler {
           this.keys.a.pressed = false;
           break;
         case "s":
+          this.keys.s.pressed = false;
+          break;
+        case "r":
           this.keys.s.pressed = false;
           break;
         case "d":
@@ -199,12 +207,7 @@ export default class MapHandler {
       if (!level.locked && Collision.check(this.map.player, level, 0, 0)) {
         const nextLevel = this.map.levelsArray[i + 1];
         this.map.canvas.classList.add("underwater");
-        return new Game(
-          level,
-          nextLevel,
-          this.map.dataSource,
-          this.map.canvas
-        );
+        return new Game(level, nextLevel, this.map.dataSource, this.map.canvas);
       }
     }
   }
