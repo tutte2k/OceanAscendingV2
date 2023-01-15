@@ -1,11 +1,14 @@
 import MathHandler from "./MathHandler.js";
 import Mode from "../Mode.js";
+
 import Calculator from "../../../Utils/Calculator.js";
+import Enemy from "../../Enemy/Enemy.js";
 export default class MathMode extends Mode {
   static EnemyInterval = 10000;
   constructor(id, content, name) {
     super(id, MathHandler, MathMode.EnemyInterval, name);
     this.content = content;
+
   }
   addEnemy(game) {
     let difficulty = Math.floor(game.level.name / 4);
