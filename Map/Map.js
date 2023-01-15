@@ -260,9 +260,7 @@ export default class Map {
       content: contentArr[counter],
     });
   }
-  update(){
-    
-  }
+  update() {}
 
   draw(ctx, deltaTime) {
     this.background.draw(ctx);

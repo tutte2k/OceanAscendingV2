@@ -10,6 +10,7 @@ canvas.height = 1768;
 const dataSource = new DataSource();
 const map = new Map(dataSource, canvas);
 
+
 window.addEventListener("load", function () {
   Global.GameContainer.hidden = false;
   let game;
