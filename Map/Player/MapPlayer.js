@@ -1,5 +1,5 @@
 import SpriteSheet from "../../Utils/SpriteSheet.js";
-export default class WorldPlayer {
+export default class MapPlayer {
   constructor(canvasWidth, canvasHeight, dataSource) {
     const Walk = [80, 80, 13, 0, 25];
     const Swim = [80, 80, 11, 0, 25];

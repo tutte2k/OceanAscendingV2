@@ -1,6 +1,7 @@
 import Collision from "../Utils/Collision.js";
-import UserInterface from "../UserInterface/UserInterface.js";
 import Game from "../Game/Game.js";
+import Shop from "./Shop.js";
+
 export default class MapHandler {
   constructor(map) {
     this.map = map;
@@ -69,51 +70,25 @@ export default class MapHandler {
   }
 
   handle() {
-
-    for (let i = 0; i < this.map.levelsArray.length; i++) {
-      const level = this.map.levelsArray[i];
-      let completedlevel;
-      if (Collision.check(this.map.player, level, 0, 0)) {
-        completedlevel =
-          this.map.dataSource.getStore().completedLevels.mode[level.mode.id][
-            level.name
-          ];
-        UserInterface.displayLevelInfo(completedlevel, level);
-      }
+    this.checkForLevelCollision();
+    if (this.keys.enter.pressed) {
+      const game = this.enterLevel();
+      if (game) return game;
     }
 
     if (this.keys.q.pressed) {
-      UserInterface.Shop.hidden = false;
+      Shop.Element.hidden = false;
     } else {
-      UserInterface.Shop.hidden = true;
+      Shop.Element.hidden = true;
     }
 
-    if (this.keys.enter.pressed) {
-      UserInterface.Info.innerHTML = "";
-      for (let i = 0; i < this.map.levelsArray.length; i++) {
-        const level = this.map.levelsArray[i];
-        if (!level.locked && Collision.check(this.map.player, level, 0, 0)) {
-          const nextLevel = this.map.levelsArray[i + 1];
-          this.map.canvas.classList.add("underwater");
-          return new Game(
-            this.map.canvas.width,
-            this.map.canvas.height,
-            level,
-            nextLevel,
-            this.map.dataSource,
-            this.map.canvas.getBoundingClientRect().width,
-            this.map.canvas.getBoundingClientRect().height
-          );
-        }
-      }
-    }
- 
     if (this.keys.w.pressed && this.lastKey === "w") {
-      UserInterface.Info.innerHTML = "";
+      
+      this.map.userInterface.elements.info.innerHTML = "";
 
       this.map.player.moving = true;
       this.map.player.sprite = this.map.player.state.up;
-
+      
       this.map.player.swimming = Collision.checkAll(
         this.map.landTiles,
         this.map.player,
@@ -140,7 +115,7 @@ export default class MapHandler {
         this.map.player.moving = false;
       }
     } else if (this.keys.s.pressed && this.lastKey === "s") {
-      UserInterface.Info.innerHTML = "";
+      this.map.userInterface.elements.info.innerHTML = "";
       this.map.player.moving = true;
       this.map.player.sprite = this.map.player.state.down;
 
@@ -169,7 +144,7 @@ export default class MapHandler {
         this.map.player.moving = false;
       }
     } else if (this.keys.a.pressed && this.lastKey === "a") {
-      UserInterface.Info.innerHTML = "";
+      this.map.userInterface.elements.info.innerHTML = "";
 
       this.map.player.moving = true;
       this.map.player.sprite = this.map.player.state.left;
@@ -193,7 +168,7 @@ export default class MapHandler {
         this.map.player.moving = false;
       }
     } else if (this.keys.d.pressed && this.lastKey === "d") {
-      UserInterface.Info.innerHTML = "";
+      this.map.userInterface.elements.info.innerHTML = "";
       this.map.player.moving = true;
       this.map.player.sprite = this.map.player.state.right;
 
@@ -214,6 +189,39 @@ export default class MapHandler {
       } else if (this.map.player.swimming) {
         this.map.player.sprite = this.map.player.sprites.idle.swim;
         this.map.player.moving = false;
+      }
+    }
+  }
+
+  checkForLevelCollision() {
+    for (let i = 0; i < this.map.levelsArray.length; i++) {
+      const level = this.map.levelsArray[i];
+      let completedlevel;
+      if (Collision.check(this.map.player, level, 0, 0)) {
+        completedlevel =
+          this.map.dataSource.getStore().completedLevels.mode[level.mode.id][
+            level.name
+          ];
+        this.map.userInterface.displayLevelInfo(completedlevel, level);
+      }
+    }
+  }
+  enterLevel() {
+    this.map.userInterface.elements.info.innerHTML = "";
+    for (let i = 0; i < this.map.levelsArray.length; i++) {
+      const level = this.map.levelsArray[i];
+      if (!level.locked && Collision.check(this.map.player, level, 0, 0)) {
+        const nextLevel = this.map.levelsArray[i + 1];
+        this.map.canvas.classList.add("underwater");
+        return new Game(
+          this.map.canvas.width,
+          this.map.canvas.height,
+          level,
+          nextLevel,
+          this.map.dataSource,
+          this.map.canvas.getBoundingClientRect().width,
+          this.map.canvas.getBoundingClientRect().height
+        );
       }
     }
   }

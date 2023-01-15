@@ -13,14 +13,13 @@ import Boundary from "./Environment/Boundary.js";
 import LandTile from "./Environment/LandTile.js";
 import Level from "./Environment/Level.js";
 import MapHandler from "./MapHandler.js";
-import UserInterface from "../UserInterface/UserInterface.js";
-import WorldPlayer from "./Player/WorldPlayer.js";
+import MapPlayer from "./Player/MapPlayer.js";
 import StaticImage from "../Utils/StaticImage.js";
 import { Matrix } from "./Environment/Matrix.js";
+import MapInterface from "./MapInterface.js";
 
 export default class Map {
   constructor(dataSource, canvas) {
-    UserInterface.setUpShop(dataSource);
     this.dataSource = dataSource;
     this.canvas = canvas;
     this.levelData = dataSource.getStore()["completedLevels"];
@@ -38,7 +37,8 @@ export default class Map {
       image: document.getElementById("foreground"),
     });
 
-    this.player = new WorldPlayer(canvas.width, canvas.height, dataSource);
+    this.player = new MapPlayer(canvas.width, canvas.height, dataSource);
+    this.userInterface = new MapInterface(dataSource);
 
     this.landTiles = [];
     this.boundaries = [];
@@ -75,7 +75,6 @@ export default class Map {
     } else {
       this.mathLevelsArray[0].locked = true;
     }
-
     this.levelsArray = [
       ...this.wordsLevelsArray,
       ...this.tibiaLevelsArray,
@@ -87,7 +86,6 @@ export default class Map {
       ...this.divLevelsArray,
       ...this.mathLevelsArray,
     ];
-
     this.movables = [
       this.background,
       ...this.boundaries,
@@ -261,6 +259,9 @@ export default class Map {
       locked: locked,
       content: contentArr[counter],
     });
+  }
+  update(){
+    
   }
 
   draw(ctx, deltaTime) {

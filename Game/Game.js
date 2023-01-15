@@ -1,7 +1,8 @@
 import Background from "./Environment/Background.js";
-import UserInterface from "../UserInterface/UserInterface.js";
 import Player from "./Player/Player.js";
 import Collision from "../Utils/Collision.js";
+import GameInterface from "./GameInterface.js";
+import Global from "../Utils/Global.js";
 
 export default class Game {
   constructor(
@@ -14,7 +15,8 @@ export default class Game {
     canvasRectHeight
   ) {
     this.store = dataSource.getStore();
-    this.wordContainer = UserInterface.WordContainer;
+    this.userInterface = new GameInterface(this);
+    this.wordContainer = this.userInterface.elements.wordContainer;
     this.level = level;
 
     this.nextLevel = nextLevel;
@@ -36,7 +38,6 @@ export default class Game {
     this.gameTime = 0;
     this.background = new Background(this);
     this.inputHandler = new this.level.mode.inputHandler(this);
-    this.userInterface = new UserInterface(this);
 
     this.keys = [];
     this.player = new Player(this);
@@ -64,7 +65,7 @@ export default class Game {
     if (this.player.y > 0 - this.player.height * 2 && this.gameOver) {
       this.player.y -= 3;
       if (this.player.y <= 0 - this.player.height) {
-        UserInterface.GameContainer.hidden = true;
+        Global.GameContainer.hidden = true;
         const state = {
           level: this.level,
           nextLevel: this.nextLevel,
@@ -158,10 +159,9 @@ export default class Game {
       this.enemyTimer += deltaTime;
     }
   }
-
   draw(context) {
     this.background.draw(context);
-    this.userInterface.draw(context);
+    this.userInterface.draw();
     this.player.draw(context);
     this.particles.forEach((particle) => particle.draw(context));
     this.explosions.forEach((explosion) => explosion.draw(context));
@@ -171,7 +171,6 @@ export default class Game {
       floatingMessage.draw(context)
     );
   }
-
   addEnemy() {
     this.level.mode.addEnemy(this);
   }

@@ -1,5 +1,5 @@
-import DataSource from "./Storage/DataSource.js"
-import UserInterface from "./UserInterface/UserInterface.js";
+import DataSource from "./Storage/DataSource.js";
+import Global from "./Utils/Global.js";
 import Map from "./Map/Map.js";
 
 const canvas = document.getElementById("canvas1");
@@ -11,7 +11,7 @@ const dataSource = new DataSource();
 const map = new Map(dataSource, canvas);
 
 window.addEventListener("load", function () {
-  UserInterface.GameContainer.hidden = false;
+  Global.GameContainer.hidden = false;
   let game;
   let lastTime = 0;
   let state;
@@ -25,11 +25,11 @@ window.addEventListener("load", function () {
     } else if (game && state) {
       canvas.classList.remove("underwater");
       if (state.win) {
+        const cash = dataSource.saveStateAndReturnCash(state);
+        map.userInterface.shop.setCash(cash);
         if (state.nextLevel) {
           state.nextLevel.locked = false;
         }
-        const cash = dataSource.saveState(state);
-        UserInterface.setCash(cash);
       }
       state = null;
       game = null;
@@ -38,8 +38,7 @@ window.addEventListener("load", function () {
       map.moving = true;
       map.player.moving = false;
       game = map.inputHandler.handle(deltaTime, ctx);
-      if (UserInterface.GameContainer.hidden)
-        UserInterface.GameContainer.hidden = false;
+      if (Global.GameContainer.hidden) Global.GameContainer.hidden = false;
     }
     window.requestAnimationFrame(animate);
   }

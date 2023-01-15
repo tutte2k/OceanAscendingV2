@@ -1,5 +1,4 @@
 import GameHandler from "../../GameHandler.js";
-import UserInterface from "../../../UserInterface/UserInterface.js";
 
 export default class MathHandler extends GameHandler {
   constructor(game) {
@@ -8,14 +7,14 @@ export default class MathHandler extends GameHandler {
     this.keys = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "-"];
     window.addEventListener("keyup", (e) => {
       e.preventDefault();
-      if(game.gameOver) return;
+      if (game.gameOver) return;
       if (this.keys.includes(e.key)) {
         this.answer += e.key;
-        UserInterface.Crosshair.innerHTML = this.answer;
+        game.userInterface.elements.crosshair.innerHTML = this.answer;
       }
       if (e.key === "Backspace") {
         this.answer = this.answer.substring(0, this.answer.length - 1);
-        UserInterface.Crosshair.innerHTML = this.answer;
+        game.userInterface.elements.crosshair.innerHTML = this.answer;
       }
       if (e.key === "Enter") {
         const enemy = this.game.enemies.find(
@@ -26,7 +25,7 @@ export default class MathHandler extends GameHandler {
           this.game.words.pop();
         }
         this.answer = "";
-        UserInterface.Crosshair.innerHTML = "";
+        game.userInterface.elements.crosshair.innerHTML = "";
       }
     });
   }
