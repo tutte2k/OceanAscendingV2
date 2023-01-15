@@ -5,15 +5,7 @@ import GameInterface from "./GameInterface.js";
 import Global from "../Utils/Global.js";
 
 export default class Game {
-  constructor(
-    width,
-    height,
-    level,
-    nextLevel,
-    dataSource,
-    canvasRectWidth,
-    canvasRectHeight
-  ) {
+  constructor(level, nextLevel, dataSource, canvas) {
     this.store = dataSource.getStore();
     this.userInterface = new GameInterface(this);
     this.wordContainer = this.userInterface.elements.wordContainer;
@@ -27,10 +19,18 @@ export default class Game {
     this.win = false;
     this.score = 0;
 
-    this.width = width;
-    this.height = height;
-    this.widthPercentage = canvasRectWidth / this.width;
-    this.heightPercentage = canvasRectHeight / this.height;
+    this.width = canvas.width;
+    this.height = canvas.height;
+
+    this.widthPercentage = canvas.getBoundingClientRect().width / this.width;
+    this.heightPercentage = canvas.getBoundingClientRect().height / this.height;
+
+    window.addEventListener("resize", (e) => {
+      console.log("Asd")
+      this.widthPercentage = canvas.getBoundingClientRect().width / this.width;
+      this.heightPercentage =
+        canvas.getBoundingClientRect().height / this.height;
+    });
 
     this.gameTime = 0;
     this.background = new Background(this);
@@ -144,7 +144,7 @@ export default class Game {
     const holdingTheDoor =
       Math.floor(this.level.mode.id) === 4
         ? this.enemies.length < 2
-        : this.enemies.length < 3 ;
+        : this.enemies.length < 3;
     holdingTheDoor ? (this.enemyInterval -= 15) : (this.enemyInterval += 5);
 
     const noEnemies = this.enemies.length === 0;

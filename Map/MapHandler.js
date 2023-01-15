@@ -200,13 +200,10 @@ export default class MapHandler {
         const nextLevel = this.map.levelsArray[i + 1];
         this.map.canvas.classList.add("underwater");
         return new Game(
-          this.map.canvas.width,
-          this.map.canvas.height,
           level,
           nextLevel,
           this.map.dataSource,
-          this.map.canvas.getBoundingClientRect().width,
-          this.map.canvas.getBoundingClientRect().height
+          this.map.canvas
         );
       }
     }
