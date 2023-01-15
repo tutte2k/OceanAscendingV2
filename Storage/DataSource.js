@@ -4,6 +4,7 @@ export default class DataSource {
   }
   getStore() {
     let storage = JSON.parse(localStorage.getItem(this.item));
+    if (storage.shop.mapSpeed < 3) storage.shop.mapSpeed = 3;
     if (storage) return storage;
     return {
       cash: 0,
