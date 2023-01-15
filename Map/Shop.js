@@ -36,7 +36,6 @@ export default class Shop {
   constructor(dataSource) {
     this.store = dataSource.getStore();
     this.update();
-
     Shop.Element.addEventListener("click", (e) => {
       const store = dataSource.getStore();
       const cash = store["cash"];
@@ -75,13 +74,12 @@ export default class Shop {
     Shop.Content.diveSpeed.current.innerHTML = this.store.shop.diveSpeed;
     Shop.Content.diveSpeed.priceElement.innerHTML =
       Shop.Content.diveSpeed.price(this.store.shop.diveSpeed);
-
+      
     Shop.Content.mapSpeed.current.innerHTML = this.store.shop.mapSpeed;
     Shop.Content.mapSpeed.priceElement.innerHTML = Shop.Content.mapSpeed.price(
       this.store.shop.mapSpeed
     );
   }
-
   buy(id, cash, dataSource, current) {
     this.store = dataSource.getStore();
     this.store.shop[id]++;

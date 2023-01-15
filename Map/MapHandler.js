@@ -75,34 +75,27 @@ export default class MapHandler {
       const game = this.enterLevel();
       if (game) return game;
     }
-
     if (this.keys.q.pressed) {
       Shop.Element.hidden = false;
     } else {
       Shop.Element.hidden = true;
     }
-
     if (this.keys.w.pressed && this.lastKey === "w") {
-      
       this.map.userInterface.elements.info.innerHTML = "";
-
       this.map.player.moving = true;
       this.map.player.sprite = this.map.player.state.up;
-      
       this.map.player.swimming = Collision.checkAll(
         this.map.landTiles,
         this.map.player,
         0,
         this.map.player.speed
       );
-
       this.map.moving = Collision.checkAll(
         this.map.boundaries,
         this.map.player,
         0,
         this.map.player.speed
       );
-
       if (this.map.moving) {
         this.map.movables.forEach(
           (movable) => (movable.position.y += this.map.player.speed)
@@ -118,7 +111,6 @@ export default class MapHandler {
       this.map.userInterface.elements.info.innerHTML = "";
       this.map.player.moving = true;
       this.map.player.sprite = this.map.player.state.down;
-
       this.map.player.swimming = Collision.checkAll(
         this.map.landTiles,
         this.map.player,
@@ -131,7 +123,6 @@ export default class MapHandler {
         0,
         -this.map.player.speed
       );
-
       if (this.map.moving) {
         this.map.movables.forEach(
           (movable) => (movable.position.y -= this.map.player.speed)
@@ -145,17 +136,14 @@ export default class MapHandler {
       }
     } else if (this.keys.a.pressed && this.lastKey === "a") {
       this.map.userInterface.elements.info.innerHTML = "";
-
       this.map.player.moving = true;
       this.map.player.sprite = this.map.player.state.left;
-
       this.map.moving = Collision.checkAll(
         this.map.boundaries,
         this.map.player,
         this.map.player.speed,
         0
       );
-
       if (this.map.moving) {
         this.map.movables.forEach(
           (movable) => (movable.position.x += this.map.player.speed)
@@ -171,14 +159,12 @@ export default class MapHandler {
       this.map.userInterface.elements.info.innerHTML = "";
       this.map.player.moving = true;
       this.map.player.sprite = this.map.player.state.right;
-
       this.map.moving = Collision.checkAll(
         this.map.boundaries,
         this.map.player,
         -this.map.player.speed,
         0
       );
-
       if (this.map.moving) {
         this.map.movables.forEach(
           (movable) => (movable.position.x -= this.map.player.speed)
