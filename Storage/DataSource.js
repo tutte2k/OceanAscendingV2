@@ -27,7 +27,7 @@ export default class DataSource {
         mineSlot: 1,
         mineReg: 1,
         diveSpeed: 1,
-        mapSpeed: 1,
+        mapSpeed: 3,
       },
     };
   }
