@@ -40,7 +40,9 @@ export default class Enemy {
       this.y += this.speedY - this.game.speed;
     } else {
       this.x += this.speedX - this.game.speed;
-      this.y > this.game.player.y ? (this.y -= 0.4) : (this.y += 0.4);
+      this.y > this.game.player.y && this.y > 10
+        ? (this.y -= 0.4)
+        : (this.y += 0.4);
       if (this.x + this.width * 0.7 < 0) {
         this.x -= this.width;
       }
@@ -327,7 +329,6 @@ class Drone extends Mech {
     );
     this.x = x;
     this.y = y;
-    this.type = "mech";
   }
 }
 class Octopus extends Enemy {
