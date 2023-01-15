@@ -5,209 +5,89 @@ import Shop from "./Shop.js";
 export default class MapHandler {
   constructor(map) {
     this.map = map;
-    this.keys = {
-      w: { pressed: false },
-      a: { pressed: false },
-      s: { pressed: false },
-      d: { pressed: false },
-      enter: { pressed: false },
-      q: { pressed: false },
-    };
-    this.lastKey = "";
+    this.keys = [];
+
     window.addEventListener("keydown", (e) => {
       e.preventDefault();
-      switch (e.key) {
-        case "w":
-          this.keys.w.pressed = true;
-          this.lastKey = "w";
-          this.map.player.lastDirection = "up";
-          break;
-        case "a":
-          this.keys.a.pressed = true;
-          this.lastKey = "a";
-          this.map.player.lastDirection = "left";
-          break;
-        case "s":
-          this.keys.s.pressed = true;
-          this.lastKey = "s";
-          this.map.player.lastDirection = "down";
-          break;
-        case "d":
-          this.keys.d.pressed = true;
-          this.lastKey = "d";
-          this.map.player.lastDirection = "right";
-          break;
-        case "W":
-          this.keys.w.pressed = true;
-          this.lastKey = "w";
-          this.map.player.lastDirection = "up";
-          break;
-        case "A":
-          this.keys.a.pressed = true;
-          this.lastKey = "a";
-          this.map.player.lastDirection = "left";
-          break;
-        case "R":
-          this.keys.s.pressed = true;
-          this.lastKey = "s";
-          this.map.player.lastDirection = "down";
-          break;
-        case "S":
-          this.keys.d.pressed = true;
-          this.lastKey = "d";
-          this.map.player.lastDirection = "right";
-          break;
-        case "Enter":
-          this.keys.enter.pressed = true;
-          break;
-        case "q":
-          this.keys.q.pressed = true;
-          break;
+      if (this.keys.indexOf(e.key) === -1) {
+        this.keys.push(e.key);
       }
     });
     window.addEventListener("keyup", (e) => {
-      switch (e.key) {
-        case "w":
-          this.keys.w.pressed = false;
-          break;
-        case "a":
-          this.keys.a.pressed = false;
-          break;
-        case "s":
-          this.keys.s.pressed = false;
-          break;
-        case "d":
-          this.keys.d.pressed = false;
-          break;
-        case "W":
-          this.keys.w.pressed = false;
-          break;
-        case "A":
-          this.keys.a.pressed = false;
-          break;
-        case "R":
-          this.keys.s.pressed = false;
-          break;
-        case "S":
-          this.keys.d.pressed = false;
-          break;
-        case "Enter":
-          this.keys.enter.pressed = false;
-          break;
-        case "q":
-          this.keys.q.pressed = false;
-          break;
+      if (this.keys.indexOf(e.key) > -1) {
+        this.keys.splice(this.keys.indexOf(e.key), 1);
       }
     });
+  }
+  move(direction, collisionX, collisionY) {
+    this.map.player.lastDirection = direction;
+    this.map.userInterface.elements.info.innerHTML = "";
+
+    this.map.player.moving = true;
+    this.map.player.sprite = this.map.player.state[direction];
+
+    this.map.player.swimming = Collision.checkAll(
+      this.map.landTiles,
+      this.map.player,
+      collisionX,
+      collisionY
+    );
+    this.map.moving = Collision.checkAll(
+      this.map.boundaries,
+      this.map.player,
+      collisionX,
+      collisionY
+    );
+    const map = {
+      up: "y",
+      down: "y",
+      left: "x",
+      right: "x",
+    };
+
+    const Calculate = {
+      up: (firstInput, secondInput) => (firstInput += secondInput),
+      down: (firstInput, secondInput) => (firstInput -= secondInput),
+      left: (firstInput, secondInput) => (firstInput += secondInput),
+      right: (firstInput, secondInput) => (firstInput -= secondInput),
+    };
+
+    if (this.map.moving) {
+      this.map.movables.forEach(
+        (movable) =>
+          (movable.position[map[direction]] = Calculate[direction](
+            movable.position[map[direction]],
+            this.map.player.speed
+          ))
+      );
+    } else if (!this.map.player.swimming) {
+      this.map.player.sprite = this.map.player.sprites.idle[direction];
+      this.map.player.moving = false;
+    } else if (this.map.player.swimming) {
+      this.map.player.sprite = this.map.player.sprites.idle.swim;
+      this.map.player.moving = false;
+    }
   }
 
   handle() {
     this.checkForLevelCollision();
-    if (this.keys.enter.pressed) {
+    if (this.keys.includes("Enter")) {
       const game = this.enterLevel();
       if (game) return game;
     }
-    if (this.keys.q.pressed && this.map.player.swimming === false) {
+    if (this.keys.includes("q") && this.map.player.swimming === false) {
       Shop.Element.hidden = false;
     } else {
       Shop.Element.hidden = true;
     }
-    if (this.keys.w.pressed && this.lastKey === "w") {
-      this.map.userInterface.elements.info.innerHTML = "";
-      this.map.player.moving = true;
-      this.map.player.sprite = this.map.player.state.up;
-      this.map.player.swimming = Collision.checkAll(
-        this.map.landTiles,
-        this.map.player,
-        0,
-        this.map.player.speed
-      );
-      this.map.moving = Collision.checkAll(
-        this.map.boundaries,
-        this.map.player,
-        0,
-        this.map.player.speed
-      );
-      if (this.map.moving) {
-        this.map.movables.forEach(
-          (movable) => (movable.position.y += this.map.player.speed)
-        );
-      } else if (!this.map.player.swimming) {
-        this.map.player.sprite = this.map.player.sprites.idle.up;
-        this.map.player.moving = false;
-      } else if (this.map.player.swimming) {
-        this.map.player.sprite = this.map.player.sprites.idle.swim;
-        this.map.player.moving = false;
-      }
-    } else if (this.keys.s.pressed && this.lastKey === "s") {
-      this.map.userInterface.elements.info.innerHTML = "";
-      this.map.player.moving = true;
-      this.map.player.sprite = this.map.player.state.down;
-      this.map.player.swimming = Collision.checkAll(
-        this.map.landTiles,
-        this.map.player,
-        0,
-        -this.map.player.speed
-      );
-      this.map.moving = Collision.checkAll(
-        this.map.boundaries,
-        this.map.player,
-        0,
-        -this.map.player.speed
-      );
-      if (this.map.moving) {
-        this.map.movables.forEach(
-          (movable) => (movable.position.y -= this.map.player.speed)
-        );
-      } else if (!this.map.player.swimming) {
-        this.map.player.sprite = this.map.player.sprites.idle.down;
-        this.map.player.moving = false;
-      } else if (this.map.player.swimming) {
-        this.map.player.sprite = this.map.player.sprites.idle.swim;
-        this.map.player.moving = false;
-      }
-    } else if (this.keys.a.pressed && this.lastKey === "a") {
-      this.map.userInterface.elements.info.innerHTML = "";
-      this.map.player.moving = true;
-      this.map.player.sprite = this.map.player.state.left;
-      this.map.moving = Collision.checkAll(
-        this.map.boundaries,
-        this.map.player,
-        this.map.player.speed,
-        0
-      );
-      if (this.map.moving) {
-        this.map.movables.forEach(
-          (movable) => (movable.position.x += this.map.player.speed)
-        );
-      } else if (!this.map.player.swimming) {
-        this.map.player.sprite = this.map.player.sprites.idle.left;
-        this.map.player.moving = false;
-      } else if (this.map.player.swimming) {
-        this.map.player.sprite = this.map.player.sprites.idle.swim;
-        this.map.player.moving = false;
-      }
-    } else if (this.keys.d.pressed && this.lastKey === "d") {
-      this.map.userInterface.elements.info.innerHTML = "";
-      this.map.player.moving = true;
-      this.map.player.sprite = this.map.player.state.right;
-      this.map.moving = Collision.checkAll(
-        this.map.boundaries,
-        this.map.player,
-        -this.map.player.speed,
-        0
-      );
-      if (this.map.moving) {
-        this.map.movables.forEach(
-          (movable) => (movable.position.x -= this.map.player.speed)
-        );
-      } else if (!this.map.player.swimming) {
-        this.map.player.sprite = this.map.player.sprites.idle.right;
-        this.map.player.moving = false;
-      } else if (this.map.player.swimming) {
-        this.map.player.sprite = this.map.player.sprites.idle.swim;
-        this.map.player.moving = false;
-      }
+    if (this.keys.includes("w") || this.keys.includes("W")) {
+      this.move("up", 0, this.map.player.speed);
+    } else if (this.keys.includes("s") || this.keys.includes("R")) {
+      this.move("down", 0, -this.map.player.speed);
+    } else if (this.keys.includes("a") || this.keys.includes("A")) {
+      this.move("left", this.map.player.speed, 0);
+    } else if (this.keys.includes("d") || this.keys.includes("S")) {
+      this.move("right", -this.map.player.speed, 0);
     }
   }
 
