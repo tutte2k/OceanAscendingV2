@@ -25,8 +25,7 @@ export default class Game {
     this.widthPercentage = canvas.getBoundingClientRect().width / this.width;
     this.heightPercentage = canvas.getBoundingClientRect().height / this.height;
 
-    window.addEventListener("resize", (e) => {
-      console.log("Asd")
+    window.addEventListener("resize", () => {
       this.widthPercentage = canvas.getBoundingClientRect().width / this.width;
       this.heightPercentage =
         canvas.getBoundingClientRect().height / this.height;
