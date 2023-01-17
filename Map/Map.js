@@ -65,6 +65,7 @@ export default class Map {
     this.mathCounter = 0;
 
     this.init();
+    console.log(this.wordsCounter)
     if (
       this.addLevelsArray[this.addLevelsArray.length - 1].locked === false ||
       this.subLevelsArray[this.subLevelsArray.length - 1].locked === false ||
@@ -112,11 +113,11 @@ export default class Map {
     }
 
     const tibiaContent = splitLevelData(TibiaMode.Data, 50);
-    const wordsContent = splitLevelData(EnglishMode.Data, 100);
+    const wordsContent = splitLevelData(EnglishMode.Data, 80);
     const specialContent = splitLevelData(ExpertMode.Data, 50);
     const svenskaContent = splitLevelData(SwedishMode.Data, 275);
     const MathContent = Array.from(Array(448), () => new Array(25).fill(1));
-
+    console.log(wordsContent.length)
     Matrix.forEach((row, i) => {
       row.forEach((symbol, j) => {
         if (symbol === 1025) {
