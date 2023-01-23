@@ -10,24 +10,24 @@ canvas.height = 1768;
 const dataSource = new DataSource();
 const map = new Map(dataSource, canvas);
 
-const audio = {
-  map: new Audio("./assets/map.mp3"),
-  match: new Audio("./assets/match.mp3"),
-};
+// const audio = {
+//   map: new Audio("./assets/map.mp3"),
+//   match: new Audio("./assets/match.mp3"),
+// };
 
-audio.map.loop = true;
-audio.match.loop = true;
+// audio.map.loop = true;
+// audio.match.loop = true;
 
-let playing = "map";
+// let playing = "map";
 
-audio.map.onplaying = () => (playing = "map");
-audio.match.onplaying = () => (playing = "match");
-audio.map.onplay = () => audio.match.pause();
-audio.match.onplay = () => audio.map.pause();
+// audio.map.onplaying = () => (playing = "map");
+// audio.match.onplaying = () => (playing = "match");
+// audio.map.onplay = () => audio.match.pause();
+// audio.match.onplay = () => audio.map.pause();
 
-window.addEventListener("focus", () => {
-  audio.map.play();
-});
+// window.addEventListener("focus", () => {
+//   audio.map.play();
+// });
 
 
 window.addEventListener("load", function () {
