@@ -6,31 +6,37 @@ export default class Shop {
       price: (val) => val * 10,
       current: document.getElementById("currentAirSlot"),
       priceElement: document.getElementById("airSlotPrice"),
+      max: 100,
     },
     airReg: {
       price: (val) => val * 20,
       current: document.getElementById("currentAirReg"),
       priceElement: document.getElementById("airRegPrice"),
+      max: 10,
     },
     mineSlot: {
       price: (val) => val * 5,
       current: document.getElementById("currentMineSlot"),
       priceElement: document.getElementById("mineSlotPrice"),
+      max: 100,
     },
     mineReg: {
       price: (val) => val * 15,
       current: document.getElementById("currentMineReg"),
       priceElement: document.getElementById("mineRegPrice"),
+      max: 10,
     },
     diveSpeed: {
       price: (val) => val * 50,
       current: document.getElementById("currentDiveSpeed"),
       priceElement: document.getElementById("diveSpeedPrice"),
+      max: 10,
     },
     mapSpeed: {
       price: (val) => val * 100,
       current: document.getElementById("currentMapSpeed"),
       priceElement: document.getElementById("mapSpeedPrice"),
+      max: 10,
     },
   };
   constructor(dataSource) {
@@ -74,13 +80,14 @@ export default class Shop {
     Shop.Content.diveSpeed.current.innerHTML = this.store.shop.diveSpeed;
     Shop.Content.diveSpeed.priceElement.innerHTML =
       Shop.Content.diveSpeed.price(this.store.shop.diveSpeed);
-      
+
     Shop.Content.mapSpeed.current.innerHTML = this.store.shop.mapSpeed;
     Shop.Content.mapSpeed.priceElement.innerHTML = Shop.Content.mapSpeed.price(
       this.store.shop.mapSpeed
     );
   }
   buy(id, cash, dataSource, current) {
+    if (current >= Shop.Content[id].max) return;
     this.store = dataSource.getStore();
     this.store.shop[id]++;
     this.store.cash = cash - Shop.Content[id].price(current);

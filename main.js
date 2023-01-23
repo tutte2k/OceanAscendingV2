@@ -10,17 +10,38 @@ canvas.height = 1768;
 const dataSource = new DataSource();
 const map = new Map(dataSource, canvas);
 
+const audio = {
+  map: new Audio("./assets/map.mp3"),
+  match: new Audio("./assets/match.mp3"),
+};
+
+audio.map.loop = true;
+audio.match.loop = true;
+
+let playing = "map";
+
+audio.map.onplaying = () => (playing = "map");
+audio.match.onplaying = () => (playing = "match");
+audio.map.onplay = () => audio.match.pause();
+audio.match.onplay = () => audio.map.pause();
+
+window.addEventListener("focus", () => {
+  audio.map.play();
+});
+
 
 window.addEventListener("load", function () {
   Global.GameContainer.hidden = false;
   let game;
   let lastTime = 0;
   let state;
+
   function animate(timeStamp) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const deltaTime = timeStamp - lastTime;
     lastTime = timeStamp;
     if (game && game.level) {
+      if (playing !== "match") audio.match.play();
       game.draw(ctx);
       state = game.update(deltaTime);
     } else if (game && state) {
@@ -32,6 +53,7 @@ window.addEventListener("load", function () {
           state.nextLevel.locked = false;
         }
       }
+      if (playing !== "map") audio.map.play();
       state = null;
       game = null;
     } else {

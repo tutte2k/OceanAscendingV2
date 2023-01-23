@@ -1,6 +1,6 @@
 export default class DataSource {
   constructor() {
-    this.item = "a5";
+    this.item = "a6";
   }
   getStore() {
     let storage = JSON.parse(localStorage.getItem(this.item));
