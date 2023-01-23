@@ -41,7 +41,7 @@ window.addEventListener("load", function () {
     const deltaTime = timeStamp - lastTime;
     lastTime = timeStamp;
     if (game && game.level) {
-      if (playing !== "match") audio.match.play();
+      //if (playing !== "match") audio.match.play();
       game.draw(ctx);
       state = game.update(deltaTime);
     } else if (game && state) {
@@ -53,7 +53,7 @@ window.addEventListener("load", function () {
           state.nextLevel.locked = false;
         }
       }
-      if (playing !== "map") audio.map.play();
+      //if (playing !== "map") audio.map.play();
       state = null;
       game = null;
     } else {
