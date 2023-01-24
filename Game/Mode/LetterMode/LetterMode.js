@@ -11,6 +11,7 @@ export default class LetterMode extends Mode {
   addEnemy(game) {
     const indexOfLastWord = game.words.length - 1;
     const word = LetterMode.Next(game, indexOfLastWord);
+    console.log(word)
     if (!word) return;
     const creature = Enemy.Next(game, word);
     game.enemies.push(creature);
@@ -36,6 +37,7 @@ export default class LetterMode extends Mode {
       }
     }
     const fallback = game.words.pop();
+    console.log(fallback)
     if (fallback) return;
     else return "x";
   }

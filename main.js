@@ -1,6 +1,7 @@
 import DataSource from "./Storage/DataSource.js";
 import Global from "./Utils/Global.js";
 import Map from "./Map/Map.js";
+import Audioplayer from "./Audioplayer/Audioplayer.js";
 
 const canvas = document.getElementById("canvas1");
 const ctx = canvas.getContext("2d");
@@ -9,26 +10,7 @@ canvas.height = 1768;
 
 const dataSource = new DataSource();
 const map = new Map(dataSource, canvas);
-
-// const audio = {
-//   map: new Audio("./assets/map.mp3"),
-//   match: new Audio("./assets/match.mp3"),
-// };
-
-// audio.map.loop = true;
-// audio.match.loop = true;
-
-// let playing = "map";
-
-// audio.map.onplaying = () => (playing = "map");
-// audio.match.onplaying = () => (playing = "match");
-// audio.map.onplay = () => audio.match.pause();
-// audio.match.onplay = () => audio.map.pause();
-
-// window.addEventListener("focus", () => {
-//   audio.map.play();
-// });
-
+const audioPlayer = new Audioplayer();
 
 window.addEventListener("load", function () {
   Global.GameContainer.hidden = false;
@@ -41,7 +23,8 @@ window.addEventListener("load", function () {
     const deltaTime = timeStamp - lastTime;
     lastTime = timeStamp;
     if (game && game.level) {
-      //if (playing !== "match") audio.match.play();
+      if (audioPlayer.playing !== "match") audioPlayer.playing = "match";
+      if (audioPlayer.isPlaying) audioPlayer.play();
       game.draw(ctx);
       state = game.update(deltaTime);
     } else if (game && state) {
@@ -53,10 +36,11 @@ window.addEventListener("load", function () {
           state.nextLevel.locked = false;
         }
       }
-      //if (playing !== "map") audio.map.play();
       state = null;
       game = null;
     } else {
+      if (audioPlayer.playing !== "map") audioPlayer.playing = "map";
+      if (audioPlayer.isPlaying) audioPlayer.play();
       map.draw(ctx, deltaTime);
       map.moving = true;
       map.player.moving = false;
