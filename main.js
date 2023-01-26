@@ -14,6 +14,7 @@ const audioPlayer = new Audioplayer();
 
 window.addEventListener("load", function () {
   Global.GameContainer.hidden = false;
+  Global.Spinner.hidden=true;
   let game;
   let lastTime = 0;
   let state;
@@ -45,7 +46,10 @@ window.addEventListener("load", function () {
       map.moving = true;
       map.player.moving = false;
       game = map.inputHandler.handle(deltaTime, ctx);
-      if (Global.GameContainer.hidden) Global.GameContainer.hidden = false;
+      if (Global.GameContainer.hidden) {
+        Global.GameContainer.hidden = false
+        Global.Spinner.hidden = true;
+      };
     }
     window.requestAnimationFrame(animate);
   }
