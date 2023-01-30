@@ -103,7 +103,7 @@ export default class Enemy {
     return new enemies[Random.index(enemies)](game, value);
   }
   static Next(game, value) {
-    const tier1 = [Goldfish, LuckyFish, Jellyfish, Inker, Urchie];
+    const tier1 = [Goldfish, LuckyFish, Jellyfish, Inker, Urchie, Inky];
     const tier2 = [Seahorse, Turtle];
     const tier3 = [Angler1, Angler2];
     const tier4 = [Lionfish, Shark, Whale];
@@ -159,7 +159,7 @@ class Jellyfish extends Fish {
       this.game.width - this.game.width * 0.1
     );
     this.y = this.game.height + 100;
-    this.speedX = 0;
+    this.speedX = 1;
     this.speedY = -1;
   }
 }
@@ -380,5 +380,22 @@ class Inker extends Octopus {
     const image = document.getElementById(`inker`);
     super(game, word, new SpriteSheet(image, width, height, 5, 18, 25, true));
     this.speedX = -2;
+  }
+}
+
+
+class Inky extends Octopus {
+  constructor(game, word) {
+    const width = 118;
+    const height = 137;
+    const image = document.getElementById("inky");
+    super(game, word, new SpriteSheet(image, width, height, 5, 18, 20, true));
+    this.x = Random.int(
+      this.game.width * 0.2,
+      this.game.width - this.game.width * 0.1
+    );
+    this.y = this.game.height + 100;
+    this.speedX = 1;
+    this.speedY = -2;
   }
 }
