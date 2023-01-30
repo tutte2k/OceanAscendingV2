@@ -6,18 +6,16 @@ export default class MapHandler {
   constructor(map) {
     this.map = map;
     this.keys = [];
-
-    window.addEventListener("keydown", (e) => {
-      e.preventDefault();
-      if (this.keys.indexOf(e.key) === -1) {
-        this.keys.push(e.key);
-      }
-    });
-    window.addEventListener("keyup", (e) => {
-      if (this.keys.indexOf(e.key) > -1) {
-        this.keys.splice(this.keys.indexOf(e.key), 1);
-      }
-    });
+  }
+  keyDown(e) {
+    if (this.keys.indexOf(e.key) === -1) {
+      this.keys.push(e.key);
+    }
+  }
+  keyUp(e) {
+    if (this.keys.indexOf(e.key) > -1) {
+      this.keys.splice(this.keys.indexOf(e.key), 1);
+    }
   }
   move(direction, collisionX, collisionY) {
     this.map.player.lastDirection = direction;
@@ -90,7 +88,6 @@ export default class MapHandler {
       this.move("right", -this.map.player.speed, 0);
     }
   }
-
   checkForLevelCollision() {
     for (let i = 0; i < this.map.levelsArray.length; i++) {
       const level = this.map.levelsArray[i];
@@ -105,6 +102,7 @@ export default class MapHandler {
     }
   }
   enterLevel() {
+    this.keys.length = 0;
     this.map.userInterface.elements.info.innerHTML = "";
     for (let i = 0; i < this.map.levelsArray.length; i++) {
       const level = this.map.levelsArray[i];

@@ -14,11 +14,27 @@ const audioPlayer = new Audioplayer();
 
 window.addEventListener("load", function () {
   Global.GameContainer.hidden = false;
-  Global.Spinner.hidden=true;
+  Global.Spinner.hidden = true;
   let game;
+
+  this.addEventListener("keydown", (e) => {
+    if (game) {
+      game.inputHandler.keyDown(e);
+    } else {
+      map.inputHandler.keyDown(e);
+    }
+  });
+
+  this.addEventListener("keyup", (e) => {
+    if (game) {
+      game.inputHandler.keyUp(e);
+    } else {
+      map.inputHandler.keyUp(e);
+    }
+  });
+
   let lastTime = 0;
   let state;
-
   function animate(timeStamp) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const deltaTime = timeStamp - lastTime;
@@ -47,10 +63,11 @@ window.addEventListener("load", function () {
       map.player.moving = false;
       game = map.inputHandler.handle(deltaTime, ctx);
       if (Global.GameContainer.hidden) {
-        Global.GameContainer.hidden = false
+        Global.GameContainer.hidden = false;
         Global.Spinner.hidden = true;
-      };
+      }
     }
+
     window.requestAnimationFrame(animate);
   }
   animate(0);

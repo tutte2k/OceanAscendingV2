@@ -42,7 +42,7 @@ export default class DataSource {
     );
     if (!levelObject) {
       levelObject = {
-        level: state.level,
+        level: state.level.name,
         mode: state.level.mode.name,
         score: state.score,
       };
