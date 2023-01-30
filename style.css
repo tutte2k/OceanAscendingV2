@@ -6,9 +6,10 @@ html {
   overflow-y: hidden;
   overflow-x: hidden;
 }
-#infoContainer{
-  position:absolute;
-  z-index: 2;
+#infoContainer {
+  position: absolute;
+  z-index: 3;
+  bottom: 0;
 }
 
 #container1 {
@@ -87,7 +88,7 @@ html {
   width: 100%;
   height: 100%;
   background: linear-gradient(
-    142deg,
+    210deg,
     #6ab7ff,
     #5ca2e4,
     #518cc4,
@@ -98,7 +99,7 @@ html {
     #000000
   );
   background-size: 1600% 1600%;
-  animation: fade 1000s ease;
+  animation: fade 100s ease;
   animation-fill-mode: forwards;
 }
 
@@ -110,54 +111,4 @@ html {
   100% {
     background-position: 50% 90%;
   }
-}
-#layer1,
-#layer2,
-#layer3,
-#layer4,
-#player,
-#angler1,
-#angler2,
-#lucky,
-#projectile,
-#gears,
-#hivewhale,
-#drone,
-#smokeExplosion,
-#fireExplosion,
-#rainbowExplosion,
-#lionfish1,
-#seahorse,
-#turtle1,
-#turtle2,
-#turtle3,
-#turtle4,
-#turtle5,
-#jellyfish1,
-#jellyfish2,
-#jellyfish3,
-#jellyfish4,
-#jellyfish5,
-#chtullie,
-#angela1,
-#angela2,
-#goldfish,
-#shark,
-#whale,
-#playerUp,
-#playerDown,
-#playerLeft,
-#playerRight,
-#idleDown,
-#idleRight,
-#idleLeft,
-#idleUp,
-#swimUp,
-#swimDown,
-#swimLeft,
-#swimIdle,
-#swimRight,
-#map,
-#foreground {
-  display: none;
 }

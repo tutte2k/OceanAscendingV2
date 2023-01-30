@@ -38,14 +38,13 @@ export default class Enemy {
   update(deltaTime) {
     if (this.speedY) {
       this.y += this.speedY - this.game.speed;
-    } else {
-      this.x += this.speedX - this.game.speed;
-      this.y > this.game.player.y && this.y > 10
-        ? (this.y -= 0.4)
-        : (this.y += 0.4);
-      if (this.x + this.width * 0.7 < 0) {
-        this.x -= this.width;
-      }
+    }
+    this.x += this.speedX - this.game.speed;
+    this.y > this.game.player.y && this.y > 10
+      ? (this.y -= 0.4)
+      : (this.y += 0.4);
+    if (this.x + this.width * 0.7 < 0) {
+      this.x -= this.width;
     }
     if (this.x + this.width < 0 || this.y + this.height < 0) {
       this.markedForDeletion = true;
@@ -104,7 +103,7 @@ export default class Enemy {
     return new enemies[Random.index(enemies)](game, value);
   }
   static Next(game, value) {
-    const tier1 = [Goldfish, LuckyFish, Jellyfish];
+    const tier1 = [Goldfish, LuckyFish, Jellyfish, Inker, Urchie];
     const tier2 = [Seahorse, Turtle];
     const tier3 = [Angler1, Angler2];
     const tier4 = [Lionfish, Shark, Whale];
@@ -125,6 +124,7 @@ export default class Enemy {
     return enemy;
   }
 }
+
 class Fish extends Enemy {
   constructor(game, word, spritesheet) {
     super(game, word, spritesheet);
@@ -155,7 +155,7 @@ class Jellyfish extends Fish {
       )
     );
     this.x = Random.int(
-      this.game.width * 0.1,
+      this.game.width * 0.2,
       this.game.width - this.game.width * 0.1
     );
     this.y = this.game.height + 100;
@@ -163,6 +163,7 @@ class Jellyfish extends Fish {
     this.speedY = -1;
   }
 }
+
 class Goldfish extends Fish {
   constructor(game, word) {
     const width = 228;
@@ -217,6 +218,22 @@ class Whale extends Fish {
     this.speedX = -1;
   }
 }
+class Urchie extends Fish {
+  constructor(game, word) {
+    const width = 100;
+    const height = 100;
+    const image = document.getElementById("urchie");
+    super(game, word, new SpriteSheet(image, width, height, 5, 7, 20, true));
+    this.x = Random.int(
+      this.game.width * 0.2,
+      this.game.width - this.game.width * 0.1
+    );
+    this.y = -50;
+    this.speedX = -1;
+    this.speedY = 2;
+  }
+}
+
 class Mech extends Enemy {
   constructor(game, word, spritesheet) {
     super(game, word, spritesheet);
@@ -331,6 +348,7 @@ class Drone extends Mech {
     this.y = y;
   }
 }
+
 class Octopus extends Enemy {
   constructor(game, word, spritesheet) {
     super(game, word, spritesheet);
@@ -353,5 +371,14 @@ class Chtullie extends Octopus {
     const image = document.getElementById(`chtullie`);
     super(game, word, new SpriteSheet(image, width, height, 4, 9, 25, true));
     this.speedX = -0.6;
+  }
+}
+class Inker extends Octopus {
+  constructor(game, word) {
+    const width = 105;
+    const height = 88;
+    const image = document.getElementById(`inker`);
+    super(game, word, new SpriteSheet(image, width, height, 5, 18, 25, true));
+    this.speedX = -2;
   }
 }
