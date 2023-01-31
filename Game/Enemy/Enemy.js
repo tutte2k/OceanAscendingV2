@@ -86,11 +86,16 @@ export default class Enemy {
   }
   draw(context) {
     this.sprite.draw(context, this.x, this.y);
-    this.element.style.top = this.y * this.game.heightPercentage + "px";
+    this.element.style.top =
+      this.y * this.game.heightPercentage +
+      (this.height * this.game.heightPercentage) / 2 +
+      "px";
+
     this.element.style.left =
       (this.width * this.game.widthPercentage) / 2 +
       (this.x - this.width * 0.5) * this.game.widthPercentage +
       "px";
+
     this.element.style.color = this.focused ? "lime" : "whitesmoke";
     if (Math.floor(this.game.level.mode.id) === 4) {
     } else {
@@ -103,7 +108,7 @@ export default class Enemy {
     return new enemies[Random.index(enemies)](game, value);
   }
   static Next(game, value) {
-    const tier1 = [Goldfish, LuckyFish, Jellyfish, Inker, Urchie, Inky];
+    const tier1 = [Goldfish, LuckyFish, Jellyfish, Inker, Urchie, Inky, Jinxy];
     const tier2 = [Seahorse, Turtle];
     const tier3 = [Angler1, Angler2];
     const tier4 = [Lionfish, Shark, Whale];
@@ -124,7 +129,6 @@ export default class Enemy {
     return enemy;
   }
 }
-
 class Fish extends Enemy {
   constructor(game, word, spritesheet) {
     super(game, word, spritesheet);
@@ -163,7 +167,6 @@ class Jellyfish extends Fish {
     this.speedY = -1;
   }
 }
-
 class Goldfish extends Fish {
   constructor(game, word) {
     const width = 228;
@@ -214,7 +217,26 @@ class Whale extends Fish {
     const width = 469;
     const height = 234;
     const image = document.getElementById("whale");
-    super(game, word, new SpriteSheet(image, width, height, 5, 13, 20, true));
+    const spriteSheetColumns = 4;
+    const spriteSheetRows = 13;
+    const indexOfLastImage = 0;
+    const fps = 20;
+
+    super(
+      game,
+      word,
+      new SpriteSheet(
+        image,
+        width,
+        height,
+        spriteSheetColumns,
+        spriteSheetRows,
+        fps,
+        true,
+        indexOfLastImage
+      )
+    );
+
     this.speedX = -1;
   }
 }
@@ -223,7 +245,24 @@ class Urchie extends Fish {
     const width = 100;
     const height = 100;
     const image = document.getElementById("urchie");
-    super(game, word, new SpriteSheet(image, width, height, 5, 7, 20, true));
+    const spriteSheetColumns = 4;
+    const spriteSheetRows = 7;
+    const indexOfLastImage = 1;
+    const fps = 20;
+    super(
+      game,
+      word,
+      new SpriteSheet(
+        image,
+        width,
+        height,
+        spriteSheetColumns,
+        spriteSheetRows,
+        fps,
+        true,
+        indexOfLastImage
+      )
+    );
     this.x = Random.int(
       this.game.width * 0.2,
       this.game.width - this.game.width * 0.1
@@ -233,7 +272,46 @@ class Urchie extends Fish {
     this.speedY = 2;
   }
 }
+class Jinxy extends Fish {
+  constructor(game, word) {
+    const width = 166;
+    const height = 162;
+    const image = document.getElementById("jinxy");
+    const spriteSheetColumns = 4;
+    const spriteSheetRows = 7;
+    const indexOfLastImage = 3;
+    const fps = 60;
+    super(
+      game,
+      word,
+      new SpriteSheet(
+        image,
+        width,
+        height,
+        spriteSheetColumns,
+        spriteSheetRows,
+        fps,
+        true,
+        indexOfLastImage
+      )
+    );
+    this.speedX = -2.5;
 
+    this.jinxTimer = 0;
+    this.jinxInterval = 5000;
+  }
+  update(deltaTime) {
+    if (this.jinxTimer > this.jinxInterval) {
+      let alphabet = LetterMode.Alphabet;
+      this.text = alphabet[Random.int(0, LetterMode.Alphabet.length - 1)];
+      this.jinxInterval -= this.jinxInterval * 0.5;
+      this.jinxTimer = 0;
+    } else {
+      this.jinxTimer += deltaTime;
+    }
+    super.update(deltaTime);
+  }
+}
 class Mech extends Enemy {
   constructor(game, word, spritesheet) {
     super(game, word, spritesheet);
@@ -348,7 +426,6 @@ class Drone extends Mech {
     this.y = y;
   }
 }
-
 class Octopus extends Enemy {
   constructor(game, word, spritesheet) {
     super(game, word, spritesheet);
@@ -369,7 +446,25 @@ class Chtullie extends Octopus {
     const width = 500;
     const height = 500;
     const image = document.getElementById(`chtullie`);
-    super(game, word, new SpriteSheet(image, width, height, 4, 9, 25, true));
+
+    const spriteSheetColumns = 4;
+    const spriteSheetRows = 9;
+    const indexOfLastImage = 2;
+    const fps = 25;
+    super(
+      game,
+      word,
+      new SpriteSheet(
+        image,
+        width,
+        height,
+        spriteSheetColumns,
+        spriteSheetRows,
+        fps,
+        true,
+        indexOfLastImage
+      )
+    );
     this.speedX = -0.6;
   }
 }
@@ -378,18 +473,54 @@ class Inker extends Octopus {
     const width = 105;
     const height = 88;
     const image = document.getElementById(`inker`);
-    super(game, word, new SpriteSheet(image, width, height, 5, 18, 25, true));
+
+    const spriteSheetColumns = 4;
+    const spriteSheetRows = 18;
+    const indexOfLastImage = 0;
+    const fps = 50;
+
+    super(
+      game,
+      word,
+      new SpriteSheet(
+        image,
+        width,
+        height,
+        spriteSheetColumns,
+        spriteSheetRows,
+        fps,
+        true,
+        indexOfLastImage
+      )
+    );
     this.speedX = -2;
   }
 }
-
-
 class Inky extends Octopus {
   constructor(game, word) {
     const width = 118;
     const height = 137;
     const image = document.getElementById("inky");
-    super(game, word, new SpriteSheet(image, width, height, 5, 18, 20, true));
+
+    const spriteSheetColumns = 4;
+    const spriteSheetRows = 18;
+    const indexOfLastImage = 0;
+    const fps = 20;
+
+    super(
+      game,
+      word,
+      new SpriteSheet(
+        image,
+        width,
+        height,
+        spriteSheetColumns,
+        spriteSheetRows,
+        fps,
+        true,
+        indexOfLastImage
+      )
+    );
     this.x = Random.int(
       this.game.width * 0.2,
       this.game.width - this.game.width * 0.1

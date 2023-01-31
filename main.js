@@ -8,6 +8,8 @@ const ctx = canvas.getContext("2d");
 canvas.width = 2500;
 canvas.height = 1768;
 
+
+
 const dataSource = new DataSource();
 const map = new Map(dataSource, canvas);
 const audioPlayer = new Audioplayer();

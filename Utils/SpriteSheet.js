@@ -6,7 +6,8 @@ export default class SpriteSheet {
     spriteSheetColumns,
     spriteSheetRows,
     fps,
-    multirow = false
+    multirow = false,
+    indexOfLastImage = -1
   ) {
     this.image = image;
 
@@ -19,28 +20,41 @@ export default class SpriteSheet {
     this.frameX = 0;
     this.frameY = 0;
     this.multirow = multirow;
+    this.indexOfLastImage = indexOfLastImage;
 
     this.timer = 0;
     this.fps = fps;
     this.interval = 1000 / this.fps;
   }
   update(deltaTime) {
-    if (this.frameX < this.spriteSheetColumns) {
-      if (this.timer > this.interval) {
-        this.frameX++;
-        if (this.multirow && this.frameX === this.spriteSheetColumns) {
-          this.frameY++;
-          this.frameX = 0;
-          if (this.frameY === this.spriteSheetRows) {
-            this.frameY = 0;
-          }
+    const resetCol = () => (this.frameX = 0);
+    const resetRow = () => (this.frameY = 0);
+    const stepRight = () => this.frameX++;
+    const stepDown = () => this.frameY++;
+
+    const isTimerElapsed = this.timer > this.interval;
+    const isMultiRow = this.multirow;
+    const isAtColEnd = this.frameX === this.spriteSheetColumns;
+    const isAtRowEnd = this.frameY === this.spriteSheetRows;
+    const isAtLastFrameCol =
+      this.frameX === this.indexOfLastImage && isAtRowEnd;
+
+    if (isTimerElapsed) {
+      if (!isMultiRow) {
+        isAtColEnd ? resetCol() : stepRight();
+      } else if (isMultiRow) {
+        if (isAtLastFrameCol) {
+          resetCol();
+          resetRow();
+        } else if (isAtColEnd) {
+          stepDown();
+          resetCol();
+        } else if (isAtRowEnd) {
+          resetRow();
+        } else {
+          stepRight();
         }
-        this.timer = 0;
-      } else {
-        this.timer += deltaTime;
       }
-    } else if (this.timer > this.interval) {
-      this.frameX = 0;
       this.timer = 0;
     } else {
       this.timer += deltaTime;
