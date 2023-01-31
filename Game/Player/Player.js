@@ -1,3 +1,4 @@
+import Global from "../../Utils/Global.js";
 import SpriteSheet from "../../Utils/SpriteSheet.js";
 import Projectile from "./Projectile.js";
 export default class Player {
@@ -13,11 +14,17 @@ export default class Player {
     this.air = this.game.store.shop.airSlot;
     this.maxAir = this.game.store.shop.airSlot;
 
+    this.maxEnergy = this.game.store.shop.maxEnergy;
+    this.energy = this.maxEnergy;
+    this.missComboCount = 0;
+
     this.airTimer = 0;
     this.airInterval = 30000 - this.game.store.shop.airReg * 2000;
 
     this.ammo = this.game.store.shop.mineSlot;
     this.maxAmmo = this.game.store.shop.mineSlot;
+    this.mineComboCount = 0;
+    this.mineComboRequirement = 25;
 
     this.ammoTimer = 0;
     this.ammoInterval = 30000 - this.game.store.shop.mineReg * 2000;
@@ -32,15 +39,39 @@ export default class Player {
       25
     );
   }
+  penalize() {
+    Global.Shaker.startShake(40, "miss");
+    this.mineComboCount = 0;
+    this.game.score--;
+    if (this.energy > 0) {
+      this.missComboCount++;
+      this.energy =
+        this.energy - this.missComboCount < 0
+          ? 0
+          : this.energy - this.missComboCount;
+      this.game.energyTimer = 0;
+    }else{
+      this.air--;
+    }
+  }
+  reward() {
+    this.mineComboCount++;
+    if (this.mineComboCount === this.mineComboRequirement) {
+      this.dropMine();
+      this.mineComboCount = 0;
+    }
+    if (this.energy < this.maxEnergy) {
+      this.energy += 0.1;
+      this.missComboCount = 0;
+    }
+  }
   update(deltaTime) {
     if (this.game.lose) {
       if (this.y > 0 - this.height) {
-        this.shootTop();
         this.y -= 0.5;
       }
     } else if (this.game.win) {
       if (this.y > 0 - this.height * 4) {
-        this.shootTop();
         this.y -= 2;
       }
     } else {
@@ -113,11 +144,12 @@ export default class Player {
         this.game.focus.x + this.game.focus.width * 0.5,
         this.game.focus.y + this.game.focus.height * 0.5
       );
+      context.lineWidth = 0.5;
       context.stroke();
     }
   }
 
-  shootTop() {
+  dropMine() {
     if (this.ammo > 0) {
       this.projectiles.push(
         new Projectile(

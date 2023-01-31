@@ -32,6 +32,12 @@ export default class Shop {
       priceElement: document.getElementById("diveSpeedPrice"),
       max: 10,
     },
+    maxEnergy: {
+      price: (val) => val * 25,
+      current: document.getElementById("currentMaxEnergy"),
+      priceElement: document.getElementById("maxEnergyPrice"),
+      max: 100,
+    },
     mapSpeed: {
       price: (val) => val * 100,
       current: document.getElementById("currentMapSpeed"),
@@ -85,6 +91,10 @@ export default class Shop {
     Shop.Content.mapSpeed.priceElement.innerHTML = Shop.Content.mapSpeed.price(
       this.store.shop.mapSpeed
     );
+
+    Shop.Content.maxEnergy.current.innerHTML = this.store.shop.maxEnergy;
+    Shop.Content.maxEnergy.priceElement.innerHTML =
+      Shop.Content.maxEnergy.price(this.store.shop.maxEnergy);
   }
   buy(id, cash, dataSource, current) {
     if (current >= Shop.Content[id].max) return;

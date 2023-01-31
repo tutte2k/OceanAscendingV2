@@ -21,7 +21,7 @@ export default class Game {
 
     this.width = Global.Canvas.width;
     this.height = Global.Canvas.height;
-
+    
     this.widthPercentage =
       Global.Canvas.getBoundingClientRect().width / this.width;
     this.heightPercentage =
@@ -44,6 +44,9 @@ export default class Game {
 
     this.enemyTimer = 0;
     this.enemyInterval = this.level.mode.enemyInterval;
+
+    this.energyTimer = 0;
+    this.energyInterval = 1000;
   }
   onResize() {
     this.widthPercentage =
@@ -53,6 +56,12 @@ export default class Game {
   }
 
   update(deltaTime) {
+    if (this.energyTimer > this.energyInterval && this.player.energy === 0) {
+      this.player.air--;
+      this.energyTimer = 0;
+    } else {
+      this.energyTimer += deltaTime;
+    }
     if (
       this.player.y < this.height / 2 &&
       this.player.maxSpeed === 0 &&
@@ -117,9 +126,9 @@ export default class Game {
         }
         enemy.die();
         if (this.player.air > 0) {
-          this.player.air--;
+          this.player.air -= enemy.score;
           if (!this.gameOver) {
-            this.userInterface.displayPlayerDamage();
+            this.userInterface.displayPlayerDamage(enemy.score);
           }
         }
       }

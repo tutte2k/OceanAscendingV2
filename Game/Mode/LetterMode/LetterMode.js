@@ -1,11 +1,11 @@
 import LettersHandler from "./LettersHandler.js";
-
 import Enemy from "../../Enemy/Enemy.js";
 import Mode from "../Mode.js";
-import Global from "../../../Utils/Global.js";
 
 export default class LetterMode extends Mode {
-  static Alphabet = "a b c d e f g h i j k l m n o p q r s t u v x y z".split(" ")
+  static Alphabet = "a b c d e f g h i j k l m n o p q r s t u v x y z".split(
+    " "
+  );
   static EnemyInterval = 5000;
   constructor(id, name) {
     super(id, LettersHandler, LetterMode.EnemyInterval, name);
@@ -56,8 +56,10 @@ export default class LetterMode extends Mode {
         "ArrowRight",
         "Shift",
       ];
-      if (!controls.includes(key)) game.userInterface.displayMissedKey(key);
-      Global.Shaker.startShake(20)
+      if (!controls.includes(key)) {
+        game.userInterface.displayMissedKey(key);
+        game.player.penalize();
+      }
       return null;
     }
   }

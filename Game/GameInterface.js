@@ -12,6 +12,8 @@ export default class GameInterface {
       crosshair: document.getElementById("crosshair"),
       message: document.getElementById("message"),
       score: document.getElementById("score"),
+      energyMax: document.getElementById("energyMax"),
+      energy: document.getElementById("energy"),
     };
     this.elements.hud.classList.remove("invisible");
     this.game = game;
@@ -23,6 +25,8 @@ export default class GameInterface {
     this.elements.mine.innerHTML = this.game.player.ammo;
     this.elements.level.innerHTML = this.game.level.name;
     this.elements.wordsLeft.innerHTML = this.game.words.length;
+    this.elements.energyMax.innerHTML = this.game.player.maxEnergy;
+    this.elements.energy.innerHTML = this.game.player.energy.toFixed(1);
     if (Math.floor(this.game.level.mode.id) !== 4) {
       this.elements.crosshair.innerHTML =
         this.game.focus && this.game.focus.text.length != 1
@@ -33,20 +37,23 @@ export default class GameInterface {
     if (this.game.gameOver) {
       let message1;
       let message2;
+      let message3;
       if (this.game.win) {
         message1 = "You made it!";
         message2 = "Fishing with dynamite is only illegal if someone hears it!";
+        message3 = `<span style="color:green">$${(this.game.score/this.game.level.maxScore * 100).toFixed(1)}%</span>`
       } else if (this.game.lose) {
-        message1 = "You ran out of air!";
-        message2 = "If you can't catch em, flee!";
+        message1 = "wasted";
+        message2 = "";
+        message3 = ""
       }
-      this.elements.message.innerHTML = message1 + "<br>" + message2;
+      this.elements.message.innerHTML = message1 + "<br>" + message2  + "<br>" + message3;
     }
   }
-  displayPlayerDamage() {
+  displayPlayerDamage(damage) {
     this.game.floatingMessages.push(
       new FloatingMessage(
-        "-" + 1,
+        "-" + damage,
         this.game.player.x + this.game.player.width * 0.8,
         this.game.player.y + this.game.player.height * 0.2,
         "red",
@@ -90,6 +97,7 @@ export default class GameInterface {
   clear() {
     this.elements.wordContainer.innerHTML = "";
     this.elements.message.innerHTML = "";
+    this.elements.crosshair.innerHTML="";
     this.elements.hud.classList.add("invisible");
   }
 }

@@ -85,6 +85,7 @@ window.addEventListener("load", function () {
       game.draw(ctx);
       state = game.update(deltaTime);
     } else if (game && state) {
+
       Global.Canvas.classList.remove("underwater");
       if (state.win) {
         const cash = dataSource.saveStateAndReturnCash(state);
