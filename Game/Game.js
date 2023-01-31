@@ -5,7 +5,7 @@ import GameInterface from "./GameInterface.js";
 import Global from "../Utils/Global.js";
 
 export default class Game {
-  constructor(level, nextLevel, dataSource, canvas) {
+  constructor(level, nextLevel, dataSource) {
     this.store = dataSource.getStore();
     this.userInterface = new GameInterface(this);
     this.wordContainer = this.userInterface.elements.wordContainer;
@@ -19,17 +19,13 @@ export default class Game {
     this.win = false;
     this.score = 0;
 
-    this.width = canvas.width;
-    this.height = canvas.height;
+    this.width = Global.Canvas.width;
+    this.height = Global.Canvas.height;
 
-    this.widthPercentage = canvas.getBoundingClientRect().width / this.width;
-    this.heightPercentage = canvas.getBoundingClientRect().height / this.height;
-
-    window.addEventListener("resize", () => {
-      this.widthPercentage = canvas.getBoundingClientRect().width / this.width;
-      this.heightPercentage =
-        canvas.getBoundingClientRect().height / this.height;
-    });
+    this.widthPercentage =
+      Global.Canvas.getBoundingClientRect().width / this.width;
+    this.heightPercentage =
+      Global.Canvas.getBoundingClientRect().height / this.height;
 
     this.gameTime = 0;
     this.background = new Background(this);
@@ -49,6 +45,12 @@ export default class Game {
     this.enemyTimer = 0;
     this.enemyInterval = this.level.mode.enemyInterval;
   }
+  onResize() {
+    this.widthPercentage =
+      Global.Canvas.getBoundingClientRect().width / this.width;
+    this.heightPercentage =
+      Global.Canvas.getBoundingClientRect().height / this.height;
+  }
 
   update(deltaTime) {
     if (
@@ -62,6 +64,7 @@ export default class Game {
       this.player.y -= 3;
       if (this.player.y <= 0 - this.player.height) {
         Global.GameContainer.hidden = true;
+        Global.Spinner.hidden = false;
         const state = {
           level: this.level,
           nextLevel: this.nextLevel,
@@ -156,6 +159,7 @@ export default class Game {
     }
   }
   draw(context) {
+    Global.Shaker.preShake(context);
     this.background.draw(context);
     this.userInterface.draw();
     this.player.draw(context);
@@ -166,6 +170,7 @@ export default class Game {
     this.floatingMessages.forEach((floatingMessage) =>
       floatingMessage.draw(context)
     );
+    Global.Shaker.postShake(context);
   }
   addEnemy() {
     this.level.mode.addEnemy(this);

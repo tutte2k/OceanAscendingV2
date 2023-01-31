@@ -19,9 +19,8 @@ import { Matrix } from "./Environment/Matrix.js";
 import MapInterface from "./MapInterface.js";
 
 export default class Map {
-  constructor(dataSource, canvas) {
+  constructor(dataSource) {
     this.dataSource = dataSource;
-    this.canvas = canvas;
     this.levelData = dataSource.getStore()["completedLevels"];
     this.offset = {
       x: -1140,
@@ -36,13 +35,12 @@ export default class Map {
       position: { x: this.offset.x, y: this.offset.y },
       image: document.getElementById("foreground"),
     });
-
-    this.player = new MapPlayer(canvas.width, canvas.height, dataSource);
+    
+    this.player = new MapPlayer(dataSource);
     this.userInterface = new MapInterface(dataSource);
 
     this.landTiles = [];
     this.boundaries = [];
-
     this.specialLevelsArray = [];
     this.svenskaLevelsArray = [];
     this.tibiaLevelsArray = [];

@@ -1,6 +1,8 @@
+import Global from "../../Utils/Global.js";
 import SpriteSheet from "../../Utils/SpriteSheet.js";
+
 export default class MapPlayer {
-  constructor(canvasWidth, canvasHeight, dataSource) {
+  constructor(dataSource) {
     const Walk = [80, 80, 13, 0, 25];
     const Swim = [80, 80, 11, 0, 25];
     const Idle = [80, 80, 1, 0, 1];
@@ -31,8 +33,8 @@ export default class MapPlayer {
     this.width = this.sprite.width;
     this.height = this.sprite.height;
     this.position = {
-      x: canvasWidth / 2 - (this.sprite.width * 4) / 4 / 2,
-      y: canvasHeight / 2 - this.sprite.height / 4,
+      x: Global.Canvas.width / 2 - (this.sprite.width * 4) / 4 / 2,
+      y: Global.Canvas.height / 2 - this.sprite.height / 4,
     };
     this.moving = false;
     this.swimming = false;

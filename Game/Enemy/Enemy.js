@@ -46,7 +46,7 @@ export default class Enemy {
     if (this.x + this.width * 0.7 < 0) {
       this.x -= this.width;
     }
-    if (this.x + this.width < 0 || this.y + this.height < 0) {
+    if (this.x + this.width < 0 || this.y + this.height < -30) {
       this.markedForDeletion = true;
       this.remove();
     }

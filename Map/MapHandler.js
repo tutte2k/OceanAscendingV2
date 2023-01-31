@@ -1,6 +1,7 @@
 import Collision from "../Utils/Collision.js";
 import Game from "../Game/Game.js";
 import Shop from "./Shop.js";
+import Global from "../Utils/Global.js";
 
 export default class MapHandler {
   constructor(map) {
@@ -108,8 +109,8 @@ export default class MapHandler {
       const level = this.map.levelsArray[i];
       if (!level.locked && Collision.check(this.map.player, level, 0, 0)) {
         const nextLevel = this.map.levelsArray[i + 1];
-        this.map.canvas.classList.add("underwater");
-        return new Game(level, nextLevel, this.map.dataSource, this.map.canvas);
+        Global.Canvas.classList.add("underwater");
+        return new Game(level, nextLevel, this.map.dataSource);
       }
     }
   }
