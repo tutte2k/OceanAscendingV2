@@ -62,14 +62,9 @@ export default class Game {
     } else {
       this.energyTimer += deltaTime;
     }
-    
-
-
-
     if (this.player.y > 0 - this.player.height * 2 && this.gameOver) {
-
-      this.speed = 0.01
-      this.player.y -= 0.01;
+      this.speed = 0.01;
+      this.player.y -= 1;
 
       if (this.player.y <= 0 - this.player.height) {
         Global.GameContainer.hidden = true;
@@ -86,7 +81,7 @@ export default class Game {
       }
     }
     if (this.player.air < 1) {
-      Global.Flasher.preFlash(3000, "black");
+      Global.Flasher.preFlash(5000, "black");
       Global.Wasted.play();
       this.lose = true;
     } else if (this.words.length === 0 && !this.gameOver) {
