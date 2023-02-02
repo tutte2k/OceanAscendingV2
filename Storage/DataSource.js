@@ -1,6 +1,6 @@
 export default class DataSource {
   constructor() {
-    this.item = "a7";
+    this.item = "a8";
   }
   getStore() {
     let storage = JSON.parse(localStorage.getItem(this.item));
@@ -27,7 +27,7 @@ export default class DataSource {
         mineReg: 1,
         diveSpeed: 1,
         mapSpeed: 3,
-        maxEnergy:3,
+        maxEnergy: 5,
       },
     };
   }
@@ -35,7 +35,6 @@ export default class DataSource {
     localStorage.setItem(this.item, JSON.stringify(store));
   }
   saveStateAndReturnCash(state) {
-
     const store = this.getStore();
     let earnedCash;
     let levelObject = store.completedLevels.mode[state.level.mode.id].find(
@@ -54,7 +53,6 @@ export default class DataSource {
       store["cash"] = store["cash"] + earnedCash;
       this.setStore(store);
     } else if (levelObject.score < state.score) {
-
       const previousScore = levelObject.score;
       const currentScore = state.score;
       const earnableScore = currentScore - previousScore;

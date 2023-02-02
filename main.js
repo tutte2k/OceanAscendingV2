@@ -5,10 +5,8 @@ import Audioplayer from "./Audioplayer/Audioplayer.js";
 
 /*
 TODO:
-air penalty on too many misses
-score penalty on miss
-decrease penalty in shop
 mechs only spawn deeper
+fish behaviour
 */
 
 const ctx = Global.Canvas.getContext("2d");
@@ -49,33 +47,9 @@ window.addEventListener("load", function () {
   let lastTime = 0;
   let state;
 
-  var shakeDuration = 800;
-  var shakeStartTime = -1;
-
-  function startShake() {
-    shakeStartTime = Date.now();
-  }
-  function preShake() {
-    if (shakeStartTime == -1) return;
-    var dt = Date.now() - shakeStartTime;
-    if (dt > shakeDuration) {
-      shakeStartTime = -1;
-      return;
-    }
-    var easingCoef = dt / shakeDuration;
-    var easing = Math.pow(easingCoef - 1, 3) + 1;
-    ctx.save();
-    var dx = easing * (Math.cos(dt * 0.1) + Math.cos(dt * 0.3115)) * 15;
-    var dy = easing * (Math.sin(dt * 0.05) + Math.sin(dt * 0.057113)) * 15;
-    ctx.translate(dx, dy);
-  }
-  function postShake() {
-    if (shakeStartTime == -1) return;
-    ctx.restore();
-  }
-  startShake();
-
   function animate(timeStamp) {
+    Global.Shaker.preShake(ctx);
+    Global.Flasher.flash();
     ctx.clearRect(0, 0, Global.Canvas.width, Global.Canvas.height);
     const deltaTime = timeStamp - lastTime;
     lastTime = timeStamp;
@@ -85,8 +59,8 @@ window.addEventListener("load", function () {
       game.draw(ctx);
       state = game.update(deltaTime);
     } else if (game && state) {
-
       Global.Canvas.classList.remove("underwater");
+      Global.Flasher.stop();
       if (state.win) {
         const cash = dataSource.saveStateAndReturnCash(state);
         map.userInterface.shop.setCash(cash);
@@ -108,10 +82,8 @@ window.addEventListener("load", function () {
         Global.Spinner.hidden = true;
       }
     }
-
+    Global.Shaker.postShake(ctx);
     window.requestAnimationFrame(animate);
   }
-
-
   animate(0);
 });

@@ -40,7 +40,8 @@ export default class Player {
     );
   }
   penalize() {
-    Global.Shaker.startShake(40, "miss");
+    Global.Shaker.startShake(50, "miss");
+    Global.Flasher.preFlash(20, "red");
     this.mineComboCount = 0;
     this.game.score--;
     if (this.energy > 0) {
@@ -50,7 +51,7 @@ export default class Player {
           ? 0
           : this.energy - this.missComboCount;
       this.game.energyTimer = 0;
-    }else{
+    } else {
       this.air--;
     }
   }

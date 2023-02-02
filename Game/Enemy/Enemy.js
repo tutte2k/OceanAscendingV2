@@ -104,7 +104,7 @@ export default class Enemy {
     }
   }
   static NextMath(game, value) {
-    const enemies = [Lionfish, Shark, Whale, Angela, Chtullie];
+    const enemies = [Whale];
     return new enemies[Random.index(enemies)](game, value);
   }
   static Next(game, value) {
@@ -211,6 +211,10 @@ class Shark extends Fish {
     super(game, word, new SpriteSheet(image, width, height, 7, 0, 20));
     this.speedX = -1.5;
   }
+  consume(key) {
+    this.speedX-=1;
+    return super.consume(key);
+  }
 }
 class Whale extends Fish {
   constructor(game, word) {
@@ -296,9 +300,8 @@ class Jinxy extends Fish {
       )
     );
     this.speedX = -2.5;
-
-    this.jinxTimer = 0;
-    this.jinxInterval = 5000;
+    this.jinxTimer = 11000;
+    this.jinxInterval = 10000;
   }
   update(deltaTime) {
     if (this.jinxTimer > this.jinxInterval) {

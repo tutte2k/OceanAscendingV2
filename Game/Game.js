@@ -21,7 +21,7 @@ export default class Game {
 
     this.width = Global.Canvas.width;
     this.height = Global.Canvas.height;
-    
+
     this.widthPercentage =
       Global.Canvas.getBoundingClientRect().width / this.width;
     this.heightPercentage =
@@ -86,6 +86,8 @@ export default class Game {
       }
     }
     if (this.player.air < 1) {
+      Global.Flasher.preFlash(3000, "black");
+      Global.Wasted.play();
       this.lose = true;
     } else if (this.words.length === 0 && !this.gameOver) {
       this.win = true;
@@ -168,7 +170,6 @@ export default class Game {
     }
   }
   draw(context) {
-    Global.Shaker.preShake(context);
     this.background.draw(context);
     this.userInterface.draw();
     this.player.draw(context);
@@ -179,7 +180,6 @@ export default class Game {
     this.floatingMessages.forEach((floatingMessage) =>
       floatingMessage.draw(context)
     );
-    Global.Shaker.postShake(context);
   }
   addEnemy() {
     this.level.mode.addEnemy(this);

@@ -41,13 +41,21 @@ export default class GameInterface {
       if (this.game.win) {
         message1 = "You made it!";
         message2 = "Fishing with dynamite is only illegal if someone hears it!";
-        message3 = `<span style="color:green">$${(this.game.score/this.game.level.maxScore * 100).toFixed(1)}%</span>`
+        message3 = `<span style="color:green">$${(
+          (this.game.score / this.game.level.maxScore) *
+          100
+        ).toFixed(0)}%</span>`;
       } else if (this.game.lose) {
         message1 = "wasted";
         message2 = "";
-        message3 = ""
+        message3 = "";
       }
-      this.elements.message.innerHTML = message1 + "<br>" + message2  + "<br>" + message3;
+      this.elements.message.innerHTML =
+        message1 + "<br>" + message2 + "<br>" + message3;
+    } else if (this.game.player.energy === 0) {
+      this.elements.message.innerHTML = `<span style="color:red;">NO OXYGEN FLOW!</span>`;
+    } else if (this.elements.message.innerHTML !== "") {
+      this.elements.message.innerHTML = "";
     }
   }
   displayPlayerDamage(damage) {
@@ -97,7 +105,7 @@ export default class GameInterface {
   clear() {
     this.elements.wordContainer.innerHTML = "";
     this.elements.message.innerHTML = "";
-    this.elements.crosshair.innerHTML="";
+    this.elements.crosshair.innerHTML = "";
     this.elements.hud.classList.add("invisible");
   }
 }

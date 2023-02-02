@@ -1,7 +1,37 @@
+class Flasher {
+  constructor() {
+    this.flashStartTime = null;
+    this.flashDuration = null;
+    this.flashStop = null;
+    this.color = null;
+  }
+  preFlash(flashDuration, color) {
+    this.flashStartTime = Date.now();
+    this.flashDuration = flashDuration;
+    this.color = color;
+  }
+  flash() {
+    if (this.flashStartTime == -1) return;
+    this.flashStop = Date.now() - this.flashStartTime;
+    if (this.flashStop > this.flashDuration) {
+      this.flashStartTime = -1;
+      Global.Effects.classList.add("invisible");
+      return;
+    } else if (this.flashStop < this.flashDuration) {
+      Global.Effects.style.backgroundColor = this.color;
+      Global.Effects.classList.remove("invisible");
+    }
+  }
+  stop() {
+    this.flashStartTime = -1;
+    Global.Effects.classList.add("invisible");
+  }
+}
 class Shaker {
   constructor() {
     this.shakeStartTime = null;
     this.shakeDuration = null;
+    this.shakeStop = null;
     this.type = null;
   }
   startShake(shakeDuration, type) {
@@ -9,11 +39,10 @@ class Shaker {
     this.shakeDuration = shakeDuration;
     this.type = type;
   }
-
   preShake(ctx) {
     if (this.shakeStartTime == -1) return;
-    var dt = Date.now() - this.shakeStartTime;
-    if (dt > this.shakeDuration) {
+    this.shakeStop = Date.now() - this.shakeStartTime;
+    if (this.shakeStop > this.shakeDuration) {
       this.shakeStartTime = -1;
       return;
     }
@@ -21,18 +50,25 @@ class Shaker {
       var dx = Math.random() * 10;
       var dy = Math.random() * 10;
     } else if (this.type === "boss") {
-      var easingCoef = dt / this.shakeDuration;
+      var easingCoef = this.shakeStop / this.shakeDuration;
       var easing = Math.pow(easingCoef - 1, 3) + 1;
-
-      var dx = easing * (Math.cos(dt * 0.1) + Math.cos(dt * 0.3115)) * 15;
-      var dy = easing * (Math.sin(dt * 0.05) + Math.sin(dt * 0.057113)) * 15;
+      var dx =
+        easing *
+        (Math.cos(this.shakeStop * 0.1) + Math.cos(this.shakeStop * 0.3115)) *
+        15;
+      var dy =
+        easing *
+        (Math.sin(this.shakeStop * 0.05) +
+          Math.sin(this.shakeStop * 0.057113)) *
+        15;
     }
-
     ctx.save();
     ctx.translate(dx, dy);
   }
   postShake(ctx) {
-    if (this.shakeStartTime == -1) return;
+    if (this.shakeStartTime == -1) {
+      return;
+    }
     ctx.restore();
   }
 }
@@ -42,4 +78,7 @@ export default class Global {
   static GameContainer = document.getElementById("container1");
   static Spinner = document.getElementById("spinner");
   static Shaker = new Shaker();
+  static Flasher = new Flasher();
+  static Effects = document.getElementById("effects");
+  static Wasted = new Audio("../assets/wasted.mp3")
 }

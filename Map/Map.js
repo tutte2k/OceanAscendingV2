@@ -35,7 +35,7 @@ export default class Map {
       position: { x: this.offset.x, y: this.offset.y },
       image: document.getElementById("foreground"),
     });
-    
+
     this.player = new MapPlayer(dataSource);
     this.userInterface = new MapInterface(dataSource);
 
@@ -253,7 +253,7 @@ export default class Map {
         y: i * Level.height + -500,
       },
       number: counter,
-      locked: locked,
+      locked: window.location.origin.includes("localhost") ? false : locked,
       content: contentArr[counter],
     });
   }

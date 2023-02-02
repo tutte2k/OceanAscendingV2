@@ -1,0 +1,50 @@
+A fish that swims in loops and spirals, requiring the player to anticipate its movements.
+A fish that creates a trail of stars or other visual effects behind it.
+A fish that splits into two or more smaller fish when hit with the correct letters.
+A fish that leaves a trail of letters behind it, requiring the player to type them in the correct order.
+A fish that changes its behavior based on the player's typing speed, such as swimming faster or slower.
+A fish that periodically changes direction, requiring the player to adapt.
+A fish that produces different sound effects when hit with the correct letters.
+A fish that creates a chain reaction, causing other fish to react when hit with the correct letters.
+A fish that generates power-ups, such as extra points or bonus time, when hit with the correct letters.
+A fish that jumps out of the water and does a backflip or other acrobatic move when hit with the correct letters.
+A fish that leaves a trail of bubbles or other visual effects that the player must navigate.
+A fish that periodically disappears and reappears, challenging the player's reaction time.
+A fish that changes color based on the player's accuracy, becoming brighter or darker.
+A fish that splits into smaller sections that move in different directions when hit with the correct letters.
+A fish that transforms into a different type of sea creature, such as a shark or a dolphin, when hit with the correct letters.
+A fish that triggers special events, such as a wave or a storm, when the player completes a certain sequence of letters.
+A fish that leaves a trail of fire or lightning behind it, requiring the player to avoid obstacles while typing.
+A fish that changes shape or size based on the player's typing speed, making it easier or harder to hit.
+A fish that swims in a zigzag pattern, making it more challenging to hit.
+A fish that creates a trail of coins or gems that the player can collect for bonus points.
+A fish that doubles or triples in speed every time the player correctly types a sequence of characters.
+A fish that sings a song and dances when hit with the correct letters, adding a fun element of surprise and delight.
+A fish that creates a trail of letters that spell out a word or a phrase when hit with the correct letters.
+A fish that changes its swimming patterns based on the player's accuracy, making it easier or harder to follow.
+A fish that creates a sonic boom or other sound effect when hit with the correct letters.
+A fish that creates a chain reaction, causing other fish to react in a fun and entertaining way.
+A fish that creates a trail of smoke or other visual effect behind it when hit with the correct letters.
+A fish that creates a series of ripples in the water when hit with the correct letters.
+A fish that doubles or triples in size every time the player correctly types a sequence of characters.
+A fish that creates a rainbow or other visual effect behind it when hit with the correct letters.
+A fish that swims in a figure-eight pattern, challenging the player's accuracy.
+A fish that creates a trail of sparkles or other visual effects behind it when hit with the correct letters.
+A fish that releases power-ups, such as extra time or bonus points, when hit with the correct letters.
+A fish that turns invisible when the player fails to hit it with the correct letters, requiring the player to pay close attention.
+A fish that swims faster or slower based on the player's accuracy, providing a dynamic challenge.
+A fish that releases a shower of confetti or other celebratory visual effects when hit with the correct letters.
+A fish that creates a trail of light behind it, adding a visual element to the game.
+A fish that makes different facial expressions or sounds based on the player's accuracy, adding a fun element of interactivity.
+A fish that leaves a trail of letters behind it that spell out a joke or a trivia question when hit with the correct letters.
+A fish that creates a trail of stars or other visual effects behind it when hit with the correct letters.
+A fish that creates a series of waves in the water when hit with the correct letters.
+A fish that periodically speeds up or slows down, challenging the player's typing speed.
+A fish that creates a trail of smoke or other visual effect behind it when hit with the correct letters.
+A fish that splits into two or more smaller fish that move in different directions when hit with the correct letters.
+A fish that leaves a trail of letters behind it that spell out a word or phrase when hit with the correct letters.
+A fish that swims in a circular pattern, requiring the player to anticipate its movements.
+A fish that creates a trail of gems or coins behind it when hit with the correct letters.
+A fish that creates a chain reaction, causing other fish to react in a visually stimulating way.
+A fish that sings a different song every time it is hit with the correct letters, adding a fun and musical element to the game.
+A fish that creates a trail of letters behind it that spell out a trivia question or a joke when hit with the correct letters.
