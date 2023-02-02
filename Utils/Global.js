@@ -80,5 +80,5 @@ export default class Global {
   static Shaker = new Shaker();
   static Flasher = new Flasher();
   static Effects = document.getElementById("effects");
-  static Wasted = new Audio("../assets/wasted.mp3")
+  static Wasted = new Audio("./../assets/wasted.mp3")
 }
