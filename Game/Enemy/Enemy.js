@@ -212,7 +212,7 @@ class Shark extends Fish {
     this.speedX = -1.5;
   }
   consume(key) {
-    this.speedX-=1;
+    this.speedX -= 1;
     return super.consume(key);
   }
 }
@@ -300,8 +300,8 @@ class Jinxy extends Fish {
       )
     );
     this.speedX = -2.5;
-    this.jinxTimer = 11000;
-    this.jinxInterval = 10000;
+    this.jinxTimer = 7501;
+    this.jinxInterval = 7500;
   }
   update(deltaTime) {
     if (this.jinxTimer > this.jinxInterval) {
@@ -386,6 +386,23 @@ class LuckyFish extends Mech {
       word,
       new SpriteSheet(image, width, height, 37, spriteSheetRows, 30)
     );
+    this.angle = 0;
+  }
+  update(deltaTime) {
+    var dd = -0.05;
+    var cx = this.x;
+    var cy = this.y;
+
+    var radius = 3;
+    this.angle += Math.acos(1 - Math.pow(dd / radius, 2) / 2);
+
+    var newX = cx + radius * Math.cos(this.angle);
+    var newY = cy + radius * Math.sin(this.angle);
+
+    this.x = newX;
+    this.y = newY;
+
+    super.update(deltaTime);
   }
 }
 class HiveWhale extends Mech {
@@ -496,7 +513,13 @@ class Inker extends Octopus {
         indexOfLastImage
       )
     );
-    this.speedX = -2;
+    this.speedX = -0.001;
+  }
+  update(deltaTime) {
+    if (this.x < this.game.width / 2) {
+      this.speedX = -20;
+    }
+    super.update(deltaTime);
   }
 }
 class Inky extends Octopus {

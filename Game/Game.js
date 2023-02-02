@@ -62,15 +62,15 @@ export default class Game {
     } else {
       this.energyTimer += deltaTime;
     }
-    if (
-      this.player.y < this.height / 2 &&
-      this.player.maxSpeed === 0 &&
-      !this.gameOver
-    ) {
-      this.player.y += 3;
-    }
+    
+
+
+
     if (this.player.y > 0 - this.player.height * 2 && this.gameOver) {
-      this.player.y -= 3;
+
+      this.speed = 0.01
+      this.player.y -= 0.01;
+
       if (this.player.y <= 0 - this.player.height) {
         Global.GameContainer.hidden = true;
         Global.Spinner.hidden = false;
