@@ -4,9 +4,7 @@ import Map from "./Map/Map.js";
 import Audioplayer from "./Audioplayer/Audioplayer.js";
 
 /*
-TODO:
-mechs only spawn deeper
-fish behaviour
+score / level progress on ui
 */
 
 const ctx = Global.Canvas.getContext("2d");
@@ -60,6 +58,7 @@ window.addEventListener("load", function () {
       state = game.update(deltaTime);
     } else if (game && state) {
       Global.Canvas.classList.remove("underwater");
+      Global.InfoContainer.classList.remove("invisible");
       Global.Flasher.stop();
       if (state.win) {
         const cash = dataSource.saveStateAndReturnCash(state);

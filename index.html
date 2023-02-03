@@ -115,8 +115,6 @@
                 </ul>
               </ul>
               <li>Features:</li>
-
-            
               <ul>
                 <li>Creatures: <em>Some behaviour might surprise you.</em></li>
                 <li>Mine: <em>Big combos deploy mines.</em></li>
@@ -127,7 +125,6 @@
                 </ul>
               </ul>
             </ul>
-           
           </ul>
 
             <a
@@ -141,27 +138,41 @@
         </div>
       </div>
     </div>
+
     <div id="spinner" class="text-center">
       <span class="spinner-grow text-bg-info"></span>
     </div>
+
+   
+  
     <div hidden="true" id="container1">
       <canvas id="canvas1"></canvas>
       <div id="effects" class="opacity-50"></div>
       <div id="ui" class="invisible">
+        <div class="bars">
+          <div id="abar" class="bar airBar"><span class="m-3 text-white">Air</span></div>
+          <div id="ebar" class="bar energyBar"><span class="m-3 text-white">Energy</span></div>
+          <div id="mcbar" class="bar mineComboBar"><span class="m-3 text-white">Combo</span></div>
+        </div>
         <div class="d-flex col justify-content-between mx-3">
-          <div id="inv">
+          <div id="inv" class="invisible">
             <p class="hud">
               Energy: <span id="energy"></span>/<span id="energyMax"></span>
             </p>
             <p class="hud">Mines: <span id="mines"></span></p>
             <p class="hud">Air: <span id="air"></span></p>
           </div>
-          <div class="row">
-            <p class="hud">Level: <span id="level"></span></p>
+          
+
+          <p class="hud">Score: <span id="score"></span></p>
+          
+          <div class="invisible">
+
             <p class="hud">Words left: <span id="wordsLeft"></span></p>
-            <p class="hud">Score: <span id="score"></span></p>
+            <p class="hud">Level: <span id="level"></span></p>
+            <p class="hud">Depth: <span id="depth"></span></p>
           </div>
-          <p class="hud">Depth: <span id="depth"></span></p>
+          
         </div>
         <div id="info" class="visible"></div>
         <div id="crosshair" class="visible"></div>

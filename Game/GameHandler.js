@@ -5,6 +5,7 @@ export default class GameHandler {
   keyDown(e) {
     const isKeyUpOrDown = e.key === "ArrowUp" || e.key === "ArrowDown";
     if (isKeyUpOrDown && this.game.keys.indexOf(e.key) === -1) {
+      if (!this.game.playerTouched) this.game.playerTouched = true;
       this.game.keys.push(e.key);
     }
   }

@@ -1,3 +1,4 @@
+import Global from "../Utils/Global.js";
 import FloatingMessage from "./Environment/FloatingMessage.js";
 export default class GameInterface {
   constructor(game) {
@@ -14,12 +15,29 @@ export default class GameInterface {
       score: document.getElementById("score"),
       energyMax: document.getElementById("energyMax"),
       energy: document.getElementById("energy"),
+      energyBar: document.getElementById("ebar"),
+      airBar: document.getElementById("abar"),
+      mineComboBar: document.getElementById("mcbar"),
     };
     this.elements.hud.classList.remove("invisible");
+    Global.InfoContainer.classList.add("invisible");
     this.game = game;
   }
   draw() {
     const formattedTime = (this.game.gameTime * 0.001).toFixed(1);
+    this.elements.mineComboBar.style.width =
+      100 -
+      (this.game.player.mineComboCount /
+        this.game.player.mineComboRequirement) *
+        100 +
+      "%";
+
+    this.elements.airBar.style.width =
+      (this.game.player.air / this.game.player.maxAir) * 100 + "%";
+
+    this.elements.energyBar.style.width =
+      (this.game.player.energy / this.game.player.maxEnergy) * 100 + "%";
+
     this.elements.depth.innerHTML = formattedTime;
     this.elements.air.innerHTML = this.game.player.air;
     this.elements.mine.innerHTML = this.game.player.ammo;
@@ -41,10 +59,7 @@ export default class GameInterface {
       if (this.game.win) {
         message1 = "You made it!";
         message2 = "Fishing with dynamite is only illegal if someone hears it!";
-        message3 = `<span style="color:green">$${(
-          (this.game.score / this.game.level.maxScore) *
-          100
-        ).toFixed(0)}%</span>`;
+        message3 = ``;
       } else if (this.game.lose) {
         message1 = `<span style="color:maroon;font-size:200px;">w a s t e d</span>`;
         message2 = "";

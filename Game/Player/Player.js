@@ -24,7 +24,7 @@ export default class Player {
     this.ammo = this.game.store.shop.mineSlot;
     this.maxAmmo = this.game.store.shop.mineSlot;
     this.mineComboCount = 0;
-    this.mineComboRequirement = 25;
+    this.mineComboRequirement = 20;
 
     this.ammoTimer = 0;
     this.ammoInterval = 30000 - this.game.store.shop.mineReg * 2000;
@@ -57,7 +57,7 @@ export default class Player {
   }
   reward() {
     this.mineComboCount++;
-    if (this.mineComboCount === this.mineComboRequirement) {
+    if (this.mineComboCount === this.mineComboRequirement && this.ammo > 0) {
       this.dropMine();
       this.mineComboCount = 0;
     }

@@ -76,6 +76,7 @@ class Shaker {
 export default class Global {
   static Canvas = document.getElementById("canvas1");
   static GameContainer = document.getElementById("container1");
+  static InfoContainer = document.getElementById("infoContainer");
   static Spinner = document.getElementById("spinner");
   static Shaker = new Shaker();
   static Flasher = new Flasher();

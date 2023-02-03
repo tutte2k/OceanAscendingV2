@@ -47,6 +47,7 @@ export default class Game {
 
     this.energyTimer = 0;
     this.energyInterval = 1000;
+    this.playerTouched = false;
   }
   onResize() {
     this.widthPercentage =
@@ -62,10 +63,16 @@ export default class Game {
     } else {
       this.energyTimer += deltaTime;
     }
+    if (
+      !this.playerTouched &&
+      !this.gameOver &&
+      this.player.height + this.player.y < this.height / 2
+    ) {
+      this.player.y += 5;
+    }
     if (this.player.y > 0 - this.player.height * 2 && this.gameOver) {
       this.speed = 0.01;
-      this.player.y -= 1;
-
+      this.player.y -= 2;
       if (this.player.y <= 0 - this.player.height) {
         Global.GameContainer.hidden = true;
         Global.Spinner.hidden = false;
@@ -97,6 +104,7 @@ export default class Game {
       this.background.layer4.update();
     }
     this.player.update(deltaTime);
+
     this.particles.forEach((particle) => particle.update());
     this.particles = this.particles.filter(
       (particle) => !particle.markedForDeletion
