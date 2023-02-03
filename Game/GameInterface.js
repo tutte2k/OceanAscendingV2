@@ -46,7 +46,7 @@ export default class GameInterface {
           100
         ).toFixed(0)}%</span>`;
       } else if (this.game.lose) {
-        message1 = "wasted";
+        message1 = `<span style="color:maroon;font-size:200px;">w a s t e d</span>`;
         message2 = "";
         message3 = "";
       }

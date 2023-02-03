@@ -81,8 +81,8 @@ export default class Game {
       }
     }
     if (this.player.air < 1) {
-      Global.Flasher.preFlash(5000, "black");
-      Global.Wasted.play();
+      Global.Flasher.preFlash(20000, "black");
+      if (!this.lose) Global.Wasted.play();
       this.lose = true;
     } else if (this.words.length === 0 && !this.gameOver) {
       this.win = true;
