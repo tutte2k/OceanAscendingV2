@@ -16,15 +16,15 @@ export default class Player {
 
     this.maxEnergy = this.game.store.shop.maxEnergy;
     this.energy = this.maxEnergy;
-    this.missComboCount = 0;
+    this.missCombo = 0;
 
     this.airTimer = 0;
     this.airInterval = 30000 - this.game.store.shop.airReg * 2000;
 
     this.ammo = this.game.store.shop.mineSlot;
     this.maxAmmo = this.game.store.shop.mineSlot;
-    this.mineComboCount = 0;
-    this.mineComboRequirement = 20;
+    this.hitCombo = 0;
+    this.hitComboCap = 20;
 
     this.ammoTimer = 0;
     this.ammoInterval = 30000 - this.game.store.shop.mineReg * 2000;
@@ -42,28 +42,32 @@ export default class Player {
   penalize() {
     Global.Shaker.startShake(50, "miss");
     Global.Flasher.preFlash(20, "red");
-    this.mineComboCount = 0;
+    this.hitCombo = 0;
     this.game.score--;
     if (this.energy > 0) {
-      this.missComboCount++;
+      this.missCombo++;
       this.energy =
-        this.energy - this.missComboCount < 0
+        this.energy - this.missCombo < 0
           ? 0
-          : this.energy - this.missComboCount;
+          : this.energy - this.missCombo;
       this.game.energyTimer = 0;
     } else {
       this.air--;
     }
   }
   reward() {
-    this.mineComboCount++;
-    if (this.mineComboCount === this.mineComboRequirement && this.ammo > 0) {
+    this.energy = addOrReturnCap(this.energy, 0.1, this.maxEnergy);
+    this.hitCombo = addOrReturnCap(this.hitCombo, 1, this.hitComboCap);
+
+    if (this.hitCombo === this.hitComboCap && this.ammo > 0) {
       this.dropMine();
-      this.mineComboCount = 0;
+      this.hitCombo = 0;
     }
-    if (this.energy < this.maxEnergy) {
-      this.energy += 0.1;
-      this.missComboCount = 0;
+
+    this.missCombo = 0;
+
+    function addOrReturnCap(num1, num2, max) {
+      return num1 + num2 <= max ? num1 + num2 : max;
     }
   }
   update(deltaTime) {

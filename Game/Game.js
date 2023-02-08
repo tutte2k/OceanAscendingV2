@@ -13,6 +13,7 @@ export default class Game {
 
     this.nextLevel = nextLevel;
     this.words = level.getContent();
+    this.totalWords = this.words.length;
 
     this.gameOver = false;
     this.lose = false;

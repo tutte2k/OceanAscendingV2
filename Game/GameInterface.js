@@ -18,6 +18,9 @@ export default class GameInterface {
       energyBar: document.getElementById("ebar"),
       airBar: document.getElementById("abar"),
       mineComboBar: document.getElementById("mcbar"),
+      progressBar: document.getElementById("pbar"),
+      progress: document.getElementById("progress"),
+      comboTimer: document.getElementById("comboTimer"),
     };
     this.elements.hud.classList.remove("invisible");
     Global.InfoContainer.classList.add("invisible");
@@ -25,10 +28,10 @@ export default class GameInterface {
   }
   draw() {
     const formattedTime = (this.game.gameTime * 0.001).toFixed(1);
+
     this.elements.mineComboBar.style.width =
-      100 -
-      (this.game.player.mineComboCount /
-        this.game.player.mineComboRequirement) *
+      (this.game.player.hitCombo /
+        this.game.player.hitComboCap) *
         100 +
       "%";
 
@@ -38,6 +41,19 @@ export default class GameInterface {
     this.elements.energyBar.style.width =
       (this.game.player.energy / this.game.player.maxEnergy) * 100 + "%";
 
+    let percentageCompleted =
+      100 -
+      ((this.game.words.length / this.game.totalWords) * 100).toFixed(0) +
+      "%";
+
+    this.elements.progressBar.style.width = percentageCompleted;
+    this.elements.progress.innerHTML = percentageCompleted;
+
+    this.elements.comboTimer.innerHTML = this.game.player.ammo === 0 ? `New mine in ${(
+      (this.game.player.ammoInterval - this.game.player.ammoTimer) /
+      1000
+    ).toFixed(0)} seconds!` : "";
+
     this.elements.depth.innerHTML = formattedTime;
     this.elements.air.innerHTML = this.game.player.air;
     this.elements.mine.innerHTML = this.game.player.ammo;
@@ -45,6 +61,7 @@ export default class GameInterface {
     this.elements.wordsLeft.innerHTML = this.game.words.length;
     this.elements.energyMax.innerHTML = this.game.player.maxEnergy;
     this.elements.energy.innerHTML = this.game.player.energy.toFixed(1);
+
     if (Math.floor(this.game.level.mode.id) !== 4) {
       this.elements.crosshair.innerHTML =
         this.game.focus && this.game.focus.text.length != 1

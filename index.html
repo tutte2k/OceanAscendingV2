@@ -143,16 +143,15 @@
       <span class="spinner-grow text-bg-info"></span>
     </div>
 
-   
-  
     <div hidden="true" id="container1">
       <canvas id="canvas1"></canvas>
       <div id="effects" class="opacity-50"></div>
       <div id="ui" class="invisible">
         <div class="bars">
+          <div id="pbar" class="bar progressBar"><span id="progress" class="m-3 text-white"></span></div>
           <div id="abar" class="bar airBar"><span class="m-3 text-white">Air</span></div>
           <div id="ebar" class="bar energyBar"><span class="m-3 text-white">Energy</span></div>
-          <div id="mcbar" class="bar mineComboBar"><span class="m-3 text-white">Combo</span></div>
+          <div id="mcbar" class="bar mineComboBar"><span class="m-3 text-white">Combo</span><span id="comboTimer" class="text-right"></span></div>
         </div>
         <div class="d-flex col justify-content-between mx-3">
           <div id="inv" class="invisible">
@@ -163,11 +162,8 @@
             <p class="hud">Air: <span id="air"></span></p>
           </div>
           
-
-          <p class="hud">Score: <span id="score"></span></p>
-          
           <div class="invisible">
-
+            <p class="hud">Score: <span id="score"></span></p>
             <p class="hud">Words left: <span id="wordsLeft"></span></p>
             <p class="hud">Level: <span id="level"></span></p>
             <p class="hud">Depth: <span id="depth"></span></p>
