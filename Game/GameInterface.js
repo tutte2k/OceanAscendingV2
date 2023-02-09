@@ -23,7 +23,7 @@ export default class GameInterface {
       comboTimer: document.getElementById("comboTimer"),
     };
     this.elements.hud.classList.remove("invisible");
-    Global.InfoContainer.classList.add("invisible");
+    Global.InfoButton.classList.add("invisible");
     this.game = game;
   }
   draw() {

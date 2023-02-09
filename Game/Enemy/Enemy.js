@@ -107,19 +107,24 @@ export default class Enemy {
     const enemies = [Whale];
     return new enemies[Random.index(enemies)](game, value);
   }
+  static NextBoss(bossId) {
+    const bosses = {
+      0: Angela,
+      1: Chtullie,
+    };
+    return bosses[bossId];
+  }
   static Next(game, value) {
     const tier1 = [Goldfish, LuckyFish, Jellyfish, Inker, Urchie, Inky, Jinxy];
     const tier2 = [Seahorse, Turtle];
-    const tier3 = [Angler1, Angler2];
+    const tier3 = [Angler1, Angler2, HiveWhale];
     const tier4 = [Lionfish, Shark, Whale];
-
-    const bosstier = [Angela, Chtullie, HiveWhale];
 
     const enemies = {
       1: [...tier1],
       2: [...tier1, ...tier2],
       3: [...tier1, ...tier2, ...tier3],
-      4: [...tier1, ...tier2, ...tier3, ...tier4, ...bosstier],
+      4: [...tier1, ...tier2, ...tier3, ...tier4],
     };
     if (!enemies[value.length]) {
       return new enemies[4][Random.index(enemies[4])](game, value);
@@ -194,13 +199,100 @@ class Lionfish extends Fish {
     this.speedX = -0.3;
   }
 }
+
 class Angela extends Fish {
-  constructor(game, word) {
+  constructor(game) {
     const width = 483;
     const height = 500;
     const image = document.getElementById(`angela${Random.int(1, 2)}`);
-    super(game, word, new SpriteSheet(image, width, height, 29, 0, 20));
-    this.speedX = -1;
+    super(game, "word", new SpriteSheet(image, width, height, 29, 0, 20));
+    this.speedX = -0.5;
+    this.chaseSpeed = 0.1;
+
+    this.livesLeft = 8;
+
+    this.data = {
+      0: Random.indexes([
+        ...LetterMode.Alphabet.slice(),
+        ...LetterMode.Numbers.slice(),
+        ...LetterMode.ALPHABET.slice(),
+      ]),
+
+      1: Random.indexes([
+        ...LetterMode.Alphabet.slice(),
+        ...LetterMode.ALPHABET.slice(),
+      ]),
+
+      2: Random.indexes(LetterMode.Numbers.slice()),
+      3: Random.indexes(LetterMode.Alphabet.slice()),
+      4: Random.indexes(LetterMode.ALPHABET.slice()),
+
+      5: LetterMode.Alphabet.slice().reverse(),
+      6: LetterMode.Alphabet.slice(),
+
+      7: LetterMode.Numbers.slice().reverse(),
+      8: LetterMode.Numbers.slice(),
+    };
+
+    this.completedText = "";
+    this.displayText = this.text;
+    this.text = this.data[this.livesLeft].pop();
+  }
+  update(deltaTime) {
+    if (this.speedY) {
+      this.y += this.speedY - this.game.speed;
+    }
+
+    this.x += this.speedX - this.game.speed;
+
+    this.y > this.game.player.y && this.y > 10
+      ? (this.y -= this.chaseSpeed)
+      : (this.y += this.chaseSpeed);
+
+    if (this.x + this.width * 0.7 < 0) {
+      this.speedX += -0.5;
+      this.chaseSpeed += 0.1;
+
+      const choice = Random.int(1, 4);
+      if (choice === 1) {
+        this.x = this.game.width;
+        this.y = 100;
+      } else if (choice === 2) {
+        this.x = this.game.width;
+        this.y = this.game.height - 100;
+      } else if (choice === 3) {
+        this.x = this.game.width;
+        this.y = this.game.height / 2;
+      } else {
+        this.x = this.game.width;
+        this.y = this.game.player.y;
+      }
+    }
+    this.sprite.update(deltaTime);
+  }
+  penalize() {
+    if (this.data[this.livesLeft].length === 0) {
+      this.livesLeft--;
+      if (this.livesLeft < 0) {
+        return (this.markedForDeletion = true);
+      }
+    }
+    this.completedText = "";
+    this.text = this.data[this.livesLeft].pop();
+  }
+
+  consume(key) {
+    const length = this.completedText.length + 1;
+    const isNextChar =
+      this.text.substring(0, length) === this.completedText + key;
+    if (isNextChar) {
+      this.completedText += key;
+      this.x += 15;
+    }
+    if (this.completedText === this.text) {
+      this.penalize();
+    }
+    return isNextChar;
   }
 }
 class Shark extends Fish {
@@ -305,7 +397,7 @@ class Jinxy extends Fish {
   }
   update(deltaTime) {
     if (this.jinxTimer > this.jinxInterval) {
-      let alphabet = LetterMode.Alphabet;
+      let alphabet = LetterMode.Alphabet.slice();
       this.text = alphabet[Random.int(0, LetterMode.Alphabet.length - 1)];
       this.jinxInterval -= this.jinxInterval * 0.5;
       this.jinxTimer = 0;

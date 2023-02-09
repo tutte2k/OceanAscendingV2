@@ -1,11 +1,6 @@
 import DataSource from "./Storage/DataSource.js";
 import Global from "./Utils/Global.js";
 import Map from "./Map/Map.js";
-import Audioplayer from "./Audioplayer/Audioplayer.js";
-
-/*
-score / level progress on ui
-*/
 
 const ctx = Global.Canvas.getContext("2d");
 Global.Canvas.width = 2500;
@@ -13,7 +8,6 @@ Global.Canvas.height = 1768;
 
 const dataSource = new DataSource();
 const map = new Map(dataSource);
-const audioPlayer = new Audioplayer();
 
 window.addEventListener("load", function () {
   Global.GameContainer.hidden = false;
@@ -52,13 +46,25 @@ window.addEventListener("load", function () {
     const deltaTime = timeStamp - lastTime;
     lastTime = timeStamp;
     if (game && game.level) {
-      if (audioPlayer.playing !== "match") audioPlayer.playing = "match";
-      if (audioPlayer.isPlaying) audioPlayer.play();
+      if (game.boss && !game.lose) {
+        Global.Audioplayer.tracks.find((x) => x.name === "evasion").play();
+      } else if (Global.Audioplayer.currentTrack.name !== "game") {
+        Global.Audioplayer.currentTrack = Global.Audioplayer.tracks.find(
+          (x) => x.name === "game"
+        );
+        Global.Audioplayer.currentTrack.play();
+      }
       game.draw(ctx);
       state = game.update(deltaTime);
     } else if (game && state) {
+      if (Global.Audioplayer.currentTrack.name !== "map") {
+        Global.Audioplayer.currentTrack = Global.Audioplayer.tracks.find(
+          (x) => x.name === "map"
+        );
+        Global.Audioplayer.currentTrack.play();
+      }
       Global.Canvas.classList.remove("underwater");
-      Global.InfoContainer.classList.remove("invisible");
+      Global.InfoButton.classList.remove("invisible");
       Global.Flasher.stop();
       if (state.win) {
         const cash = dataSource.saveStateAndReturnCash(state);
@@ -70,8 +76,6 @@ window.addEventListener("load", function () {
       state = null;
       game = null;
     } else {
-      if (audioPlayer.playing !== "map") audioPlayer.playing = "map";
-      if (audioPlayer.isPlaying) audioPlayer.play();
       map.draw(ctx, deltaTime);
       map.moving = true;
       map.player.moving = false;

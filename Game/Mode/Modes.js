@@ -10,6 +10,7 @@ import ExpertMode from "./LetterMode/Modes/ExpertMode.js";
 import SwedishMode from "./LetterMode/Modes/SwedishMode.js";
 import LetterMode from "./LetterMode/LetterMode.js";
 import Mode from "./Mode.js";
+import BossMode from "./LetterMode/Modes/BossMode.js";
 
 export {
   TibiaMode,
@@ -18,6 +19,7 @@ export {
   SwedishMode,
   MultiplyMode,
   SubtractMode,
+  BossMode,
   AddMode,
   DivideMode,
   BeyondMode,

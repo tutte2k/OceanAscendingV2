@@ -72,14 +72,93 @@ class Shaker {
     ctx.restore();
   }
 }
+class Track {
+  constructor(path, name, audioplayer) {
+    this.name = name;
+    this.track = new Audio(path);
+    this.track.loop = true;
+    this.track.muted = true;
+    this.track.volume = Audioplayer.Volume;
+    this.track.onplaying = () => (audioplayer.playing = name);
+    this.playPromise = undefined;
+    this.track.onplay = () => {
+      audioplayer.currentTrack = this;
+      audioplayer.tracks.forEach((x) => {
+        if (x.name !== this.name) {
+          if (x.playPromise) {
+            x.track.pause();
+          }
+        }
+      });
+    };
+  }
+  play() {
+    this.playPromise = this.track.play();
+  }
+  pause() {
+    this.track.pause();
+  }
+}
+class Sound {
+  constructor(path, name) {
+    this.name = name;
+    this.sound = new Audio(path);
+    this.sound.muted = true;
+    this.sound.volume = Audioplayer.Volume;
+  }
+  play() {
+    this.sound.play();
+  }
+}
+class Audioplayer {
+  static Volume = 50 / 100;
+
+  constructor() {
+    this.toggleButton = document.getElementById("audioBtn");
+    this.volumeSlider = document.getElementById("volumeSlider");
+    this.toggleButton.innerHTML = "Unmute 🔊";
+
+    this.muted = true;
+    this.isPlaying = false;
+
+    this.tracks = [
+      new Track("./assets/map.mp3", "map", this),
+      new Track("./assets/match.mp3", "game", this),
+      new Track("./assets/berlin-techno.mp3", "berlin", this),
+      new Track("./assets/evasion.mp3", "evasion", this),
+      new Track("./assets/the-lost-expedition.mp3", "expedition", this),
+    ];
+    this.sounds = [new Sound("./assets/wasted.mp3", "lose")];
+
+    this.currentTrack = this.tracks[0];
+    this.currentTrack.play();
+
+    this.toggleButton.addEventListener("click", () => {
+      this.toggleMute();
+    });
+    this.volumeSlider.addEventListener("change", (e) => {
+      if (this.muted) this.toggleMute();
+      let volume = e.currentTarget.value / 100;
+      this.tracks.forEach((x) => (x.track.volume = volume));
+      this.sounds.forEach((x) => (x.sound.volume = volume));
+    });
+  }
+  toggleMute() {
+    this.muted = !this.muted;
+    this.toggleButton.innerHTML = this.muted ? "Unmute 🔊" : "Mute 🔇";
+    this.tracks.forEach((x) => (x.track.muted = !this.muted ? false : true));
+    this.sounds.forEach((x) => (x.sound.muted = !this.muted ? false : true));
+  }
+}
 
 export default class Global {
   static Canvas = document.getElementById("canvas1");
+  static Effects = document.getElementById("effects");
   static GameContainer = document.getElementById("container1");
-  static InfoContainer = document.getElementById("infoContainer");
+  static InfoButton = document.getElementById("infoButton");
   static Spinner = document.getElementById("spinner");
+
   static Shaker = new Shaker();
   static Flasher = new Flasher();
-  static Effects = document.getElementById("effects");
-  static Wasted = new Audio("./assets/wasted.mp3")
+  static Audioplayer = new Audioplayer();
 }

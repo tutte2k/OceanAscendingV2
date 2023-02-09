@@ -1,4 +1,5 @@
 import GameHandler from "../../GameHandler.js";
+import LetterMode from "./LetterMode.js";
 export default class LettersHandler extends GameHandler {
   constructor(game) {
     super(game);
@@ -10,8 +11,10 @@ export default class LettersHandler extends GameHandler {
       const hit = this.game.focus.consume(e.key);
       if (hit) {
         this.game.player.reward();
-      } else {
-        this.game.player.penalize();
+      } else if (!LetterMode.Controls.includes(e.key)) {
+        {
+          this.game.player.penalize();
+        }
       }
     } else {
       this.game.focus = this.game.level.mode.findFocus(e.key, this.game);

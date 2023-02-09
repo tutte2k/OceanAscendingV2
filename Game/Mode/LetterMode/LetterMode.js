@@ -6,6 +6,18 @@ export default class LetterMode extends Mode {
   static Alphabet = "a b c d e f g h i j k l m n o p q r s t u v x y z".split(
     " "
   );
+  static ALPHABET = "a b c d e f g h i j k l m n o p q r s t u v x y z"
+    .toUpperCase()
+    .split(" ");
+
+  static Numbers = "1 2 3 4 5 6 7 8 9 0".split(" ");
+  static Controls = [
+    "ArrowLeft",
+    "ArrowDown",
+    "ArrowUp",
+    "ArrowRight",
+    "Shift",
+  ];
   static EnemyInterval = 5000;
   constructor(id, name) {
     super(id, LettersHandler, LetterMode.EnemyInterval, name);
@@ -49,14 +61,7 @@ export default class LetterMode extends Mode {
       enemy.focused = true;
       return enemy;
     } else {
-      const controls = [
-        "ArrowLeft",
-        "ArrowDown",
-        "ArrowUp",
-        "ArrowRight",
-        "Shift",
-      ];
-      if (!controls.includes(key)) {
+      if (!LetterMode.Controls.includes(key)) {
         game.userInterface.displayMissedKey(key);
         game.player.penalize();
       }

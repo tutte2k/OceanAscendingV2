@@ -17,6 +17,7 @@ import MapPlayer from "./Player/MapPlayer.js";
 import StaticImage from "../Utils/StaticImage.js";
 import { Matrix } from "./Environment/Matrix.js";
 import MapInterface from "./MapInterface.js";
+import BossMode from "../Game/Mode/LetterMode/Modes/BossMode.js";
 
 export default class Map {
   constructor(dataSource) {
@@ -51,10 +52,13 @@ export default class Map {
     this.divLevelsArray = [];
     this.mulLevelsArray = [];
 
+    this.bossLevelsArray = [];
+
     this.wordsCounter = 0;
     this.tibiaCounter = 0;
     this.specialCounter = 0;
     this.svenskaCounter = 0;
+    this.bossCounter = 0;
 
     this.addCounter = 0;
     this.subCounter = 0;
@@ -83,6 +87,7 @@ export default class Map {
       ...this.mulLevelsArray,
       ...this.divLevelsArray,
       ...this.mathLevelsArray,
+      ...this.bossLevelsArray
     ];
     this.movables = [
       this.background,
@@ -114,6 +119,9 @@ export default class Map {
     const specialContent = splitLevelData(ExpertMode.Data, 50);
     const svenskaContent = splitLevelData(SwedishMode.Data, 275);
     const MathContent = Array.from(Array(448), () => new Array(25).fill(1));
+
+    const bossContent = splitLevelData(BossMode.Data,20)
+
     Matrix.forEach((row, i) => {
       row.forEach((symbol, j) => {
         if (symbol === 1025) {
@@ -146,6 +154,17 @@ export default class Map {
             i
           );
           this.wordsCounter++;
+        }
+        if (symbol === 7) {
+          this.constructLevel(
+            new BossMode(),
+            bossContent,
+            this.bossLevelsArray,
+            this.bossCounter,
+            j,
+            i
+          );
+          this.bossCounter++;
         }
         if (symbol === 6) {
           this.constructLevel(

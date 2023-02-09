@@ -20,6 +20,8 @@ export default class Game {
     this.win = false;
     this.score = 0;
 
+    this.boss = false;
+
     this.width = Global.Canvas.width;
     this.height = Global.Canvas.height;
 
@@ -89,9 +91,17 @@ export default class Game {
       }
     }
     if (this.player.air < 1) {
-      Global.Flasher.preFlash(20000, "black");
-      if (!this.lose) Global.Wasted.play();
-      this.lose = true;
+      Global.Flasher.preFlash(20000, "lightgray");
+      if (Global.Audioplayer.currentTrack.playPromise) {
+        Global.Audioplayer.currentTrack.pause();
+      }
+      if (!this.lose) {
+        this.lose = true;
+        const sound = Global.Audioplayer.sounds.find(
+          (sound) => sound.name === "lose"
+        );
+        sound.play();
+      }
     } else if (this.words.length === 0 && !this.gameOver) {
       this.win = true;
       this.enemies.forEach((enemy) => {
@@ -130,7 +140,9 @@ export default class Game {
         if (enemy.focused && this.focus === enemy) {
           this.focus = null;
         }
-        enemy.die();
+        if (!this.boss) {
+          enemy.die();
+        }
         if (this.player.air > 0) {
           this.player.air -= enemy.score;
           if (!this.gameOver) {
@@ -140,12 +152,17 @@ export default class Game {
       }
       this.player.projectiles.forEach((projectile) => {
         if (Collision.checkCollision(projectile, enemy)) {
-          if (enemy.focused && this.focus === enemy) {
-            this.focus = null;
+          if (this.boss) {
+            projectile.explode();
+            this.enemies[0].penalize();
+          } else {
+            if (enemy.focused && this.focus === enemy) {
+              this.focus = null;
+            }
+            projectile.explode();
+            enemy.die();
+            this.userInterface.displayScoreMessage(enemy);
           }
-          projectile.explode();
-          enemy.die();
-          this.userInterface.displayScoreMessage(enemy);
         }
       });
       if (enemy.markedForDeletion === true) {
