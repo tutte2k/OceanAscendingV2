@@ -117,9 +117,8 @@ class Audioplayer {
     this.toggleButton = document.getElementById("audioBtn");
     this.volumeSlider = document.getElementById("volumeSlider");
     this.toggleButton.innerHTML = "Unmute 🔊";
-
     this.muted = true;
-    this.isPlaying = false;
+    this.currentTrack = null;
 
     this.tracks = [
       new Track("./assets/map.mp3", "map", this),
@@ -130,10 +129,11 @@ class Audioplayer {
     ];
     this.sounds = [new Sound("./assets/wasted.mp3", "lose")];
 
-    this.currentTrack = this.tracks[0];
-    this.currentTrack.play();
-
     this.toggleButton.addEventListener("click", () => {
+      if (this.currentTrack === null) {
+        this.currentTrack = this.tracks[0];
+        this.currentTrack.play();
+      }
       this.toggleMute();
     });
     this.volumeSlider.addEventListener("change", (e) => {
