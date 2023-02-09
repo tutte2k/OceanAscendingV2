@@ -118,7 +118,6 @@ class Audioplayer {
     this.volumeSlider = document.getElementById("volumeSlider");
     this.toggleButton.innerHTML = "Unmute 🔊";
     this.muted = true;
-    this.currentTrack = null;
 
     this.tracks = [
       new Track("./assets/map.mp3", "map", this),
@@ -128,14 +127,13 @@ class Audioplayer {
       new Track("./assets/the-lost-expedition.mp3", "expedition", this),
     ];
     this.sounds = [new Sound("./assets/wasted.mp3", "lose")];
+    this.currentTrack = this.tracks[0];
 
     this.toggleButton.addEventListener("click", () => {
-      if (this.currentTrack === null) {
-        this.currentTrack = this.tracks[0];
-        this.currentTrack.play();
-      }
+      this.currentTrack.play();
       this.toggleMute();
     });
+    
     this.volumeSlider.addEventListener("change", (e) => {
       if (this.muted) this.toggleMute();
       let volume = e.currentTarget.value / 100;
