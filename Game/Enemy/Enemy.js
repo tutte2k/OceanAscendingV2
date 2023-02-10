@@ -689,7 +689,6 @@ class Chtullie extends Octopus {
   }
   update(deltaTime) {
     this.inkyTime = this.game.enemies.length < 3;
-    console.log(this.inkyTime);
     if (this.inkyTime) {
       const inky = new Inky(this.game, "!");
       inky.x = this.game.player.x + 120;
