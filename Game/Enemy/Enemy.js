@@ -8,7 +8,7 @@ import {
   InkExplosion,
 } from "../Environment/Explosion.js";
 
-export class Enemy {
+export default class Enemy {
   constructor(game, word, sprite) {
     this.game = game;
     this.text = word;
