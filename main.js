@@ -21,6 +21,8 @@ refactor Game class
 Boss
   add shake
   scoring?
+  progress / health bar
+  fix boss level construction
 
 Shop
   add impact
