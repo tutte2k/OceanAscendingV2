@@ -21,7 +21,7 @@ Boss
   add shake
   scoring?
   progress / health bar
-  fix octopus data / add all
+    Octopus movement
 
 Shop
   add impact
@@ -33,6 +33,8 @@ Features
   add harpoon
     goes through enemies
     x++
+
+  A STAR ALGORITHM
 
 */
 
