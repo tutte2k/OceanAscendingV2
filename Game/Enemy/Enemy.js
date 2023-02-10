@@ -272,7 +272,6 @@ class Angela extends Fish {
 
   randomPosition() {
     const choice = Random.int(1, 4);
-    console.log(choice);
     if (choice === 1) {
       this.x = this.game.width;
       this.y = 0;

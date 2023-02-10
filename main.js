@@ -1,6 +1,7 @@
 import DataSource from "./Storage/DataSource.js";
 import Global from "./Utils/Global.js";
 import Map from "./Map/Map.js";
+import Random from "./Utils/Random.js";
 
 const ctx = Global.Canvas.getContext("2d");
 Global.Canvas.width = 2500;
@@ -8,7 +9,6 @@ Global.Canvas.height = 1768;
 
 const dataSource = new DataSource();
 const map = new Map(dataSource);
-
 
 /*
 TODO:
@@ -67,6 +67,8 @@ window.addEventListener("load", function () {
   let lastTime = 0;
   let state;
 
+  const bossTracks = ["evasion", "berlin", "expedition"];
+
   function animate(timeStamp) {
     Global.Shaker.preShake(ctx);
     Global.Flasher.flash();
@@ -74,9 +76,19 @@ window.addEventListener("load", function () {
     const deltaTime = timeStamp - lastTime;
     lastTime = timeStamp;
     if (game && game.level) {
-      if (game.boss && !game.lose && Global.Audioplayer.currentTrack.name !== "evasion") {
-        Global.Audioplayer.tracks.find((x) => x.name === "evasion").play();
-      } else if (!game.boss && Global.Audioplayer.currentTrack.name !== "game") {
+      if (
+        game.boss &&
+        !game.lose &&
+        !(Global.Audioplayer.currentTrack.name === "evasion" ||
+          Global.Audioplayer.currentTrack.name === "berlin" ||
+          Global.Audioplayer.currentTrack.name === "expedition")
+      ) {
+        const randomTrack = bossTracks[Random.index(bossTracks)];
+        Global.Audioplayer.tracks.find((x) => x.name === randomTrack).play();
+      } else if (
+        !game.boss &&
+        Global.Audioplayer.currentTrack.name !== "game"
+      ) {
         Global.Audioplayer.currentTrack = Global.Audioplayer.tracks.find(
           (x) => x.name === "game"
         );
