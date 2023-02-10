@@ -9,6 +9,31 @@ Global.Canvas.height = 1768;
 const dataSource = new DataSource();
 const map = new Map(dataSource);
 
+
+/*
+TODO:
+
+refactor Global class
+refactor Game class
+  Boss mode?
+  this.boss = Boss object not bool
+
+Boss
+  add shake
+  scoring?
+
+Shop
+  add impact
+
+Features
+  add consumable items
+  add boss loot
+  add harpoon
+    goes through enemies
+    x++
+
+*/
+
 window.addEventListener("load", function () {
   Global.GameContainer.hidden = false;
   Global.Spinner.hidden = true;
