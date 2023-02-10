@@ -135,7 +135,7 @@ export default class Game {
         this.focus = enemy;
       }
       enemy.update(deltaTime);
-      if (Collision.checkCollision(this.player, enemy)) {
+      if (Collision.checkCollision(this.player, enemy, 0.8)) {
         if (enemy.focused && this.focus === enemy) {
           this.focus = null;
         }

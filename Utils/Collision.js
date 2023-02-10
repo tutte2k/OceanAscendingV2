@@ -28,12 +28,17 @@ export default class Collision {
       rectangle1.position.y + rectangle1.height >= rectangle2.position.y
     );
   }
-  static checkCollision(rect1, rect2) {
+  static checkCollision(rect1, rect2, precision = 1) {
+    let r1w = rect1.width * precision;
+    let r1h = rect1.height * precision;
+    let r2w = rect2.width * precision;
+    let r2h = rect2.height * precision;
+
     return (
-      rect1.x < rect2.x + rect2.width &&
-      rect1.x + rect1.width > rect2.x &&
-      rect1.y < rect2.y + rect2.height &&
-      rect1.height + rect1.y > rect2.y
+      rect1.x < rect2.x + r2w &&
+      rect1.x + r1w > rect2.x &&
+      rect1.y < rect2.y + r2h &&
+      r1h + rect1.y > rect2.y
     );
   }
 }

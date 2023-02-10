@@ -120,6 +120,11 @@ export default class Player {
     this.sprite.update(deltaTime);
   }
   draw(context) {
+    if (window.location.origin.includes("localhost")) {
+      context.beginPath();
+      context.rect(this.x, this.y, this.width*0.8, this.height*0.8);
+      context.stroke();
+    }
     context.beginPath();
     const gradient = context.createLinearGradient(
       0,

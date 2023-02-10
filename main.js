@@ -26,6 +26,7 @@ Boss
 
 Shop
   add impact
+  add harpoon
 
 Features
   add consumable items

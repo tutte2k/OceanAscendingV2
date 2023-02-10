@@ -85,6 +85,12 @@ export default class Enemy {
     this.element.remove();
   }
   draw(context) {
+    if (window.location.origin.includes("localhost")) {
+      context.beginPath();
+      context.rect(this.x, this.y, this.width*0.8, this.height*0.8);
+      context.stroke();
+    }
+
     this.sprite.draw(context, this.x, this.y);
     this.element.style.top =
       this.y * this.game.heightPercentage +
@@ -203,11 +209,9 @@ class Lionfish extends Fish {
 class Angela extends Fish {
   constructor(game) {
     const width = 483;
-    const height = 500;
+    const height = 300;
     const image = document.getElementById(`angela${Random.int(1, 2)}`);
     super(game, "word", new SpriteSheet(image, width, height, 29, 0, 20));
-
-
 
     this.speedX = -0.5;
     this.chaseSpeed = 0.1;
