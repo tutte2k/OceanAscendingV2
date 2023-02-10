@@ -42,6 +42,7 @@ export default class Player {
   penalize() {
     Global.Shaker.startShake(50, "miss");
     Global.Flasher.preFlash(20, "red");
+    Global.Audioplayer.sounds.find(x=> x.name ==="miss").play()
     this.hitCombo = 0;
     this.game.score--;
     if (this.energy > 0) {

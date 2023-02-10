@@ -128,7 +128,10 @@ class Audioplayer {
       new Track("./assets/evasion.mp3", "evasion", this),
       new Track("./assets/the-lost-expedition.mp3", "expedition", this),
     ];
-    this.sounds = [new Sound("./assets/wasted.mp3", "lose")];
+    this.sounds = [
+      new Sound("./assets/wasted.mp3", "lose"),
+      new Sound("./assets/miss.mp3", "miss"),
+    ];
     this.currentTrack = this.tracks[0];
 
     this.volumeSlider.addEventListener("change", (e) => {
@@ -137,11 +140,12 @@ class Audioplayer {
         this.currentTrack.play();
       }
 
-      let icons = { 0: "🔇", 1: "🔈", 2: "🔉", 3: "🔊 " };
-      
+      let icons = { 0: "🔈", 1: "🔉", 2: "🔊 ", 3: "🔥" };
+
       let volume = e.currentTarget.value / 100;
 
-      this.toggleButton.innerHTML = volume > 0 ? icons[Math.floor(volume*10*0.33)] : "🔇";
+      this.toggleButton.innerHTML =
+        volume === 0 ? "🔇" : icons[Math.floor(volume * 10 * 0.3)];
       this.tracks.forEach((x) => (x.track.volume = volume));
       this.sounds.forEach((x) => (x.sound.volume = volume));
     });
