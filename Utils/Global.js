@@ -130,7 +130,7 @@ class Audioplayer {
     ];
     this.sounds = [
       new Sound("./assets/wasted.mp3", "lose"),
-      new Sound("./assets/miss.mp3", "miss"),
+      new Sound("./assets/miss.flac", "miss"),
     ];
     this.currentTrack = this.tracks[0];
 
