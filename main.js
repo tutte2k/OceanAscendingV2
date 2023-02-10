@@ -46,7 +46,7 @@ window.addEventListener("load", function () {
     const deltaTime = timeStamp - lastTime;
     lastTime = timeStamp;
     if (game && game.level) {
-      if (game.boss && !game.lose) {
+      if (game.boss && !game.lose && Global.Audioplayer.currentTrack.name !== "evasion") {
         Global.Audioplayer.tracks.find((x) => x.name === "evasion").play();
       } else if (!game.boss && Global.Audioplayer.currentTrack.name !== "game") {
         Global.Audioplayer.currentTrack = Global.Audioplayer.tracks.find(

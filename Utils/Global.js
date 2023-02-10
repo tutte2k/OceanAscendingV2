@@ -111,12 +111,14 @@ class Sound {
   }
 }
 class Audioplayer {
-  static Volume = 50 / 100;
+  static Volume = 0;
 
   constructor() {
     this.toggleButton = document.getElementById("audioBtn");
     this.volumeSlider = document.getElementById("volumeSlider");
-    this.toggleButton.innerHTML = "Unmute 🔊";
+    this.volumeSlider.value = 0;
+    this.toggleButton.innerHTML = "🔇";
+
     this.muted = true;
 
     this.tracks = [
@@ -129,21 +131,23 @@ class Audioplayer {
     this.sounds = [new Sound("./assets/wasted.mp3", "lose")];
     this.currentTrack = this.tracks[0];
 
-    this.toggleButton.addEventListener("click", () => {
-      this.currentTrack.play();
-      this.toggleMute();
-    });
-    
     this.volumeSlider.addEventListener("change", (e) => {
-      if (this.muted) this.toggleMute();
+      if (this.muted) {
+        this.toggleMute();
+        this.currentTrack.play();
+      }
+
+      let icons = { 0: "🔇", 1: "🔈", 2: "🔉", 3: "🔊 " };
+      
       let volume = e.currentTarget.value / 100;
+
+      this.toggleButton.innerHTML = volume > 0 ? icons[Math.floor(volume*10*0.33)] : "🔇";
       this.tracks.forEach((x) => (x.track.volume = volume));
       this.sounds.forEach((x) => (x.sound.volume = volume));
     });
   }
   toggleMute() {
     this.muted = !this.muted;
-    this.toggleButton.innerHTML = this.muted ? "Unmute 🔊" : "Mute 🔇";
     this.tracks.forEach((x) => (x.track.muted = !this.muted ? false : true));
     this.sounds.forEach((x) => (x.sound.muted = !this.muted ? false : true));
   }
