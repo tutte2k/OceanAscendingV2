@@ -67,8 +67,6 @@ window.addEventListener("load", function () {
   let lastTime = 0;
   let state;
 
-  const bossTracks = ["evasion", "berlin", "expedition"];
-
   function animate(timeStamp) {
     Global.Shaker.preShake(ctx);
     Global.Flasher.flash();
@@ -79,12 +77,9 @@ window.addEventListener("load", function () {
       if (
         game.boss &&
         !game.lose &&
-        !(Global.Audioplayer.currentTrack.name === "evasion" ||
-          Global.Audioplayer.currentTrack.name === "berlin" ||
-          Global.Audioplayer.currentTrack.name === "expedition")
+        Global.Audioplayer.currentTrack.name !== "evasion"
       ) {
-        const randomTrack = bossTracks[Random.index(bossTracks)];
-        Global.Audioplayer.tracks.find((x) => x.name === randomTrack).play();
+        Global.Audioplayer.tracks.find((x) => x.name === "evasion").play();
       } else if (
         !game.boss &&
         Global.Audioplayer.currentTrack.name !== "game"
