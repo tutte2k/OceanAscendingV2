@@ -8,7 +8,7 @@ import {
   InkExplosion,
 } from "../Environment/Explosion.js";
 
-export default class Enemy {
+export class Enemy {
   constructor(game, word, sprite) {
     this.game = game;
     this.text = word;
@@ -87,7 +87,7 @@ export default class Enemy {
   draw(context) {
     if (window.location.origin.includes("localhost")) {
       context.beginPath();
-      context.rect(this.x, this.y, this.width*0.8, this.height*0.8);
+      context.rect(this.x, this.y, this.width * 0.8, this.height * 0.8);
       context.stroke();
     }
 
@@ -205,12 +205,12 @@ class Lionfish extends Fish {
     this.speedX = -0.3;
   }
 }
-
 class Angela extends Fish {
   constructor(game) {
     const width = 483;
     const height = 300;
     const image = document.getElementById(`angela${Random.int(1, 2)}`);
+
     super(game, "word", new SpriteSheet(image, width, height, 29, 0, 20));
 
     this.speedX = -0.5;
@@ -243,6 +243,7 @@ class Angela extends Fish {
 
     this.completedText = "";
     this.displayText = this.text;
+
     this.text = this.data[this.livesLeft].pop();
     this.randomPosition();
   }
@@ -569,33 +570,7 @@ class Octopus extends Enemy {
     );
   }
 }
-class Chtullie extends Octopus {
-  constructor(game, word) {
-    const width = 500;
-    const height = 500;
-    const image = document.getElementById(`chtullie`);
 
-    const spriteSheetColumns = 4;
-    const spriteSheetRows = 9;
-    const indexOfLastImage = 2;
-    const fps = 25;
-    super(
-      game,
-      word,
-      new SpriteSheet(
-        image,
-        width,
-        height,
-        spriteSheetColumns,
-        spriteSheetRows,
-        fps,
-        true,
-        indexOfLastImage
-      )
-    );
-    this.speedX = -0.6;
-  }
-}
 class Inker extends Octopus {
   constructor(game, word) {
     const width = 105;
@@ -662,5 +637,105 @@ class Inky extends Octopus {
     this.y = this.game.height + 100;
     this.speedX = 1;
     this.speedY = -2;
+  }
+}
+
+class Chtullie extends Octopus {
+  constructor(game) {
+    const width = 500;
+    const height = 500;
+    const image = document.getElementById(`chtullie`);
+    const spriteSheetColumns = 4;
+    const spriteSheetRows = 9;
+    const indexOfLastImage = 2;
+    const fps = 25;
+    super(
+      game,
+      "word",
+      new SpriteSheet(
+        image,
+        width,
+        height,
+        spriteSheetColumns,
+        spriteSheetRows,
+        fps,
+        true,
+        indexOfLastImage
+      )
+    );
+
+    this.livesLeft = 8;
+    this.inkyTime = false;
+
+    this.inkyCount = 1;
+
+    this.data = {
+      0: [...Array.from(new Array(5).fill("i"))],
+      1: [...Array.from(new Array(5).fill("h"))],
+      2: [...Array.from(new Array(5).fill("g"))],
+      3: [...Array.from(new Array(5).fill("f"))],
+      4: [...Array.from(new Array(5).fill("e"))],
+      5: [...Array.from(new Array(5).fill("d"))],
+      6: [...Array.from(new Array(5).fill("c"))],
+      7: [...Array.from(new Array(5).fill("b"))],
+      8: [...Array.from(new Array(5).fill("a"))],
+    };
+
+    this.completedText = "";
+    this.displayText = this.text;
+
+    this.text = this.data[this.livesLeft].pop();
+    this.x = this.game.width * 0.8;
+  }
+  update(deltaTime) {
+    this.inkyTime = this.game.enemies.length < 3;
+    console.log(this.inkyTime);
+    if (this.inkyTime) {
+      const inky = new Inky(this.game, "!");
+      inky.x = this.game.player.x + 120;
+      this.game.enemies.push(inky);
+
+      for (let i = 0; i < this.inkyCount; i++) {
+        const inker = new Inker(this.game, i.toString());
+        inker.x = this.game.width * 0.6;
+        inker.y = this.game.height / i;
+        this.game.enemies.push(inker);
+      }
+      this.inkyCount++;
+    }
+    this.y = this.game.player.y;
+    if (this.x + this.width * 0.7 < 0) {
+      this.randomPosition();
+    }
+    this.sprite.update(deltaTime);
+  }
+  die() {
+    super.die();
+    this.game.win = true;
+  }
+
+  penalize() {
+    if (this.data[this.livesLeft].length === 0) {
+      this.livesLeft--;
+      if (this.livesLeft < 0) {
+        return (this.markedForDeletion = true);
+      }
+    }
+    this.completedText = "";
+    this.text = this.data[this.livesLeft].pop();
+  }
+  consume(key) {
+    const length = this.completedText.length + 1;
+    const isNextChar =
+      this.text.substring(0, length) === this.completedText + key;
+    if (isNextChar) {
+      this.completedText += key;
+      this.game.focus = null;
+      this.focused = false;
+    }
+    if (this.completedText === this.text) {
+      this.penalize();
+    }
+    return isNextChar;
   }
 }

@@ -1,7 +1,6 @@
 import DataSource from "./Storage/DataSource.js";
 import Global from "./Utils/Global.js";
 import Map from "./Map/Map.js";
-import Random from "./Utils/Random.js";
 
 const ctx = Global.Canvas.getContext("2d");
 Global.Canvas.width = 2500;
@@ -22,7 +21,7 @@ Boss
   add shake
   scoring?
   progress / health bar
-  fix boss level construction
+
 
 Shop
   add impact

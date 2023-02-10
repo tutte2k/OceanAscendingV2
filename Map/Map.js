@@ -120,7 +120,7 @@ export default class Map {
     const svenskaContent = splitLevelData(SwedishMode.Data, 275);
     const MathContent = Array.from(Array(448), () => new Array(25).fill(1));
 
-    const bossContent = splitLevelData(BossMode.Data,20)
+    const bossContent = Array.from(Array(3), () => new Array(1000).fill(1));
 
     Matrix.forEach((row, i) => {
       row.forEach((symbol, j) => {

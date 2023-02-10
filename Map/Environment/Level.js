@@ -18,7 +18,7 @@ export default class Level {
     if (!this.locked) {
       ctx.font = "26px serif";
       ctx.fillStyle = "white";
-      const icon = this.locked === false ? "⭐" : "🚫";
+      const icon = this.mode.name === "Boss" ? "💀" : "⭐";
       ctx.fillText(icon, this.position.x, this.position.y + 30);
     }
   }
