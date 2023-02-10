@@ -10,6 +10,7 @@ export default class Game {
     this.userInterface = new GameInterface(this);
     this.wordContainer = this.userInterface.elements.wordContainer;
     this.level = level;
+    this.boss = this.level.mode.name === "Boss";
 
     this.nextLevel = nextLevel;
     this.words = level.getContent();
@@ -19,8 +20,6 @@ export default class Game {
     this.lose = false;
     this.win = false;
     this.score = 0;
-
-    this.boss = false;
 
     this.width = Global.Canvas.width;
     this.height = Global.Canvas.height;

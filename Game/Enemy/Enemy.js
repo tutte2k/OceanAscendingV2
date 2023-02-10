@@ -206,6 +206,9 @@ class Angela extends Fish {
     const height = 500;
     const image = document.getElementById(`angela${Random.int(1, 2)}`);
     super(game, "word", new SpriteSheet(image, width, height, 29, 0, 20));
+
+
+
     this.speedX = -0.5;
     this.chaseSpeed = 0.1;
 
@@ -237,6 +240,7 @@ class Angela extends Fish {
     this.completedText = "";
     this.displayText = this.text;
     this.text = this.data[this.livesLeft].pop();
+    this.randomPosition();
   }
   update(deltaTime) {
     if (this.speedY) {
@@ -253,23 +257,33 @@ class Angela extends Fish {
       this.speedX += -0.5;
       this.chaseSpeed += 0.1;
 
-      const choice = Random.int(1, 4);
-      if (choice === 1) {
-        this.x = this.game.width;
-        this.y = 100;
-      } else if (choice === 2) {
-        this.x = this.game.width;
-        this.y = this.game.height - 100;
-      } else if (choice === 3) {
-        this.x = this.game.width;
-        this.y = this.game.height / 2;
-      } else {
-        this.x = this.game.width;
-        this.y = this.game.player.y;
-      }
+      this.randomPosition();
     }
     this.sprite.update(deltaTime);
   }
+  die() {
+    super.die();
+    this.game.win = true;
+  }
+
+  randomPosition() {
+    const choice = Random.int(1, 4);
+    console.log(choice);
+    if (choice === 1) {
+      this.x = this.game.width;
+      this.y = 0;
+    } else if (choice === 2) {
+      this.x = this.game.width;
+      this.y = this.game.height * 0.8;
+    } else if (choice === 3) {
+      this.x = this.game.width;
+      this.y = this.game.height * 0.5;
+    } else {
+      this.x = this.game.width;
+      this.y = this.game.player.y;
+    }
+  }
+
   penalize() {
     if (this.data[this.livesLeft].length === 0) {
       this.livesLeft--;
@@ -280,7 +294,6 @@ class Angela extends Fish {
     this.completedText = "";
     this.text = this.data[this.livesLeft].pop();
   }
-
   consume(key) {
     const length = this.completedText.length + 1;
     const isNextChar =

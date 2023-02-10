@@ -8,15 +8,10 @@ export default class BossMode extends LetterMode {
     super(BossMode.Id, BossMode.Name);
   }
   addEnemy(game) {
-    if (!game.boss) {
-      game.boss = true;
-      const bossClass = Enemy.NextBoss(game.level.name);
-      const boss = new bossClass(game);
-      game.enemies.push(boss);
-    }
-    if (game.enemies.length === 0) {
-      game.win = true;
-    }
+    if (game.enemies.length !== 0) return;
+    const bossClass = Enemy.NextBoss(game.level.name);
+    const boss = new bossClass(game);
+    game.enemies.push(boss);
   }
   static Data = LetterMode.Alphabet.slice();
 }

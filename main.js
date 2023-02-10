@@ -48,7 +48,7 @@ window.addEventListener("load", function () {
     if (game && game.level) {
       if (game.boss && !game.lose) {
         Global.Audioplayer.tracks.find((x) => x.name === "evasion").play();
-      } else if (Global.Audioplayer.currentTrack.name !== "game") {
+      } else if (!game.boss && Global.Audioplayer.currentTrack.name !== "game") {
         Global.Audioplayer.currentTrack = Global.Audioplayer.tracks.find(
           (x) => x.name === "game"
         );
