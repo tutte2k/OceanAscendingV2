@@ -11,6 +11,8 @@ export default class Game {
     this.wordContainer = this.userInterface.elements.wordContainer;
     this.level = level;
     this.boss = this.level.mode.name === "Boss";
+    if (!this.boss)
+      Global.Audioplayer.tracks.find((x) => x.name === "game").play();
 
     this.nextLevel = nextLevel;
     this.words = level.getContent();

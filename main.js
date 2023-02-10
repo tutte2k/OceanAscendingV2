@@ -21,7 +21,7 @@ Boss
   add shake
   scoring?
   progress / health bar
-
+  fix octopus data / add all
 
 Shop
   add impact
@@ -66,6 +66,7 @@ window.addEventListener("load", function () {
   let lastTime = 0;
   let state;
 
+
   function animate(timeStamp) {
     Global.Shaker.preShake(ctx);
     Global.Flasher.flash();
@@ -73,21 +74,6 @@ window.addEventListener("load", function () {
     const deltaTime = timeStamp - lastTime;
     lastTime = timeStamp;
     if (game && game.level) {
-      if (
-        game.boss &&
-        !game.lose &&
-        Global.Audioplayer.currentTrack.name !== "evasion"
-      ) {
-        Global.Audioplayer.tracks.find((x) => x.name === "evasion").play();
-      } else if (
-        !game.boss &&
-        Global.Audioplayer.currentTrack.name !== "game"
-      ) {
-        Global.Audioplayer.currentTrack = Global.Audioplayer.tracks.find(
-          (x) => x.name === "game"
-        );
-        Global.Audioplayer.currentTrack.play();
-      }
       game.draw(ctx);
       state = game.update(deltaTime);
     } else if (game && state) {
