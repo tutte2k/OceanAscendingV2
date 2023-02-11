@@ -118,6 +118,7 @@ export default class Enemy {
     const bosses = {
       0: Angela,
       1: Chtullie,
+      2: Kraken,
     };
     return bosses[bossId];
   }
@@ -220,27 +221,17 @@ class Angela extends Fish {
 
     this.livesLeft = 8;
 
+    let angelaData = BossMode.Data.Angela.slice();
     this.data = {
-      0: Random.indexes([
-        ...LetterMode.Alphabet.slice(),
-        ...LetterMode.Numbers.slice(),
-        ...LetterMode.ALPHABET.slice(),
-      ]),
-
-      1: Random.indexes([
-        ...LetterMode.Alphabet.slice(),
-        ...LetterMode.ALPHABET.slice(),
-      ]),
-
-      2: Random.indexes(LetterMode.Numbers.slice()),
-      3: Random.indexes(LetterMode.Alphabet.slice()),
-      4: Random.indexes(LetterMode.ALPHABET.slice()),
-
-      5: LetterMode.Alphabet.slice().reverse(),
-      6: LetterMode.Alphabet.slice(),
-
-      7: LetterMode.Numbers.slice().reverse(),
-      8: LetterMode.Numbers.slice(),
+      8: angelaData.splice(0, 35).reverse(),
+      7: angelaData.splice(0, 35).reverse(),
+      6: angelaData.splice(0, 35).reverse(),
+      5: angelaData.splice(0, 35).reverse(),
+      4: angelaData.splice(0, 35).reverse(),
+      3: angelaData.splice(0, 35).reverse(),
+      2: angelaData.splice(0, 35).reverse(),
+      1: angelaData.splice(0, 35).reverse(),
+      0: angelaData.splice(0, 35).reverse(),
     };
 
     this.completedText = "";
@@ -689,6 +680,7 @@ class Chtullie extends Octopus {
 
     this.text = this.data[this.livesLeft].pop();
     this.x = this.game.width * 0.8;
+    this.inkySpeed = 0.005;
   }
   update(deltaTime) {
     this.inkyTime = this.game.enemies.length === 1;
@@ -696,16 +688,17 @@ class Chtullie extends Octopus {
       const inkyData = ["?", "!"];
       const inky = new Inky(this.game, inkyData[Random.index(inkyData)]);
       inky.x = this.game.player.x + 120;
-      inky.speedY = 0.1;
+      inky.speedY = this.inkySpeed;
       this.game.enemies.push(inky);
+      this.inkySpeed += 0.005;
 
       for (let i = 1; i < this.inkyCount; i++) {
         const inkerData = LetterMode.Numbers.slice();
         const inker = new Inker(this.game, inkerData[Random.index(inkerData)]);
-        inker.y = inker.height * 2 * i;
+        inker.y = inker.height * 3 * i;
         this.game.enemies.push(inker);
       }
-      if (this.inkyCount < 9) this.inkyCount++;
+      if (this.inkyCount < 7) this.inkyCount++;
     }
     this.y = this.game.player.y;
     if (this.x + this.width * 0.7 < 0) {
@@ -734,6 +727,91 @@ class Chtullie extends Octopus {
       this.text.substring(0, length) === this.completedText + key;
     if (isNextChar) {
       this.completedText += key;
+    }
+    if (this.completedText === this.text) {
+      this.game.focus = null;
+      this.focused = false;
+      this.penalize();
+    }
+    return isNextChar;
+  }
+}
+class Kraken extends Octopus {
+  constructor(game) {
+    const width = 419;
+    const height = 342;
+    const image = document.getElementById(`kraken`);
+    const spriteSheetColumns = 4;
+    const spriteSheetRows = 11;
+    const indexOfLastImage = 1;
+    const fps = 40;
+    super(
+      game,
+      "word",
+      new SpriteSheet(
+        image,
+        width,
+        height,
+        spriteSheetColumns,
+        spriteSheetRows,
+        fps,
+        true,
+        indexOfLastImage
+      )
+    );
+    Global.Audioplayer.tracks.find((x) => x.name === "berlin").play();
+
+    this.livesLeft = 8;
+
+    let data = BossMode.Data.Kraken.slice();
+    this.data = {
+      8: data.splice(0, 39).reverse(),
+      7: data.splice(0, 39).reverse(),
+      6: data.splice(0, 39).reverse(),
+      5: data.splice(0, 39).reverse(),
+      4: data.splice(0, 39).reverse(),
+      3: data.splice(0, 39).reverse(),
+      2: data.splice(0, 39).reverse(),
+      1: data.splice(0, 39).reverse(),
+      0: data.splice(0, 39).reverse(),
+    };
+
+    this.completedText = "";
+    this.displayText = this.text;
+
+    this.text = this.data[this.livesLeft].pop();
+    this.x = this.game.width;
+
+    this.targetX = this.game.width;
+  }
+  update(deltaTime) {
+    this.y = this.game.player.y;
+    this.x -= 1 + this.game.player.totalMisses;
+
+    this.sprite.update(deltaTime);
+  }
+  die() {
+    super.die();
+    this.game.win = true;
+  }
+
+  penalize() {
+    if (this.data[this.livesLeft].length === 0) {
+      this.livesLeft--;
+      if (this.livesLeft < 0) {
+        return (this.markedForDeletion = true);
+      }
+    }
+    this.completedText = "";
+    this.text = this.data[this.livesLeft].pop();
+  }
+  consume(key) {
+    const length = this.completedText.length + 1;
+    const isNextChar =
+      this.text.substring(0, length) === this.completedText + key;
+    if (isNextChar) {
+      this.completedText += key;
+      this.x += this.game.player.totalHitCombo;
     }
     if (this.completedText === this.text) {
       this.game.focus = null;

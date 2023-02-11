@@ -38,6 +38,8 @@ Features
 
 */
 
+
+
 window.addEventListener("load", function () {
   Global.GameContainer.hidden = false;
   Global.Spinner.hidden = true;

@@ -17,6 +17,7 @@ export default class Player {
     this.maxEnergy = this.game.store.shop.maxEnergy;
     this.energy = this.maxEnergy;
     this.missCombo = 0;
+    this.totalMisses = 0;
 
     this.airTimer = 0;
     this.airInterval = 30000 - this.game.store.shop.airReg * 2000;
@@ -24,6 +25,7 @@ export default class Player {
     this.ammo = this.game.store.shop.mineSlot;
     this.maxAmmo = this.game.store.shop.mineSlot;
     this.hitCombo = 0;
+    this.totalHitCombo = 0;
     this.hitComboCap = 20;
 
     this.ammoTimer = 0;
@@ -42,21 +44,22 @@ export default class Player {
   penalize() {
     Global.Shaker.startShake(50, "miss");
     Global.Flasher.preFlash(20, "red");
-    Global.Audioplayer.sounds.find(x=> x.name ==="miss").play()
+    Global.Audioplayer.sounds.find((x) => x.name === "miss").play();
+    this.totalMisses++;
     this.hitCombo = 0;
+    this.totalHitCombo = 0;
     this.game.score--;
     if (this.energy > 0) {
       this.missCombo++;
       this.energy =
-        this.energy - this.missCombo < 0
-          ? 0
-          : this.energy - this.missCombo;
+        this.energy - this.missCombo < 0 ? 0 : this.energy - this.missCombo;
       this.game.energyTimer = 0;
     } else {
       this.air--;
     }
   }
   reward() {
+    this.totalHitCombo++;
     this.energy = addOrReturnCap(this.energy, 0.1, this.maxEnergy);
     this.hitCombo = addOrReturnCap(this.hitCombo, 1, this.hitComboCap);
 
@@ -66,7 +69,6 @@ export default class Player {
     }
 
     this.missCombo = 0;
-
     function addOrReturnCap(num1, num2, max) {
       return num1 + num2 <= max ? num1 + num2 : max;
     }
@@ -123,7 +125,7 @@ export default class Player {
   draw(context) {
     if (window.location.origin.includes("localhost")) {
       context.beginPath();
-      context.rect(this.x, this.y, this.width*0.8, this.height*0.8);
+      context.rect(this.x, this.y, this.width * 0.8, this.height * 0.8);
       context.stroke();
     }
     context.beginPath();
