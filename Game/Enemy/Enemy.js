@@ -671,17 +671,17 @@ class Chtullie extends Octopus {
     this.inkyTime = false;
 
     this.inkyCount = 1;
-
+    let chtullieData = BossMode.Data.Chtullie.slice();
     this.data = {
-      8: BossMode.Data.Chtullie.splice(0, 37).reverse(),
-      7: BossMode.Data.Chtullie.splice(0, 37).reverse(),
-      6: BossMode.Data.Chtullie.splice(0, 37).reverse(),
-      5: BossMode.Data.Chtullie.splice(0, 37).reverse(),
-      4: BossMode.Data.Chtullie.splice(0, 37).reverse(),
-      3: BossMode.Data.Chtullie.splice(0, 37).reverse(),
-      2: BossMode.Data.Chtullie.splice(0, 37).reverse(),
-      1: BossMode.Data.Chtullie.splice(0, 37).reverse(),
-      0: BossMode.Data.Chtullie.splice(0, 37).reverse(),
+      8: chtullieData.splice(0, 37).reverse(),
+      7: chtullieData.splice(0, 37).reverse(),
+      6: chtullieData.splice(0, 37).reverse(),
+      5: chtullieData.splice(0, 37).reverse(),
+      4: chtullieData.splice(0, 37).reverse(),
+      3: chtullieData.splice(0, 37).reverse(),
+      2: chtullieData.splice(0, 37).reverse(),
+      1: chtullieData.splice(0, 37).reverse(),
+      0: chtullieData.splice(0, 37).reverse(),
     };
 
     this.completedText = "";
