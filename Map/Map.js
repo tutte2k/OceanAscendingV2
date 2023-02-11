@@ -272,7 +272,7 @@ export default class Map {
         y: i * Level.height + -500,
       },
       number: counter,
-      locked: window.location.origin.includes("localhost") ? false : locked,
+      locked:( window.location.origin.includes("localhost") || mode.name === "Boss" )? false : locked,
       content: contentArr[counter],
     });
   }
