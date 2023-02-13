@@ -1,16 +1,21 @@
 class Explosion {
   constructor(game, x, y) {
     this.game = game;
+
     this.frameX = 0;
     this.spriteHeight = 200;
     this.spriteWidth = 200;
+
     this.fps = 30;
+
     this.timer = 0;
     this.interval = 1000 / this.fps;
     this.markedForDeletion = false;
     this.maxFrame = 8;
+
     this.width = this.spriteWidth;
     this.height = this.spriteHeight;
+
     this.x = x - this.width * 0.5;
     this.y = y - this.width * 0.5;
   }

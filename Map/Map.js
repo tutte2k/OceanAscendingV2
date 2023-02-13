@@ -8,6 +8,8 @@ import {
   AddMode,
   DivideMode,
   BeyondMode,
+  BossMode,
+  StoryMode,
 } from "../Game/Mode/Modes.js";
 import Boundary from "./Environment/Boundary.js";
 import LandTile from "./Environment/LandTile.js";
@@ -17,7 +19,6 @@ import MapPlayer from "./Player/MapPlayer.js";
 import StaticImage from "../Utils/StaticImage.js";
 import { Matrix } from "./Environment/Matrix.js";
 import MapInterface from "./MapInterface.js";
-import BossMode from "../Game/Mode/LetterMode/Modes/BossMode.js";
 
 export default class Map {
   constructor(dataSource) {
@@ -53,12 +54,14 @@ export default class Map {
     this.mulLevelsArray = [];
 
     this.bossLevelsArray = [];
+    this.storyLevelsArray = [];
 
     this.wordsCounter = 0;
     this.tibiaCounter = 0;
     this.specialCounter = 0;
     this.svenskaCounter = 0;
     this.bossCounter = 0;
+    this.storyCounter = 0;
 
     this.addCounter = 0;
     this.subCounter = 0;
@@ -87,7 +90,8 @@ export default class Map {
       ...this.mulLevelsArray,
       ...this.divLevelsArray,
       ...this.mathLevelsArray,
-      ...this.bossLevelsArray
+      ...this.bossLevelsArray,
+      ...this.storyLevelsArray,
     ];
     this.movables = [
       this.background,
@@ -106,9 +110,6 @@ export default class Map {
       for (let i = 0; i < numberOfLevels; i++) {
         const levelContent = contentArr.slice(-levelSize);
         contentArr.splice(-levelSize);
-        if (levelContent.length !== levelSize) {
-          break;
-        }
         levelContents.push(levelContent);
       }
       return levelContents;
@@ -121,6 +122,8 @@ export default class Map {
     const MathContent = Array.from(Array(448), () => new Array(25).fill(1));
 
     const bossContent = Array.from(Array(3), () => new Array(1000).fill(1));
+
+    const storyContent = splitLevelData(StoryMode.Data, 1035);
 
     Matrix.forEach((row, i) => {
       row.forEach((symbol, j) => {
@@ -165,6 +168,17 @@ export default class Map {
             i
           );
           this.bossCounter++;
+        }
+        if (symbol === 8) {
+          this.constructLevel(
+            new StoryMode(),
+            storyContent,
+            this.storyLevelsArray,
+            this.storyCounter,
+            j,
+            i
+          );
+          this.storyCounter++;
         }
         if (symbol === 6) {
           this.constructLevel(
@@ -272,7 +286,10 @@ export default class Map {
         y: i * Level.height + -500,
       },
       number: counter,
-      locked:( window.location.origin.includes("localhost") || mode.name === "Boss" )? false : locked,
+      locked:
+        window.location.origin.includes("localhost") || mode.name === "Boss"
+          ? false
+          : locked,
       content: contentArr[counter],
     });
   }

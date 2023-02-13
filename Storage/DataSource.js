@@ -4,7 +4,12 @@ export default class DataSource {
   }
   getStore() {
     let storage = JSON.parse(localStorage.getItem(this.item));
-    if (storage) return storage;
+    if (storage) {
+      if (!storage.completedLevels.mode[8]) {
+        storage.completedLevels.mode[8] = [];
+      }
+      return storage;
+    }
     return {
       cash: 0,
       completedLevels: {
@@ -19,6 +24,7 @@ export default class DataSource {
           4.4: [],
           6: [],
           7: [],
+          8: [],
         },
       },
       shop: {

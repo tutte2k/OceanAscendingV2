@@ -11,6 +11,7 @@ import SwedishMode from "./LetterMode/Modes/SwedishMode.js";
 import LetterMode from "./LetterMode/LetterMode.js";
 import Mode from "./Mode.js";
 import BossMode from "./LetterMode/Modes/BossMode.js";
+import StoryMode from "./LetterMode/Modes/StoryMode.js";
 
 export {
   TibiaMode,
@@ -20,6 +21,7 @@ export {
   MultiplyMode,
   SubtractMode,
   BossMode,
+  StoryMode,
   AddMode,
   DivideMode,
   BeyondMode,

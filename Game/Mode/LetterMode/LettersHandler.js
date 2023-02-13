@@ -27,5 +27,11 @@ export default class LettersHandler extends GameHandler {
         }
       }
     }
+    if (e.key === "Tab" && this.game.focus) {
+      this.game.focus.focused = false;
+      this.game.focus.completedText = "";
+      this.game.focus.displayText = this.game.focus.text;
+      this.game.focus = null;
+    }
   }
 }

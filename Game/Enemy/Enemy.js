@@ -8,33 +8,38 @@ import {
   InkExplosion,
 } from "../Environment/Explosion.js";
 import Global from "../../Utils/Global.js";
+import Collision from "../../Utils/Collision.js";
 
 export default class Enemy {
   constructor(game, word, sprite) {
     this.game = game;
+
     this.text = word;
     this.completedText = "";
     this.displayText = this.text;
+    this.focused = false;
 
     this.score =
       Math.floor(this.game.level.mode.id) === 4 ? 1 : this.text.length;
 
-    this.focused = false;
-    this.x = this.game.width;
-
-    this.speedX = -this.game.speed;
     this.markedForDeletion = false;
 
     this.sprite = sprite;
     this.width = sprite.width;
     this.height = sprite.height;
+
+    this.speedX = -this.game.speed;
+    this.x = this.game.width;
     this.y = Math.random() * (this.game.height * 0.95 - this.height);
 
     this.element = document.createElement("div");
+    this.showElement(word, this.element);
+  }
+  showElement(word, element) {
     this.element.classList.add("word");
     this.element.innerHTML = word;
     this.element.style.position = "absolute";
-    this.game.wordContainer.appendChild(this.element);
+    this.game.wordContainer.appendChild(element);
   }
   update(deltaTime) {
     if (this.speedY) {
@@ -59,7 +64,6 @@ export default class Enemy {
       this.text.substring(0, length) === this.completedText + key;
     if (isNextChar) {
       this.completedText += key;
-      this.x += 5;
     }
     this.markedForDeletion = !(this.completedText !== this.text);
     return isNextChar;
@@ -119,6 +123,7 @@ export default class Enemy {
       0: Angela,
       1: Chtullie,
       2: Kraken,
+      3: Fishy,
     };
     return bosses[bossId];
   }
@@ -141,6 +146,9 @@ export default class Enemy {
     let enemy = new enemies[value.length][randomIndex](game, value);
     return enemy;
   }
+  static NextStory(game, value) {
+    return new Fishy(game, value);
+  }
 }
 class Fish extends Enemy {
   constructor(game, word, spritesheet) {
@@ -157,6 +165,54 @@ class Fish extends Enemy {
     );
   }
 }
+
+class Fishy extends Fish {
+  constructor(game, word) {
+    const width = 213;
+    const height = 95;
+    const image = document.getElementById(`fishy`);
+    const spriteSheetColumns = 4;
+    const spriteSheetRows = 8;
+    const indexOfLastImage = 0;
+    const fps = 25;
+    super(
+      game,
+      word,
+      new SpriteSheet(
+        image,
+        width,
+        height,
+        spriteSheetColumns,
+        spriteSheetRows,
+        fps,
+        true,
+        indexOfLastImage
+      )
+    );
+    this.completedText = "";
+    this.displayText = this.text;
+    this.speedX = -2;
+    this.y = this.game.height * 0.5;
+  }
+  update(deltaTime) {
+    let stop;
+    this.game.enemies.forEach((a) => {
+      this.game.enemies.forEach((b) => {
+        if (Collision.checkCollision(a, b) && a !== b) {
+          a.x -= a.width;
+        }
+        if (a.x < this.game.width * 0.2 || b.x < this.game.width * 0.2) {
+          stop = true;
+        }
+      });
+    });
+    if (!stop) super.update(deltaTime);
+  }
+  die() {
+    super.die();
+  }
+}
+
 class Jellyfish extends Fish {
   constructor(game, word) {
     super(
@@ -632,7 +688,6 @@ class Inky extends Octopus {
     this.speedY = -2;
   }
 }
-
 class Chtullie extends Octopus {
   constructor(game) {
     const width = 500;
@@ -710,7 +765,6 @@ class Chtullie extends Octopus {
     super.die();
     this.game.win = true;
   }
-
   penalize() {
     if (this.data[this.livesLeft].length === 0) {
       this.livesLeft--;
@@ -794,7 +848,6 @@ class Kraken extends Octopus {
     super.die();
     this.game.win = true;
   }
-
   penalize() {
     if (this.data[this.livesLeft].length === 0) {
       this.livesLeft--;
