@@ -194,6 +194,16 @@ class Fishy extends Fish {
     this.speedX = -2;
     this.y = this.game.height * 0.5;
   }
+  consume(key) {
+    const length = this.completedText.length + 1;
+    const isNextChar =
+      this.text.substring(0, length) === this.completedText + key;
+    if (isNextChar) {
+      this.completedText += key;
+    }
+    this.markedForDeletion = !(this.completedText !== this.text) && key === " ";
+    return isNextChar;
+  }
   update(deltaTime) {
     let stop;
     this.game.enemies.forEach((a) => {

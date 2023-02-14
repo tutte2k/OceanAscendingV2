@@ -3,18 +3,11 @@ import FloatingMessage from "./Environment/FloatingMessage.js";
 export default class GameInterface {
   constructor(game) {
     this.elements = {
+      timer:document.getElementById("timer"),
       wordContainer: document.getElementById("words"),
       hud: document.getElementById("ui"),
-      mine: document.getElementById("mines"),
-      air: document.getElementById("air"),
-      wordsLeft: document.getElementById("wordsLeft"),
-      level: document.getElementById("level"),
-      depth: document.getElementById("depth"),
       crosshair: document.getElementById("crosshair"),
       message: document.getElementById("message"),
-      score: document.getElementById("score"),
-      energyMax: document.getElementById("energyMax"),
-      energy: document.getElementById("energy"),
       energyBar: document.getElementById("ebar"),
       airBar: document.getElementById("abar"),
       mineComboBar: document.getElementById("mcbar"),
@@ -27,7 +20,8 @@ export default class GameInterface {
     this.game = game;
   }
   draw() {
-    const formattedTime = (this.game.gameTime * 0.001).toFixed(1);
+    const formattedTime = (this.game.gameTime * 0.001).toFixed(2);
+    this.elements.timer.innerHTML = formattedTime;
 
     this.elements.mineComboBar.style.width =
       (this.game.player.hitCombo /
@@ -54,13 +48,6 @@ export default class GameInterface {
       1000
     ).toFixed(0)} seconds!` : "";
 
-    this.elements.depth.innerHTML = formattedTime;
-    this.elements.air.innerHTML = this.game.player.air;
-    this.elements.mine.innerHTML = this.game.player.ammo;
-    this.elements.level.innerHTML = this.game.level.name;
-    this.elements.wordsLeft.innerHTML = this.game.words.length;
-    this.elements.energyMax.innerHTML = this.game.player.maxEnergy;
-    this.elements.energy.innerHTML = this.game.player.energy.toFixed(1);
 
     if (Math.floor(this.game.level.mode.id) !== 4) {
       this.elements.crosshair.innerHTML =
@@ -68,7 +55,7 @@ export default class GameInterface {
           ? this.game.focus.displayText
           : "";
     }
-    this.elements.score.innerHTML = this.game.score;
+
     if (this.game.gameOver) {
       let message1;
       let message2;

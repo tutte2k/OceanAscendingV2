@@ -119,11 +119,14 @@
                   <li>Swedish 120k</li>
                   <em class="text-muted">West</em>
                   <li>Boss</li>
-                  <em class="text-muted">Under construction</em>
+                  <em class="text-muted">Unexperienced explorers beware</em>
+                  <li>Story</li>
+                  <em class="text-muted">Spacebar is key</em>
                 </ul>
               </ul>
               <li>Features:</li>
               <ul>
+                <li>Tabbing: <em>Press tab to reset focus.</em></li>
                 <li>Creatures: <em>Some behaviour might surprise you.</em></li>
                 <li>Mine: <em>Big combos deploy mines.</em></li>
                 <li>Energy: <em>Without energy you cant breathe.</em></li>
@@ -144,16 +147,17 @@
         </div>
       </div>
     </div>
-
     <div id="spinner" class="text-center">
       <span class="spinner-grow text-bg-info"></span>
     </div>
-
     <div hidden="true" id="container1">
       <canvas id="canvas1"></canvas>
       <div id="effects" class="opacity-50"></div>
       <div id="ui" class="invisible">
-        <div class="bars">
+        <div class="position-absolute end-50 text-center">
+          <p id="timer"></p>
+        </div>
+        <div class="bars position-absolute top-0">
           <div id="pbar" class="bar progressBar">
             <span id="progress" class="m-3 text-white"></span>
           </div>
@@ -168,33 +172,25 @@
             ><span id="comboTimer" class="text-right"></span>
           </div>
         </div>
-        <div class="d-flex col justify-content-between mx-3">
-          <div id="inv" class="invisible">
-            <p class="hud">
-              Energy: <span id="energy"></span>/<span id="energyMax"></span>
-            </p>
-            <p class="hud">Mines: <span id="mines"></span></p>
-            <p class="hud">Air: <span id="air"></span></p>
-          </div>
-
-          <div class="invisible">
-            <p class="hud">Score: <span id="score"></span></p>
-            <p class="hud">Words left: <span id="wordsLeft"></span></p>
-            <p class="hud">Level: <span id="level"></span></p>
-            <p class="hud">Depth: <span id="depth"></span></p>
+        <div class="position-absolute top-0 end-0 mx-3">
+          <div class="visible">
+            <p class="hud text-success">$<span id="cash"></span></p>
           </div>
         </div>
         <div id="info" class="visible"></div>
-        <div id="crosshair" class="visible"></div>
+        <div
+          id="crosshair"
+          class="visible position-absolute bottom-0 start-50 text-center"
+        ></div>
         <div id="message"></div>
-        <div id="shop" hidden="true" class="visible text-white w-25">
+        <div id="shop" hidden="true" class="visible text-white w-25 m-5">
           <table
             class="table table-sm table-striped border table-dark table-responsive table-hover"
           >
             <tr>
               <th>Current</th>
               <th>Upgrade</th>
-              <th>$<span id="cash"></span></th>
+              <th></th>
               <th></th>
             </tr>
             <tr>

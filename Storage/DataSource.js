@@ -41,6 +41,13 @@ export default class DataSource {
   setStore(store) {
     localStorage.setItem(this.item, JSON.stringify(store));
   }
+  sobStory(state) {
+    const store = this.getStore();
+    let earnedCash = Math.round(state.score * 0.01);
+    store["cash"] = store["cash"] + earnedCash;
+    this.setStore(store);
+    return store["cash"];
+  }
   saveStateAndReturnCash(state) {
     const store = this.getStore();
     let earnedCash;

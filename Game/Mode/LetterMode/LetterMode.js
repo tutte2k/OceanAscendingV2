@@ -17,7 +17,8 @@ export default class LetterMode extends Mode {
     "ArrowUp",
     "ArrowRight",
     "Shift",
-    "Tab"
+    "Tab",
+    " "
   ];
   static EnemyInterval = 5000;
   constructor(id, name) {

@@ -10,8 +10,8 @@ export default class AddMode extends MathMode {
       num2: () => Random.int(0, 9),
     },
     1: {
-      num1: () => () => Random.int(0, 50),
-      num2: () => () => Random.int(0, 50),
+      num1: () => Random.int(0, 50),
+      num2: () => Random.int(0, 50),
     },
     2: {
       num1: () => Random.int(-9, 9),

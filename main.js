@@ -39,7 +39,6 @@ Features
 
 */
 
-
 /*
 
 const trivia= `
@@ -1597,7 +1596,6 @@ CRASTER, of Craster’s Keep, who kneels to none, —GILLY, his daughter and wif
 
 */
 
-
 window.addEventListener("load", function () {
   Global.GameContainer.hidden = false;
   Global.Spinner.hidden = true;
@@ -1628,7 +1626,6 @@ window.addEventListener("load", function () {
   let lastTime = 0;
   let state;
 
-
   function animate(timeStamp) {
     Global.Shaker.preShake(ctx);
     Global.Flasher.flash();
@@ -1654,6 +1651,9 @@ window.addEventListener("load", function () {
         if (state.nextLevel) {
           state.nextLevel.locked = false;
         }
+      } else if (!state.win) {
+        const cash = dataSource.sobStory(state);
+        map.userInterface.shop.setCash(cash);
       }
       state = null;
       game = null;

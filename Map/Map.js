@@ -120,9 +120,7 @@ export default class Map {
     const specialContent = splitLevelData(ExpertMode.Data, 50);
     const svenskaContent = splitLevelData(SwedishMode.Data, 275);
     const MathContent = Array.from(Array(448), () => new Array(25).fill(1));
-
     const bossContent = Array.from(Array(3), () => new Array(1000).fill(1));
-
     const storyContent = splitLevelData(StoryMode.Data, 1035);
 
     Matrix.forEach((row, i) => {

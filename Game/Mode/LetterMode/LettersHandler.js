@@ -22,8 +22,10 @@ export default class LettersHandler extends GameHandler {
         const hit = this.game.focus.consume(e.key);
         if (hit) {
           this.game.player.reward();
-        } else {
-          this.game.player.penalize();
+        } else if (!LetterMode.Controls.includes(e.key)) {
+          {
+            this.game.player.penalize();
+          }
         }
       }
     }
