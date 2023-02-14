@@ -21,7 +21,6 @@ Boss
   add shake
   scoring?
   progress / health bar
-    Octopus movement
 
 Shop
   add impact

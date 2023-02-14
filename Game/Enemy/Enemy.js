@@ -844,14 +844,20 @@ class Kraken extends Octopus {
     this.displayText = this.text;
 
     this.text = this.data[this.livesLeft].pop();
-    this.x = this.game.width;
+    this.x = this.game.width - this.width;
 
-    this.targetX = this.game.width;
+    this.hitsTaken = 0;
+    this.speedMod = 0.001;
   }
   update(deltaTime) {
     this.y = this.game.player.y;
-    this.x -= 1 + this.game.player.totalMisses;
 
+    this.speedMod += 0.001;
+
+    let modifier =
+      this.game.player.totalMisses === 0 ? this.speedMod : this.game.player.totalMisses;
+
+    this.x -= modifier;
     this.sprite.update(deltaTime);
   }
   die() {
@@ -874,7 +880,13 @@ class Kraken extends Octopus {
       this.text.substring(0, length) === this.completedText + key;
     if (isNextChar) {
       this.completedText += key;
-      this.x += this.game.player.totalHitCombo;
+      this.hitsTaken++;
+      let modifier = this.game.player.totalHitCombo + this.hitsTaken;
+      if (this.x < this.game.width - this.width) {
+        this.x += modifier;
+      } else {
+        this.x += modifier * 0.1;
+      }
     }
     if (this.completedText === this.text) {
       this.game.focus = null;
