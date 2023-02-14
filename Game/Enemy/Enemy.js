@@ -855,7 +855,9 @@ class Kraken extends Octopus {
     this.speedMod += 0.001;
 
     let modifier =
-      this.game.player.totalMisses === 0 ? this.speedMod : this.game.player.totalMisses;
+      this.game.player.totalMisses === 0
+        ? this.speedMod
+        : this.game.player.totalMisses;
 
     this.x -= modifier;
     this.sprite.update(deltaTime);
