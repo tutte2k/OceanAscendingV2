@@ -8,6 +8,11 @@ export default class DataSource {
       if (!storage.completedLevels.mode[8]) {
         storage.completedLevels.mode[8] = [];
       }
+      if (!storage.shop.combo) {
+        storage.shop.combo = 1;
+        storage.shop.spear = 1;
+        storage.shop.impact = 1;
+      }
       return storage;
     }
     return {
@@ -35,6 +40,9 @@ export default class DataSource {
         diveSpeed: 1,
         mapSpeed: 3,
         maxEnergy: 5,
+        combo: 1,
+        spear: 1,
+        impact: 1,
       },
     };
   }

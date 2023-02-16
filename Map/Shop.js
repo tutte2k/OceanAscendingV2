@@ -2,47 +2,65 @@ export default class Shop {
   static Element = document.getElementById("shop");
   static Cash = document.getElementById("cash");
   static Content = {
-    airSlot: {
-      price: (val) => val * 10,
-      current: document.getElementById("currentAirSlot"),
-      priceElement: document.getElementById("airSlotPrice"),
-      max: 100,
-    },
-    airReg: {
-      price: (val) => val * 20,
-      current: document.getElementById("currentAirReg"),
-      priceElement: document.getElementById("airRegPrice"),
-      max: 10,
+    impact: {
+      price: (val) => val * ( val * 10),
+      current: document.getElementById("currentImpact"),
+      priceElement: document.getElementById("impactPrice"),
+      max: 15,
     },
     mineSlot: {
-      price: (val) => val * 5,
+      price: (val) => val * ( val * 20),
       current: document.getElementById("currentMineSlot"),
       priceElement: document.getElementById("mineSlotPrice"),
       max: 100,
     },
     mineReg: {
-      price: (val) => val * 15,
+      price: (val) => val * ( val * 30),
       current: document.getElementById("currentMineReg"),
       priceElement: document.getElementById("mineRegPrice"),
       max: 10,
     },
-    diveSpeed: {
-      price: (val) => val * 50,
-      current: document.getElementById("currentDiveSpeed"),
-      priceElement: document.getElementById("diveSpeedPrice"),
+    combo: {
+      price: (val) => val * ( val * 80),
+      current: document.getElementById("currentCombo"),
+      priceElement: document.getElementById("comboPrice"),
       max: 10,
     },
     maxEnergy: {
-      price: (val) => val * 25,
+      price: (val) => val * ( val * 50),
       current: document.getElementById("currentMaxEnergy"),
       priceElement: document.getElementById("maxEnergyPrice"),
       max: 100,
     },
+    airSlot: {
+      price: (val) => val * ( val * 30),
+      current: document.getElementById("currentAirSlot"),
+      priceElement: document.getElementById("airSlotPrice"),
+      max: 100,
+    },
+    airReg: {
+      price: (val) => val * ( val * 40),
+      current: document.getElementById("currentAirReg"),
+      priceElement: document.getElementById("airRegPrice"),
+      max: 10,
+    },
+    diveSpeed: {
+      price: (val) => val * ( val * 90),
+      current: document.getElementById("currentDiveSpeed"),
+      priceElement: document.getElementById("diveSpeedPrice"),
+      max: 10,
+    },
     mapSpeed: {
-      price: (val) => val * 100,
+      price: (val) => val * ( val * 100),
       current: document.getElementById("currentMapSpeed"),
       priceElement: document.getElementById("mapSpeedPrice"),
       max: 10,
+    },
+    spear: {
+      price: (val) => val * ( val * 5000),
+      current: document.getElementById("currentSpear"),
+      priceElement: document.getElementById("spearPrice"),
+      max: 5,
     },
   };
   constructor(dataSource) {
@@ -67,13 +85,13 @@ export default class Shop {
     );
 
     Shop.Content.airReg.current.innerHTML =
-      30 - this.store.shop.airReg * 2 + " seconds";
+      32 - this.store.shop.airReg * 2 + " seconds";
     Shop.Content.airReg.priceElement.innerHTML = Shop.Content.airReg.price(
       this.store.shop.airReg
     );
 
     Shop.Content.mineReg.current.innerHTML =
-      30 - this.store.shop.mineReg * 2 + " seconds";
+      32 - this.store.shop.mineReg * 2 + " seconds";
     Shop.Content.mineReg.priceElement.innerHTML = Shop.Content.mineReg.price(
       this.store.shop.mineReg
     );
@@ -95,6 +113,21 @@ export default class Shop {
     Shop.Content.maxEnergy.current.innerHTML = this.store.shop.maxEnergy;
     Shop.Content.maxEnergy.priceElement.innerHTML =
       Shop.Content.maxEnergy.price(this.store.shop.maxEnergy);
+
+    Shop.Content.combo.current.innerHTML = 21 - this.store.shop.combo;
+    Shop.Content.combo.priceElement.innerHTML = Shop.Content.combo.price(
+      this.store.shop.combo
+    );
+
+    Shop.Content.impact.current.innerHTML = this.store.shop.impact;
+    Shop.Content.impact.priceElement.innerHTML = Shop.Content.impact.price(
+      this.store.shop.impact
+    );
+
+    Shop.Content.spear.current.innerHTML = this.store.shop.spear;
+    Shop.Content.spear.priceElement.innerHTML = Shop.Content.spear.price(
+      this.store.shop.spear
+    );
   }
   buy(id, cash, dataSource, current) {
     if (current >= Shop.Content[id].max) return;

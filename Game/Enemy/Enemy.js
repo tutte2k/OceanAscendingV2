@@ -64,6 +64,7 @@ export default class Enemy {
       this.text.substring(0, length) === this.completedText + key;
     if (isNextChar) {
       this.completedText += key;
+      this.x += this.game.player.impact;
     }
     this.markedForDeletion = !(this.completedText !== this.text);
     return isNextChar;
@@ -200,6 +201,7 @@ class Fishy extends Fish {
       this.text.substring(0, length) === this.completedText + key;
     if (isNextChar) {
       this.completedText += key;
+      this.x += this.game.player.impact;
     }
     this.markedForDeletion = !(this.completedText !== this.text) && key === " ";
     return isNextChar;
@@ -273,104 +275,7 @@ class Lionfish extends Fish {
     this.speedX = -0.3;
   }
 }
-class Angela extends Fish {
-  constructor(game) {
-    const width = 483;
-    const height = 300;
-    const image = document.getElementById(`angela${Random.int(1, 2)}`);
-    Global.Audioplayer.tracks.find((x) => x.name === "evasion").play();
 
-    super(game, "word", new SpriteSheet(image, width, height, 29, 0, 20));
-    this.speedX = -0.5;
-
-    this.chaseSpeed = 0.1;
-
-    this.livesLeft = 8;
-
-    let angelaData = BossMode.Data.Angela.slice();
-    this.data = {
-      8: angelaData.splice(0, 35).reverse(),
-      7: angelaData.splice(0, 35).reverse(),
-      6: angelaData.splice(0, 35).reverse(),
-      5: angelaData.splice(0, 35).reverse(),
-      4: angelaData.splice(0, 35).reverse(),
-      3: angelaData.splice(0, 35).reverse(),
-      2: angelaData.splice(0, 35).reverse(),
-      1: angelaData.splice(0, 35).reverse(),
-      0: angelaData.splice(0, 35).reverse(),
-    };
-
-    this.completedText = "";
-    this.displayText = this.text;
-
-    this.text = this.data[this.livesLeft].pop();
-    this.randomPosition();
-  }
-  update(deltaTime) {
-    if (this.speedY) {
-      this.y += this.speedY - this.game.speed;
-    }
-
-    this.x += this.speedX - this.game.speed;
-
-    this.y > this.game.player.y && this.y > 10
-      ? (this.y -= this.chaseSpeed)
-      : (this.y += this.chaseSpeed);
-
-    if (this.x + this.width * 0.7 < 0) {
-      this.speedX += -0.5;
-      this.chaseSpeed += 0.1;
-
-      this.randomPosition();
-    }
-    this.sprite.update(deltaTime);
-  }
-  die() {
-    super.die();
-    this.game.win = true;
-  }
-
-  randomPosition() {
-    const choice = Random.int(1, 4);
-    if (choice === 1) {
-      this.x = this.game.width;
-      this.y = 0;
-    } else if (choice === 2) {
-      this.x = this.game.width;
-      this.y = this.game.height * 0.8;
-    } else if (choice === 3) {
-      this.x = this.game.width;
-      this.y = this.game.height * 0.5;
-    } else {
-      this.x = this.game.width;
-      this.y = this.game.player.y;
-    }
-  }
-
-  penalize() {
-    if (this.data[this.livesLeft].length === 0) {
-      this.livesLeft--;
-      if (this.livesLeft < 0) {
-        return (this.markedForDeletion = true);
-      }
-    }
-    this.completedText = "";
-    this.text = this.data[this.livesLeft].pop();
-  }
-  consume(key) {
-    const length = this.completedText.length + 1;
-    const isNextChar =
-      this.text.substring(0, length) === this.completedText + key;
-    if (isNextChar) {
-      this.completedText += key;
-      this.x += 15;
-    }
-    if (this.completedText === this.text) {
-      this.penalize();
-    }
-    return isNextChar;
-  }
-}
 class Shark extends Fish {
   constructor(game, word) {
     const width = 398;
@@ -472,12 +377,15 @@ class Jinxy extends Fish {
     this.jinxInterval = 7500;
   }
   update(deltaTime) {
-    if (this.jinxTimer > this.jinxInterval) {
+    if (
+      this.jinxTimer > this.jinxInterval &&
+      this.jinxInterval > 1 &&
+      !this.game.gamOver
+    ) {
       const indexOfLastWord = this.game.words.length - 1;
       const word = LetterMode.Next(this.game, indexOfLastWord);
       this.game.words.push(this.text);
       this.text = word;
-
       LetterMode.Next(this.game);
       this.jinxInterval -= this.jinxInterval * 0.5;
       this.jinxTimer = 0;
@@ -725,7 +633,6 @@ class Chtullie extends Octopus {
         indexOfLastImage
       )
     );
-    Global.Audioplayer.tracks.find((x) => x.name === "expedition").play();
 
     this.livesLeft = 8;
     this.inkyTime = false;
@@ -750,6 +657,8 @@ class Chtullie extends Octopus {
     this.text = this.data[this.livesLeft].pop();
     this.x = this.game.width * 0.8;
     this.inkySpeed = 0.005;
+    Global.Audioplayer.tracks.find((x) => x.name === "expedition").play();
+    Global.Shaker.startShake(1000, "boss");
   }
   update(deltaTime) {
     this.inkyTime = this.game.enemies.length === 1;
@@ -795,6 +704,7 @@ class Chtullie extends Octopus {
       this.text.substring(0, length) === this.completedText + key;
     if (isNextChar) {
       this.completedText += key;
+      this.x += this.game.player.impact;
     }
     if (this.completedText === this.text) {
       this.game.focus = null;
@@ -827,7 +737,6 @@ class Kraken extends Octopus {
         indexOfLastImage
       )
     );
-    Global.Audioplayer.tracks.find((x) => x.name === "berlin").play();
 
     this.livesLeft = 8;
 
@@ -852,6 +761,9 @@ class Kraken extends Octopus {
 
     this.hitsTaken = 0;
     this.speedMod = 0.001;
+
+    Global.Audioplayer.tracks.find((x) => x.name === "berlin").play();
+    Global.Shaker.startShake(1000, "boss");
   }
   update(deltaTime) {
     this.y = this.game.player.y;
@@ -886,6 +798,7 @@ class Kraken extends Octopus {
       this.text.substring(0, length) === this.completedText + key;
     if (isNextChar) {
       this.completedText += key;
+      this.x += this.game.player.impact;
       this.hitsTaken++;
       let modifier = this.game.player.totalHitCombo + this.hitsTaken;
       if (this.x < this.game.width - this.width) {
@@ -897,6 +810,104 @@ class Kraken extends Octopus {
     if (this.completedText === this.text) {
       this.game.focus = null;
       this.focused = false;
+      this.penalize();
+    }
+    return isNextChar;
+  }
+}
+class Angela extends Fish {
+  constructor(game) {
+    const width = 483;
+    const height = 300;
+    const image = document.getElementById(`angela${Random.int(1, 2)}`);
+    super(game, "word", new SpriteSheet(image, width, height, 29, 0, 20));
+
+    this.speedX = -0.5;
+    this.chaseSpeed = 0.1;
+    this.livesLeft = 8;
+
+    let angelaData = BossMode.Data.Angela.slice();
+    this.data = {
+      8: angelaData.splice(0, 35).reverse(),
+      7: angelaData.splice(0, 35).reverse(),
+      6: angelaData.splice(0, 35).reverse(),
+      5: angelaData.splice(0, 35).reverse(),
+      4: angelaData.splice(0, 35).reverse(),
+      3: angelaData.splice(0, 35).reverse(),
+      2: angelaData.splice(0, 35).reverse(),
+      1: angelaData.splice(0, 35).reverse(),
+      0: angelaData.splice(0, 35).reverse(),
+    };
+
+    this.completedText = "";
+    this.displayText = this.text;
+
+    this.text = this.data[this.livesLeft].pop();
+    this.randomPosition();
+
+    Global.Audioplayer.tracks.find((x) => x.name === "evasion").play();
+    Global.Shaker.startShake(1000, "boss");
+  }
+  update(deltaTime) {
+    if (this.speedY) {
+      this.y += this.speedY - this.game.speed;
+    }
+
+    this.x += this.speedX - this.game.speed;
+
+    this.y > this.game.player.y && this.y > 10
+      ? (this.y -= this.chaseSpeed)
+      : (this.y += this.chaseSpeed);
+
+    if (this.x + this.width * 0.7 < 0) {
+      this.speedX += -0.5;
+      this.chaseSpeed += 0.1;
+
+      this.randomPosition();
+    }
+    this.sprite.update(deltaTime);
+  }
+  die() {
+    super.die();
+    this.game.win = true;
+  }
+
+  randomPosition() {
+    const choice = Random.int(1, 4);
+    if (choice === 1) {
+      this.x = this.game.width;
+      this.y = 0;
+    } else if (choice === 2) {
+      this.x = this.game.width;
+      this.y = this.game.height * 0.8;
+    } else if (choice === 3) {
+      this.x = this.game.width;
+      this.y = this.game.height * 0.5;
+    } else {
+      this.x = this.game.width;
+      this.y = this.game.player.y;
+    }
+  }
+
+  penalize() {
+    if (this.data[this.livesLeft].length === 0) {
+      this.livesLeft--;
+      if (this.livesLeft < 0) {
+        return (this.markedForDeletion = true);
+      }
+    }
+    this.completedText = "";
+    this.text = this.data[this.livesLeft].pop();
+  }
+  consume(key) {
+    const length = this.completedText.length + 1;
+    const isNextChar =
+      this.text.substring(0, length) === this.completedText + key;
+    if (isNextChar) {
+      this.completedText += key;
+      this.x += 15;
+    }
+    if (this.completedText === this.text) {
       this.penalize();
     }
     return isNextChar;

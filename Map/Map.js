@@ -117,21 +117,11 @@ export default class Map {
 
     const tibiaContent = splitLevelData(TibiaMode.Data, 50, 70);
     const specialContent = splitLevelData(ExpertMode.Data, 50, 42);
-
     const wordsContent = splitLevelData(EnglishMode.Data, 80, 317);
     const svenskaContent = splitLevelData(SwedishMode.Data, 80, 1529);
-
     const storyContent = splitLevelData(StoryMode.Data, 250, 4138);
-
-
-
     const MathContent = Array.from(Array(448), () => new Array(25).fill(1));
     const bossContent = Array.from(Array(3), () => new Array(1000).fill(1));
-
-    console.log(storyContent)
-    console.log(StoryMode.Data)
-
-
 
     Matrix.forEach((row, i) => {
       row.forEach((symbol, j) => {

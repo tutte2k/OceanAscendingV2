@@ -14,28 +14,23 @@ TODO:
 
 continue class diagram
 
-refactor Global class
+add boss class
 
+refactor projectile/spear
+refactor Global class
 refactor Game class
   Boss mode?
   this.boss = Boss object not bool
 
 Boss
-  add shake
   scoring?
   progress / health bar
   add boss loot
 
-Shop
-  add impact / pushback on fish
-  add harpoon
   
 Features
-  impact / pushback
   add consumable items
-  harpoon
-    goes through enemies
-    x++
+
 
 A STAR ALGORITHM for map walking
 

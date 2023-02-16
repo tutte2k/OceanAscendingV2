@@ -34,6 +34,8 @@ export default class LettersHandler extends GameHandler {
       this.game.focus.completedText = "";
       this.game.focus.displayText = this.game.focus.text;
       this.game.focus = null;
+
+     
     }
   }
 }

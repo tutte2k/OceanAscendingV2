@@ -1,6 +1,7 @@
 import Global from "../../Utils/Global.js";
 import SpriteSheet from "../../Utils/SpriteSheet.js";
 import Projectile from "./Projectile.js";
+import Spear from "./Spear.js";
 export default class Player {
   constructor(game) {
     this.game = game;
@@ -10,6 +11,7 @@ export default class Player {
     this.y = 100;
     this.speedY = 0;
 
+    this.impact = this.game.store.shop.impact;
     this.maxSpeed = this.game.store.shop.diveSpeed;
     this.air = this.game.store.shop.airSlot;
     this.maxAir = this.game.store.shop.airSlot;
@@ -20,16 +22,21 @@ export default class Player {
     this.totalMisses = 0;
 
     this.airTimer = 0;
-    this.airInterval = 30000 - this.game.store.shop.airReg * 2000;
+    this.airInterval = 32000 - this.game.store.shop.airReg * 2000;
 
     this.ammo = this.game.store.shop.mineSlot;
     this.maxAmmo = this.game.store.shop.mineSlot;
+
+    this.spears = this.game.store.shop.spear;
+    this.spearCombo = 0;
+
     this.hitCombo = 0;
+    this.hitComboCap = 21 - this.game.store.shop.combo;
+
     this.totalHitCombo = 0;
-    this.hitComboCap = 20;
 
     this.ammoTimer = 0;
-    this.ammoInterval = 30000 - this.game.store.shop.mineReg * 2000;
+    this.ammoInterval = 32000 - this.game.store.shop.mineReg * 2000;
     this.projectiles = [];
 
     this.sprite = new SpriteSheet(
@@ -63,12 +70,20 @@ export default class Player {
     this.energy = addOrReturnCap(this.energy, 0.1, this.maxEnergy);
     this.hitCombo = addOrReturnCap(this.hitCombo, 1, this.hitComboCap);
 
-    if (this.hitCombo === this.hitComboCap && this.ammo > 0) {
-      this.dropMine();
-      this.hitCombo = 0;
+    if (this.hitCombo === this.hitComboCap) {
+      if (this.ammo > 0) {
+        this.dropMine();
+        this.hitCombo = 0;
+        this.spearCombo++;
+      }
+      if (this.spearCombo === 3 && this.spears > 0) {
+        this.throwSpear();
+        this.spearCombo = 0;
+      }
     }
 
     this.missCombo = 0;
+
     function addOrReturnCap(num1, num2, max) {
       return num1 + num2 <= max ? num1 + num2 : max;
     }
@@ -115,7 +130,7 @@ export default class Player {
         this.airTimer += deltaTime;
       }
     }
-    this.projectiles.forEach((projectile) => projectile.update());
+    this.projectiles.forEach((projectile) => projectile.update(deltaTime));
 
     this.projectiles = this.projectiles.filter(
       (projectile) => !projectile.markedForDeletion
@@ -163,15 +178,23 @@ export default class Player {
   }
 
   dropMine() {
-    if (this.ammo > 0) {
-      this.projectiles.push(
-        new Projectile(
-          this.game,
-          this.x + this.width * 0.8,
-          this.y + this.height * 0.5
-        )
-      );
-      this.ammo--;
-    }
+    this.projectiles.push(
+      new Projectile(
+        this.game,
+        this.x + this.width * 0.8,
+        this.y + this.height * 0.5
+      )
+    );
+    this.ammo--;
+  }
+  throwSpear() {
+    this.projectiles.push(
+      new Spear(
+        this.game,
+        this.x + this.width * 0.8,
+        this.y + this.height * 0.8
+      )
+    );
+    this.spears--;
   }
 }

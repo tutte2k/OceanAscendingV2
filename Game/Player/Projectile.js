@@ -10,7 +10,7 @@ export default class Projectile {
     this.markedForDeletion = false;
     this.image = document.getElementById("projectile");
   }
-  update() {
+  update(deltaTime) {
     this.x += this.game.speed / (this.x * 0.005);
     this.y += -this.game.speed * (this.x * 0.001);
     if (this.y < 0) {
@@ -31,3 +31,4 @@ export default class Projectile {
     context.drawImage(this.image, this.x, this.y);
   }
 }
+
