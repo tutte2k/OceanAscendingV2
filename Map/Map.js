@@ -1,24 +1,24 @@
 import {
-  TibiaMode,
-  EnglishMode,
-  ExpertMode,
-  SwedishMode,
-  MultiplyMode,
-  SubtractMode,
   AddMode,
-  DivideMode,
   BeyondMode,
   BossMode,
+  DivideMode,
+  EnglishMode,
+  ExpertMode,
+  MultiplyMode,
   StoryMode,
+  SubtractMode,
+  SwedishMode,
+  TibiaMode
 } from "../Game/Mode/Modes.js";
+import StaticImage from "../Utils/StaticImage.js";
 import Boundary from "./Environment/Boundary.js";
 import LandTile from "./Environment/LandTile.js";
 import Level from "./Environment/Level.js";
-import MapHandler from "./MapHandler.js";
-import MapPlayer from "./Player/MapPlayer.js";
-import StaticImage from "../Utils/StaticImage.js";
 import { Matrix } from "./Environment/Matrix.js";
+import MapHandler from "./MapHandler.js";
 import MapInterface from "./MapInterface.js";
+import MapPlayer from "./Player/MapPlayer.js";
 
 export default class Map {
   constructor(dataSource) {
@@ -105,7 +105,7 @@ export default class Map {
     this.inputHandler = new MapHandler(this);
   }
   init() {
-    function splitLevelData(contentArr, levelSize, numberOfLevels = 1000) {
+    function splitLevelData(contentArr, levelSize, numberOfLevels) {
       const levelContents = [];
       for (let i = 0; i < numberOfLevels; i++) {
         const levelContent = contentArr.slice(-levelSize);
@@ -115,13 +115,23 @@ export default class Map {
       return levelContents;
     }
 
-    const tibiaContent = splitLevelData(TibiaMode.Data, 50);
-    const wordsContent = splitLevelData(EnglishMode.Data, 80);
-    const specialContent = splitLevelData(ExpertMode.Data, 50);
-    const svenskaContent = splitLevelData(SwedishMode.Data, 275);
+    const tibiaContent = splitLevelData(TibiaMode.Data, 50, 70);
+    const specialContent = splitLevelData(ExpertMode.Data, 50, 42);
+
+    const wordsContent = splitLevelData(EnglishMode.Data, 80, 317);
+    const svenskaContent = splitLevelData(SwedishMode.Data, 80, 1529);
+
+    const storyContent = splitLevelData(StoryMode.Data, 250, 4138);
+
+
+
     const MathContent = Array.from(Array(448), () => new Array(25).fill(1));
     const bossContent = Array.from(Array(3), () => new Array(1000).fill(1));
-    const storyContent = splitLevelData(StoryMode.Data, 1035);
+
+    console.log(storyContent)
+    console.log(StoryMode.Data)
+
+
 
     Matrix.forEach((row, i) => {
       row.forEach((symbol, j) => {

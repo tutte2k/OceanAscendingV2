@@ -1,14 +1,14 @@
-import SpriteSheet from "../../Utils/SpriteSheet.js";
+import Collision from "../../Utils/Collision.js";
+import Global from "../../Utils/Global.js";
 import Random from "../../Utils/Random.js";
-import Particle from "../Environment/Particle.js";
-import { BossMode, LetterMode } from "../Mode/Modes.js";
+import SpriteSheet from "../../Utils/SpriteSheet.js";
 import {
-  SmokeExplosion,
   FireExplosion,
   InkExplosion,
+  SmokeExplosion
 } from "../Environment/Explosion.js";
-import Global from "../../Utils/Global.js";
-import Collision from "../../Utils/Collision.js";
+import Particle from "../Environment/Particle.js";
+import { BossMode, LetterMode } from "../Mode/Modes.js";
 
 export default class Enemy {
   constructor(game, word, sprite) {
@@ -473,8 +473,12 @@ class Jinxy extends Fish {
   }
   update(deltaTime) {
     if (this.jinxTimer > this.jinxInterval) {
-      let alphabet = LetterMode.Alphabet.slice();
-      this.text = alphabet[Random.int(0, LetterMode.Alphabet.length - 1)];
+      const indexOfLastWord = this.game.words.length - 1;
+      const word = LetterMode.Next(this.game, indexOfLastWord);
+      this.game.words.push(this.text);
+      this.text = word;
+
+      LetterMode.Next(this.game);
       this.jinxInterval -= this.jinxInterval * 0.5;
       this.jinxTimer = 0;
     } else {
