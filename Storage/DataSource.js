@@ -13,6 +13,9 @@ export default class DataSource {
         storage.shop.spear = 1;
         storage.shop.impact = 1;
       }
+      if (!storage.shop.durability) {
+        storage.shop.durability = 1;
+      }
       return storage;
     }
     return {
@@ -43,6 +46,7 @@ export default class DataSource {
         combo: 1,
         spear: 1,
         impact: 1,
+        durability: 1,
       },
     };
   }

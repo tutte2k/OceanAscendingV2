@@ -28,6 +28,7 @@ export default class Player {
     this.maxAmmo = this.game.store.shop.mineSlot;
 
     this.spears = this.game.store.shop.spear;
+    this.spearLives = this.game.store.shop.durability;
     this.spearCombo = 0;
     this.spearComboCap = 3;
 
@@ -192,7 +193,8 @@ export default class Player {
       new Spear(
         this.game,
         this.x + this.width * 0.8,
-        this.y + this.height * 0.8
+        this.y + this.height * 0.8,
+        this.spearLives
       )
     );
     this.spears--;

@@ -21,8 +21,6 @@ refactor Game class
   this.boss = Boss object not bool
 
 Boss
-  scoring?
-  progress / health bar
   add boss loot
 
 Features

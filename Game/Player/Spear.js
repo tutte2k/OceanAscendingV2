@@ -1,6 +1,6 @@
 import SpriteSheet from "../../Utils/SpriteSheet.js";
 export default class Spear {
-  constructor(game, x, y) {
+  constructor(game, x, y, lives) {
     this.game = game;
     this.x = x;
     this.y = y;
@@ -17,7 +17,7 @@ export default class Spear {
       0,
       30
     );
-    this.lives = 3;
+    this.lives = lives;
   }
   update(deltaTime) {
     this.x += this.speed > 1 ? this.speed : 1;

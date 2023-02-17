@@ -134,13 +134,17 @@ export default class Enemy {
     const tier1 = [Goldfish, LuckyFish, Jellyfish, Inker, Urchie, Inky, Jinxy];
     const tier2 = [Seahorse, Turtle];
     const tier3 = [Angler1, Angler2, HiveWhale];
-    const tier4 = [Lionfish, Shark, Whale];
+    const tier4 = [Lionfish];
+    const tier5 = [Shark];
+    const tier6 = [Whale];
 
     const enemies = {
       1: [...tier1],
       2: [...tier1, ...tier2],
       3: [...tier1, ...tier2, ...tier3],
       4: [...tier1, ...tier2, ...tier3, ...tier4],
+      5: [...tier1, ...tier2, ...tier3, ...tier4, ...tier5],
+      6: [...tier1, ...tier2, ...tier3, ...tier4, ...tier5, ...tier6],
     };
     if (!enemies[value.length]) {
       return new enemies[4][Random.index(enemies[4])](game, value);
@@ -389,13 +393,25 @@ class Jinxy extends Fish {
     if (
       this.jinxTimer > this.jinxInterval &&
       this.jinxInterval > 1 &&
-      !this.game.gamOver
+      !this.game.gameOver
     ) {
       const indexOfLastWord = this.game.words.length - 1;
-      const word = LetterMode.Next(this.game, indexOfLastWord);
-      this.game.words.push(this.text);
-      this.text = word;
-      LetterMode.Next(this.game);
+
+      try {
+        const word = LetterMode.Next(this.game, indexOfLastWord);
+        this.game.words.push(this.text);
+        this.text = word;
+        LetterMode.Next(this.game);
+        this.focused = false;
+        this.completedText = "";
+        this.displayText = this.text;
+        if (this.game.focus === this) {
+          this.game.focus = null;
+        }
+      } catch (error) {
+        this.markedForDeletion = true;
+      }
+
       this.jinxInterval -= this.jinxInterval * 0.5;
       this.jinxTimer = 0;
     } else {
@@ -626,6 +642,7 @@ class Inky extends Octopus {
     this.speedY = -2;
   }
 }
+
 class Chtullie extends Octopus {
   constructor(game) {
     const width = 500;
@@ -680,7 +697,6 @@ class Chtullie extends Octopus {
     this.inkySpeed = 0.005;
     Global.Audioplayer.tracks.find((x) => x.name === "expedition").play();
     Global.Shaker.startShake(1000, "boss");
-
   }
   update(deltaTime) {
     this.inkyTime = this.game.enemies.length === 1;
@@ -723,7 +739,7 @@ class Chtullie extends Octopus {
       this.text.substring(0, length) === this.completedText + key;
     if (isNextChar) {
       this.completedText += key;
-      this.game.score++
+      this.game.score++;
       this.x += this.game.player.impact;
     }
     if (this.completedText === this.text) {
@@ -824,7 +840,7 @@ class Kraken extends Octopus {
     if (isNextChar) {
       this.completedText += key;
       this.x += this.game.player.impact;
-      this.game.score++
+      this.game.score++;
       this.hitsTaken++;
       let modifier = this.game.player.totalHitCombo + this.hitsTaken;
       if (this.x < this.game.width - this.width) {
@@ -878,8 +894,6 @@ class Angela extends Fish {
 
     Global.Audioplayer.tracks.find((x) => x.name === "evasion").play();
     Global.Shaker.startShake(1000, "boss");
-
-
   }
   update(deltaTime) {
     if (this.speedY) {
@@ -938,7 +952,7 @@ class Angela extends Fish {
       this.text.substring(0, length) === this.completedText + key;
     if (isNextChar) {
       this.completedText += key;
-      this.game.score++
+      this.game.score++;
       this.x += 15;
     }
     if (this.completedText === this.text) {

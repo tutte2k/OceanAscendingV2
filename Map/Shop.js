@@ -3,64 +3,70 @@ export default class Shop {
   static Cash = document.getElementById("cash");
   static Content = {
     impact: {
-      price: (val) => val * ( val * 10),
+      price: (val) => val * (val * 10),
       current: document.getElementById("currentImpact"),
       priceElement: document.getElementById("impactPrice"),
       max: 15,
     },
     mineSlot: {
-      price: (val) => val * ( val * 20),
+      price: (val) => val * (val * 20),
       current: document.getElementById("currentMineSlot"),
       priceElement: document.getElementById("mineSlotPrice"),
       max: 100,
     },
     mineReg: {
-      price: (val) => val * ( val * 30),
+      price: (val) => val * (val * 30),
       current: document.getElementById("currentMineReg"),
       priceElement: document.getElementById("mineRegPrice"),
       max: 10,
     },
     combo: {
-      price: (val) => val * ( val * 80),
+      price: (val) => val * (val * 80),
       current: document.getElementById("currentCombo"),
       priceElement: document.getElementById("comboPrice"),
       max: 10,
     },
     maxEnergy: {
-      price: (val) => val * ( val * 50),
+      price: (val) => val * (val * 50),
       current: document.getElementById("currentMaxEnergy"),
       priceElement: document.getElementById("maxEnergyPrice"),
       max: 100,
     },
     airSlot: {
-      price: (val) => val * ( val * 30),
+      price: (val) => val * (val * 30),
       current: document.getElementById("currentAirSlot"),
       priceElement: document.getElementById("airSlotPrice"),
       max: 100,
     },
     airReg: {
-      price: (val) => val * ( val * 40),
+      price: (val) => val * (val * 40),
       current: document.getElementById("currentAirReg"),
       priceElement: document.getElementById("airRegPrice"),
       max: 10,
     },
     diveSpeed: {
-      price: (val) => val * ( val * 90),
+      price: (val) => val * (val * 90),
       current: document.getElementById("currentDiveSpeed"),
       priceElement: document.getElementById("diveSpeedPrice"),
       max: 10,
     },
     mapSpeed: {
-      price: (val) => val * ( val * 100),
+      price: (val) => val * (val * 100),
       current: document.getElementById("currentMapSpeed"),
       priceElement: document.getElementById("mapSpeedPrice"),
       max: 10,
     },
     spear: {
-      price: (val) => val * ( val * 5000),
+      price: (val) => val * (val * 5000),
       current: document.getElementById("currentSpear"),
       priceElement: document.getElementById("spearPrice"),
       max: 5,
+    },
+    durability: {
+      price: (val) => val * (val * 1000),
+      current: document.getElementById("currentDurability"),
+      priceElement: document.getElementById("durabilityPrice"),
+      max: 10,
     },
   };
   constructor(dataSource) {
@@ -127,6 +133,11 @@ export default class Shop {
     Shop.Content.spear.current.innerHTML = this.store.shop.spear;
     Shop.Content.spear.priceElement.innerHTML = Shop.Content.spear.price(
       this.store.shop.spear
+    );
+
+    Shop.Content.durability.current.innerHTML = this.store.shop.durability;
+    Shop.Content.durability.priceElement.innerHTML = Shop.Content.durability.price(
+      this.store.shop.durability
     );
   }
   buy(id, cash, dataSource, current) {
