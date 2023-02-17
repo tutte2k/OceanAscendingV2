@@ -70,9 +70,11 @@ export default class Enemy {
     return isNextChar;
   }
   die() {
-    this.game.score += this.score;
-    if (this.game.score > this.game.level.maxScore) {
-      this.game.score = this.game.level.maxScore;
+    if (!this.game.boss) {
+      this.game.score += this.score;
+      if (this.game.score > this.game.level.maxScore) {
+        this.game.score = this.game.level.maxScore;
+      }
     }
     for (let i = 0; i < this.score; i++) {
       this.game.particles.push(
@@ -145,6 +147,13 @@ export default class Enemy {
     }
     const randomIndex = Random.index(enemies[value.length]);
     let enemy = new enemies[value.length][randomIndex](game, value);
+
+    // const bossTier = [Angela, Chtullie, Kraken];
+    // const randomNumber = Math.random();
+    // const triggerBelow = 0.01
+    // const unlucky = randomNumber < triggerBelow;
+    // if (unlucky) game.enemies.push(new bossTier[Random.index(bossTier)](game));
+
     return enemy;
   }
   static NextStory(game, value) {
@@ -424,6 +433,13 @@ class Seahorse extends Mech {
         30
       )
     );
+    this.x = Random.int(
+      this.game.width * 0.2,
+      this.game.width - this.game.width * 0.1
+    );
+    this.y = this.game.height + 100;
+    this.speedX = -1;
+    this.speedY = -1;
   }
 }
 class Angler1 extends Mech {
@@ -496,7 +512,7 @@ class HiveWhale extends Mech {
       word,
       new SpriteSheet(image, width, height, 37, spriteSheetRows, 30)
     );
-    this.speedX = -0.2;
+    this.speedX = -0.1;
   }
   die() {
     super.die();
@@ -506,7 +522,7 @@ class HiveWhale extends Mech {
       this.game.explosions.push(new SmokeExplosion(this.game, x, y));
       const indexOfLastWord = this.game.words.length - 1;
       const word = LetterMode.Next(this.game, indexOfLastWord);
-      if (!word) return;
+      if (!word || indexOfLastWord === -1) return;
       this.game.enemies.push(new Drone(this.game, x, y, word));
     }
   }
@@ -638,17 +654,22 @@ class Chtullie extends Octopus {
     this.inkyTime = false;
 
     this.inkyCount = 1;
-    let chtullieData = BossMode.Data.Chtullie.slice();
+    let data = BossMode.Data.Chtullie.slice();
+
+    this.maxScore = 0;
+    data.forEach((word) => (this.maxScore += word.length));
+
+    this.game.totalScore = this.maxScore;
     this.data = {
-      8: chtullieData.splice(0, 37).reverse(),
-      7: chtullieData.splice(0, 37).reverse(),
-      6: chtullieData.splice(0, 37).reverse(),
-      5: chtullieData.splice(0, 37).reverse(),
-      4: chtullieData.splice(0, 37).reverse(),
-      3: chtullieData.splice(0, 37).reverse(),
-      2: chtullieData.splice(0, 37).reverse(),
-      1: chtullieData.splice(0, 37).reverse(),
-      0: chtullieData.splice(0, 37).reverse(),
+      8: data.splice(0, 37).reverse(),
+      7: data.splice(0, 37).reverse(),
+      6: data.splice(0, 37).reverse(),
+      5: data.splice(0, 37).reverse(),
+      4: data.splice(0, 37).reverse(),
+      3: data.splice(0, 37).reverse(),
+      2: data.splice(0, 37).reverse(),
+      1: data.splice(0, 37).reverse(),
+      0: data.splice(0, 37).reverse(),
     };
 
     this.completedText = "";
@@ -659,6 +680,7 @@ class Chtullie extends Octopus {
     this.inkySpeed = 0.005;
     Global.Audioplayer.tracks.find((x) => x.name === "expedition").play();
     Global.Shaker.startShake(1000, "boss");
+
   }
   update(deltaTime) {
     this.inkyTime = this.game.enemies.length === 1;
@@ -679,9 +701,6 @@ class Chtullie extends Octopus {
       if (this.inkyCount < 7) this.inkyCount++;
     }
     this.y = this.game.player.y;
-    if (this.x + this.width * 0.7 < 0) {
-      this.randomPosition();
-    }
     this.sprite.update(deltaTime);
   }
   die() {
@@ -704,6 +723,7 @@ class Chtullie extends Octopus {
       this.text.substring(0, length) === this.completedText + key;
     if (isNextChar) {
       this.completedText += key;
+      this.game.score++
       this.x += this.game.player.impact;
     }
     if (this.completedText === this.text) {
@@ -740,7 +760,12 @@ class Kraken extends Octopus {
 
     this.livesLeft = 8;
 
+    this.maxScore = 0;
     let data = BossMode.Data.Kraken.slice();
+    data.forEach((word) => (this.maxScore += word.length));
+
+    this.game.totalScore = this.maxScore;
+
     this.data = {
       8: data.splice(0, 39).reverse(),
       7: data.splice(0, 39).reverse(),
@@ -799,6 +824,7 @@ class Kraken extends Octopus {
     if (isNextChar) {
       this.completedText += key;
       this.x += this.game.player.impact;
+      this.game.score++
       this.hitsTaken++;
       let modifier = this.game.player.totalHitCombo + this.hitsTaken;
       if (this.x < this.game.width - this.width) {
@@ -826,17 +852,22 @@ class Angela extends Fish {
     this.chaseSpeed = 0.1;
     this.livesLeft = 8;
 
-    let angelaData = BossMode.Data.Angela.slice();
+    let data = BossMode.Data.Angela.slice();
+    this.maxScore = 0;
+    data.forEach((word) => (this.maxScore += word.length));
+
+    this.game.totalScore = this.maxScore;
+
     this.data = {
-      8: angelaData.splice(0, 35).reverse(),
-      7: angelaData.splice(0, 35).reverse(),
-      6: angelaData.splice(0, 35).reverse(),
-      5: angelaData.splice(0, 35).reverse(),
-      4: angelaData.splice(0, 35).reverse(),
-      3: angelaData.splice(0, 35).reverse(),
-      2: angelaData.splice(0, 35).reverse(),
-      1: angelaData.splice(0, 35).reverse(),
-      0: angelaData.splice(0, 35).reverse(),
+      8: data.splice(0, 35).reverse(),
+      7: data.splice(0, 35).reverse(),
+      6: data.splice(0, 35).reverse(),
+      5: data.splice(0, 35).reverse(),
+      4: data.splice(0, 35).reverse(),
+      3: data.splice(0, 35).reverse(),
+      2: data.splice(0, 35).reverse(),
+      1: data.splice(0, 35).reverse(),
+      0: data.splice(0, 35).reverse(),
     };
 
     this.completedText = "";
@@ -847,6 +878,8 @@ class Angela extends Fish {
 
     Global.Audioplayer.tracks.find((x) => x.name === "evasion").play();
     Global.Shaker.startShake(1000, "boss");
+
+
   }
   update(deltaTime) {
     if (this.speedY) {
@@ -905,6 +938,7 @@ class Angela extends Fish {
       this.text.substring(0, length) === this.completedText + key;
     if (isNextChar) {
       this.completedText += key;
+      this.game.score++
       this.x += 15;
     }
     if (this.completedText === this.text) {

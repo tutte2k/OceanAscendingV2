@@ -29,6 +29,7 @@ export default class Player {
 
     this.spears = this.game.store.shop.spear;
     this.spearCombo = 0;
+    this.spearComboCap = 3;
 
     this.hitCombo = 0;
     this.hitComboCap = 21 - this.game.store.shop.combo;
@@ -54,8 +55,9 @@ export default class Player {
     Global.Audioplayer.sounds.find((x) => x.name === "miss").play();
     this.totalMisses++;
     this.hitCombo = 0;
+    this.spearCombo = 0;
     this.totalHitCombo = 0;
-    this.game.score--;
+    if (!this.game.boss) this.game.score--;
     if (this.energy > 0) {
       this.missCombo++;
       this.energy =
@@ -66,7 +68,9 @@ export default class Player {
     }
   }
   reward() {
-    this.totalHitCombo++;
+    const addOrReturnCap = (num1, num2, max) => {
+      return num1 + num2 <= max ? num1 + num2 : max;
+    };
     this.energy = addOrReturnCap(this.energy, 0.1, this.maxEnergy);
     this.hitCombo = addOrReturnCap(this.hitCombo, 1, this.hitComboCap);
 
@@ -76,17 +80,13 @@ export default class Player {
         this.hitCombo = 0;
         this.spearCombo++;
       }
-      if (this.spearCombo === 3 && this.spears > 0) {
+      if (this.spearCombo === this.spearComboCap && this.spears > 0) {
         this.throwSpear();
         this.spearCombo = 0;
       }
     }
-
     this.missCombo = 0;
-
-    function addOrReturnCap(num1, num2, max) {
-      return num1 + num2 <= max ? num1 + num2 : max;
-    }
+    this.totalHitCombo++;
   }
   update(deltaTime) {
     if (this.game.lose) {

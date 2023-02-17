@@ -13,9 +13,7 @@ const map = new Map(dataSource);
 TODO:
 
 continue class diagram
-
 add boss class
-
 refactor projectile/spear
 refactor Global class
 refactor Game class
@@ -27,15 +25,11 @@ Boss
   progress / health bar
   add boss loot
 
-  
 Features
   add consumable items
 
-
 A STAR ALGORITHM for map walking
 
-Fish
-  add personality
 
 */
 

@@ -1,6 +1,6 @@
-import LettersHandler from "./LettersHandler.js";
 import Enemy from "../../Enemy/Enemy.js";
 import Mode from "../Mode.js";
+import LettersHandler from "./LettersHandler.js";
 
 export default class LetterMode extends Mode {
   static Alphabet = "a b c d e f g h i j k l m n o p q r s t u v x y z".split(
@@ -20,8 +20,10 @@ export default class LetterMode extends Mode {
     "Tab",
     " ",
     "Alt",
-    "Control"
-
+    "Control",
+    "AltGraph",
+    "Meta",
+    "Dead",
   ];
   static EnemyInterval = 5000;
   constructor(id, name) {

@@ -1,8 +1,8 @@
-import Background from "./Environment/Background.js";
-import Player from "./Player/Player.js";
 import Collision from "../Utils/Collision.js";
-import GameInterface from "./GameInterface.js";
 import Global from "../Utils/Global.js";
+import Background from "./Environment/Background.js";
+import GameInterface from "./GameInterface.js";
+import Player from "./Player/Player.js";
 
 export default class Game {
   constructor(level, nextLevel, dataSource) {
@@ -11,12 +11,16 @@ export default class Game {
     this.wordContainer = this.userInterface.elements.wordContainer;
     this.level = level;
     this.boss = this.level.mode.name === "Boss";
+    this.totalScore = 0;
+
     if (!this.boss)
       Global.Audioplayer.tracks.find((x) => x.name === "game").play();
 
     this.nextLevel = nextLevel;
+
     this.words = level.getContent();
     this.totalWords = this.words.length;
+
 
     this.gameOver = false;
     this.lose = false;
@@ -162,14 +166,14 @@ export default class Game {
             }
             projectile.explode();
             enemy.die();
-            this.userInterface.displayScoreMessage(enemy);
+            if (!this.boss) this.userInterface.displayScoreMessage(enemy);
           }
         }
       });
       if (enemy.markedForDeletion === true) {
         if (!this.lose) {
           if (Math.floor(this.level.mode.id) !== 4) enemy.die();
-          this.userInterface.displayScoreMessage(enemy);
+          if (!this.boss) this.userInterface.displayScoreMessage(enemy);
         }
         this.focus = null;
       }

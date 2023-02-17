@@ -3,7 +3,7 @@ import FloatingMessage from "./Environment/FloatingMessage.js";
 export default class GameInterface {
   constructor(game) {
     this.elements = {
-      timer:document.getElementById("timer"),
+      timer: document.getElementById("timer"),
       wordContainer: document.getElementById("words"),
       hud: document.getElementById("ui"),
       crosshair: document.getElementById("crosshair"),
@@ -12,6 +12,7 @@ export default class GameInterface {
       airBar: document.getElementById("abar"),
       mineComboBar: document.getElementById("mcbar"),
       progressBar: document.getElementById("pbar"),
+      spearBar: document.getElementById("sbar"),
       progress: document.getElementById("progress"),
       comboTimer: document.getElementById("comboTimer"),
     };
@@ -21,13 +22,14 @@ export default class GameInterface {
   }
   draw() {
     const formattedTime = (this.game.gameTime * 0.001).toFixed(2);
-    this.elements.timer.innerHTML = formattedTime;
+    this.elements.timer.innerHTML = `${this.game.score} - ${formattedTime}`;
+
+    this.elements.spearBar.style.width =
+      (this.game.player.spearCombo / this.game.player.spearComboCap) * 100 +
+      "%";
 
     this.elements.mineComboBar.style.width =
-      (this.game.player.hitCombo /
-        this.game.player.hitComboCap) *
-        100 +
-      "%";
+      (this.game.player.hitCombo / this.game.player.hitComboCap) * 100 + "%";
 
     this.elements.airBar.style.width =
       (this.game.player.air / this.game.player.maxAir) * 100 + "%";
@@ -35,19 +37,27 @@ export default class GameInterface {
     this.elements.energyBar.style.width =
       (this.game.player.energy / this.game.player.maxEnergy) * 100 + "%";
 
-    let percentageCompleted =
-      100 -
-      ((this.game.words.length / this.game.totalWords) * 100).toFixed(0) +
-      "%";
+    let percentageCompleted;
+    if (!this.game.boss) {
+      percentageCompleted =
+        100 -
+        ((this.game.words.length / this.game.totalWords) * 100).toFixed(0) +
+        "%";
+    } else {
+      percentageCompleted =
+        100 - ((this.game.score / this.game.totalScore) * 100).toFixed(0) + "%";
+    }
 
     this.elements.progressBar.style.width = percentageCompleted;
     this.elements.progress.innerHTML = percentageCompleted;
 
-    this.elements.comboTimer.innerHTML = this.game.player.ammo === 0 ? `New mine in ${(
-      (this.game.player.ammoInterval - this.game.player.ammoTimer) /
-      1000
-    ).toFixed(0)} seconds!` : "";
-
+    this.elements.comboTimer.innerHTML =
+      this.game.player.ammo === 0
+        ? `New mine in ${(
+            (this.game.player.ammoInterval - this.game.player.ammoTimer) /
+            1000
+          ).toFixed(0)} seconds!`
+        : "";
 
     if (Math.floor(this.game.level.mode.id) !== 4) {
       this.elements.crosshair.innerHTML =

@@ -28,14 +28,14 @@ html {
   right: 0;
   bottom: 0;
   max-width: 25%;
-  max-height: 12%;
+  max-height: 18%;
   overflow: hidden;
   z-index: 2;
   text-align: left;
 }
 .bar {
   width: 100%;
-  height: 25%;
+  height: 20%;
   clip-path: polygon(10px 0, calc(100% - 10px) 0%, 100% 50%, calc(100% - 10px) 100%, 10px 100%, 0% 50%);
 }
 .progressBar {
@@ -51,7 +51,6 @@ html {
     cadetblue,
     rgba(255, 255, 255, 0)
   );
-  
 }
 .energyBar {
   background-image: linear-gradient(
@@ -64,6 +63,13 @@ html {
   background-image: linear-gradient(
     rgba(255, 255, 255, 0),
     darkorange,
+    rgba(255, 255, 255, 0)
+  );
+}
+.spearComboBar {
+  background-image: linear-gradient(
+    rgba(255, 255, 255, 0),
+    crimson,
     rgba(255, 255, 255, 0)
   );
 }
@@ -155,7 +161,6 @@ html {
   animation: fade 100s ease;
   animation-fill-mode: forwards;
 }
-
 @keyframes fade {
   0% {
     background-position: 50% 10%;
