@@ -75,7 +75,7 @@ window.addEventListener("load", function () {
         Global.Audioplayer.currentTrack = Global.Audioplayer.tracks.find(
           (x) => x.name === "map"
         );
-        Global.Audioplayer.currentTrack.play();
+        Global.Audioplayer.currentTrack.resetPlay();
       }
       Global.Canvas.classList.remove("underwater");
       Global.InfoButton.classList.remove("invisible");

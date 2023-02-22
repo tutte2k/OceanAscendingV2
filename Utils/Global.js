@@ -98,6 +98,10 @@ class Track {
   pause() {
     this.track.pause();
   }
+  resetPlay() {
+    this.track.currentTime = 0;
+    this.playPromise = this.track.play();
+  }
 }
 class Sound {
   constructor(path, name) {
