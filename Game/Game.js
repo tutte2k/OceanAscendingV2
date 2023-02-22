@@ -74,7 +74,7 @@ export default class Game {
       this.player.height + this.player.y < this.height / 2
     ) {
       this.player.y += 5;
-    } 
+    }
     if (this.player.y > 0 - this.player.height * 5 && this.gameOver) {
       this.speed = 0.5;
       if (this.player.y <= 0 - this.player.height) {
@@ -99,9 +99,7 @@ export default class Game {
       }
       if (!this.lose) {
         this.lose = true;
-        const sound = Global.Audioplayer.sounds.find(
-          (sound) => sound.name === "lose"
-        );
+        const sound = Global.Audioplayer.sounds.find((x) => x.name === "lose");
         sound.play();
       }
     } else if (this.words.length === 0 && !this.gameOver) {
