@@ -107,6 +107,7 @@ class Sound {
     this.sound.volume = Audioplayer.Volume;
   }
   play() {
+    this.sound.currentTime = 0;
     this.sound.play();
   }
 }
@@ -131,6 +132,7 @@ class Audioplayer {
     this.sounds = [
       new Sound("./assets/wasted.mp3", "lose"),
       new Sound("./assets/miss.flac", "miss"),
+      new Sound("./assets/jlife.flac", "win"),
     ];
     this.currentTrack = this.tracks[0];
 

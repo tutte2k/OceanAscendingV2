@@ -126,38 +126,32 @@ export default class Enemy {
       0: Angela,
       1: Chtullie,
       2: Kraken,
-      3: Fishy,
     };
     return bosses[bossId];
   }
   static Next(game, value) {
-    const tier1 = [Goldfish, LuckyFish, Jellyfish, Inker, Urchie, Inky, Jinxy];
-    const tier2 = [Seahorse, Turtle];
-    const tier3 = [Angler1, Angler2, HiveWhale];
-    const tier4 = [Lionfish];
-    const tier5 = [Shark];
-    const tier6 = [Whale];
+    const t1 = [Goldfish, Turtle, LuckyFish];
+    const t2 = [Jellyfish, Inky, Angler1, Angler2];
+    const t3 = [HiveWhale, Lionfish];
+    const t4 = [Inker, Jinxy];
+    const t5 = [Urchie, Seahorse];
+    const t6 = [Shark, Whale];
 
     const enemies = {
-      1: [...tier1],
-      2: [...tier1, ...tier2],
-      3: [...tier1, ...tier2, ...tier3],
-      4: [...tier1, ...tier2, ...tier3, ...tier4],
-      5: [...tier1, ...tier2, ...tier3, ...tier4, ...tier5],
-      6: [...tier1, ...tier2, ...tier3, ...tier4, ...tier5, ...tier6],
+      1: [...t1],
+      2: [...t1, ...t2],
+      3: [...t1, ...t2, ...t3],
+      4: [...t1, ...t2, ...t3, ...t4],
+      5: [...t1, ...t2, ...t3, ...t4, ...t5],
+      6: [...t1, ...t2, ...t3, ...t4, ...t5, ...t6],
     };
+
     if (!enemies[value.length]) {
       return new enemies[4][Random.index(enemies[4])](game, value);
     }
+
     const randomIndex = Random.index(enemies[value.length]);
     let enemy = new enemies[value.length][randomIndex](game, value);
-
-    // const bossTier = [Angela, Chtullie, Kraken];
-    // const randomNumber = Math.random();
-    // const triggerBelow = 0.01
-    // const unlucky = randomNumber < triggerBelow;
-    // if (unlucky) game.enemies.push(new bossTier[Random.index(bossTier)](game));
-
     return enemy;
   }
   static NextStory(game, value) {
@@ -699,6 +693,7 @@ class Chtullie extends Octopus {
     Global.Shaker.startShake(1000, "boss");
   }
   update(deltaTime) {
+    this.x -= 0.1;
     this.inkyTime = this.game.enemies.length === 1;
     if (this.inkyTime) {
       const inkyData = ["?", "!"];

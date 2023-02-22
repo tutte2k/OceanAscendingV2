@@ -90,13 +90,9 @@ export default class Player {
     this.totalHitCombo++;
   }
   update(deltaTime) {
-    if (this.game.lose) {
+    if (this.game.gameOver) {
       if (this.y > 0 - this.height) {
-        this.y -= 0.5;
-      }
-    } else if (this.game.win) {
-      if (this.y > 0 - this.height * 4) {
-        this.y -= 2;
+        this.y -= 1.5;
       }
     } else {
       if (this.game.keys.includes("ArrowUp")) {

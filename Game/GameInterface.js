@@ -71,9 +71,9 @@ export default class GameInterface {
       let message2;
       let message3;
       if (this.game.win) {
-        message1 = "You made it!";
-        message2 = "Fishing with dynamite is only illegal if someone hears it!";
-        message3 = ``;
+        message1 = `<span style="color:darkgreen;font-size:200px;">s t o n k s</span>`;
+        message2 = "";
+        message3 = "";
       } else if (this.game.lose) {
         message1 = `<span style="color:maroon;font-size:200px;">w a s t e d</span>`;
         message2 = "";

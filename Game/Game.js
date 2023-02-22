@@ -12,15 +12,12 @@ export default class Game {
     this.level = level;
     this.boss = this.level.mode.name === "Boss";
     this.totalScore = 0;
-
     if (!this.boss)
       Global.Audioplayer.tracks.find((x) => x.name === "game").play();
 
     this.nextLevel = nextLevel;
-
     this.words = level.getContent();
     this.totalWords = this.words.length;
-
 
     this.gameOver = false;
     this.lose = false;
@@ -77,10 +74,11 @@ export default class Game {
       this.player.height + this.player.y < this.height / 2
     ) {
       this.player.y += 5;
+    } else {
+      this.words.pop();
     }
-    if (this.player.y > 0 - this.player.height * 2 && this.gameOver) {
-      this.speed = 0.01;
-      this.player.y -= 2;
+    if (this.player.y > 0 - this.player.height * 5 && this.gameOver) {
+      this.speed = 0.5;
       if (this.player.y <= 0 - this.player.height) {
         Global.GameContainer.hidden = true;
         Global.Spinner.hidden = false;
@@ -89,6 +87,7 @@ export default class Game {
           nextLevel: this.nextLevel,
           score: this.score,
           win: this.win,
+          bonus: this.boss ? 1000 : 0,
         };
         this.level = null;
         this.userInterface.clear();
@@ -108,17 +107,27 @@ export default class Game {
         sound.play();
       }
     } else if (this.words.length === 0 && !this.gameOver) {
-      this.win = true;
-      this.enemies.forEach((enemy) => {
-        enemy.die();
-      });
+      Global.Flasher.preFlash(20000, "goldenrod");
+      if (Global.Audioplayer.currentTrack.playPromise) {
+        Global.Audioplayer.currentTrack.pause();
+      }
+      if (!this.win) {
+        const sound = Global.Audioplayer.sounds.find((x) => x.name === "win");
+        sound.play();
+        this.win = true;
+        this.enemies.forEach((enemy) => {
+          enemy.die();
+        });
+      }
     }
     this.gameOver = this.lose == true || this.win === true;
+
     if (!this.gameOver) {
       this.gameTime += deltaTime;
       this.background.update();
       this.background.layer4.update();
     }
+
     this.player.update(deltaTime);
 
     this.particles.forEach((particle) => particle.update());

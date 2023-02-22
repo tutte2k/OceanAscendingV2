@@ -76,7 +76,7 @@ export default class DataSource {
       const availableScore = state.level.maxScore;
       earnedCash =
         state.level.name + Math.round((state.score / availableScore) * 10);
-      store["cash"] = store["cash"] + earnedCash;
+      store["cash"] = store["cash"] + earnedCash + state.bonus;
       this.setStore(store);
     } else if (levelObject.score < state.score) {
       const previousScore = levelObject.score;
