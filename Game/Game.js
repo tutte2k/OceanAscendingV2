@@ -74,9 +74,7 @@ export default class Game {
       this.player.height + this.player.y < this.height / 2
     ) {
       this.player.y += 5;
-    } else {
-      this.words.pop();
-    }
+    } 
     if (this.player.y > 0 - this.player.height * 5 && this.gameOver) {
       this.speed = 0.5;
       if (this.player.y <= 0 - this.player.height) {
