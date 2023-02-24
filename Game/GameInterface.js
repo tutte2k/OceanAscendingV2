@@ -71,7 +71,7 @@ export default class GameInterface {
       let message2;
       let message3;
       if (this.game.win) {
-        message1 = `<span style="color:darkgreen;font-size:200px;">s t o n k s</span>`;
+        message1 = `<span style="color:darkgreen;font-size:200px;">$ t o n k s</span>`;
         message2 = "";
         message3 = "";
       } else if (this.game.lose) {
