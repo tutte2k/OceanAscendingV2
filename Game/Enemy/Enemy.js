@@ -5,7 +5,7 @@ import SpriteSheet from "../../Utils/SpriteSheet.js";
 import {
   FireExplosion,
   InkExplosion,
-  SmokeExplosion
+  SmokeExplosion,
 } from "../Environment/Explosion.js";
 import Particle from "../Environment/Particle.js";
 import { BossMode, LetterMode } from "../Mode/Modes.js";
@@ -712,6 +712,7 @@ class Chtullie extends Octopus {
       if (this.inkyCount < 7) this.inkyCount++;
     }
     this.y = this.game.player.y;
+    if (this.x > this.game.width * 0.4) this.x--;
     this.sprite.update(deltaTime);
   }
   die() {
